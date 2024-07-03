@@ -35,17 +35,15 @@ class TransactionItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
-                    child: Text(
+                Text(
                   type,
                   style:
                       blackTextStyle.copyWith(fontSize: 18, fontWeight: medium),
-                )),
-                Container(
-                    child: Text(
+                ),
+                Text(
                   name,
                   style: greyTextStyle.copyWith(fontWeight: light),
-                )),
+                ),
               ],
             ),
           ),
@@ -60,12 +58,11 @@ class TransactionItem extends StatelessWidget {
                   color: grafik ? kGreenColor : kRedColor,
                 ),
               ),
-              Container(
-                  child: Text(
+              Text(
                 "200.000",
                 style:
                     blackTextStyle.copyWith(fontSize: 18, fontWeight: medium),
-              )),
+              ),
             ],
           )
         ],
