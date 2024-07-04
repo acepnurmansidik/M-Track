@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tracking/cubit/transaction_cubit.dart';
 import 'package:tracking/pages/home_page.dart';
 import 'package:tracking/pages/splash_page.dart';
 
@@ -9,12 +11,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      routes: {
-        "/": (context) => const SplashPage(),
-        "/home": (context) => const HomePage(),
-      },
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => TransactionCubit(),
+        ),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        routes: {
+          "/": (context) => const SplashPage(),
+          "/home": (context) => const HomePage(),
+        },
+      ),
     );
   }
 }

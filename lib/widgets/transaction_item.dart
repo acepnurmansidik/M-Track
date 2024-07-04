@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:tracking/model/transaction_model.dart';
 import 'package:tracking/theme.dart';
 
 class TransactionItem extends StatelessWidget {
-  final bool grafik;
-  final String type;
-  final String name;
-  const TransactionItem(
-      {super.key,
-      required this.grafik,
-      required this.type,
-      required this.name});
+  final bool grafik = false;
+  final TransactionModel transaction;
+  const TransactionItem({super.key, required this.transaction});
 
   @override
   Widget build(BuildContext context) {
@@ -36,12 +33,12 @@ class TransactionItem extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  type,
+                  transaction.typeId["value"],
                   style:
                       blackTextStyle.copyWith(fontSize: 18, fontWeight: medium),
                 ),
                 Text(
-                  name,
+                  transaction.categoryId["value"],
                   style: greyTextStyle.copyWith(fontWeight: light),
                 ),
               ],
@@ -59,7 +56,8 @@ class TransactionItem extends StatelessWidget {
                 ),
               ),
               Text(
-                "200.000",
+                NumberFormat.currency(symbol: "IDR ", decimalDigits: 0)
+                    .format(transaction.amount),
                 style:
                     blackTextStyle.copyWith(fontSize: 18, fontWeight: medium),
               ),

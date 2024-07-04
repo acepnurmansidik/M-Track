@@ -1,9 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:tracking/cubit/transaction_cubit.dart';
 import 'package:tracking/theme.dart';
 import 'package:tracking/widgets/transaction_item.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    context.read<TransactionCubit>().fetchTransaction();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +86,7 @@ class HomePage extends StatelessWidget {
                     style: blackTextStyle.copyWith(fontSize: 16),
                     children: [
                   TextSpan(
-                      text: " 25.9 %",
+                      text: " 25.9%",
                       style: greenTextStyle.copyWith(
                           fontSize: 16, fontWeight: medium))
                 ]))),
@@ -83,87 +96,90 @@ class HomePage extends StatelessWidget {
     }
 
     Widget transactionList() {
-      return SizedBox.expand(
-        child: DraggableScrollableSheet(
-          initialChildSize: 0.65,
-          minChildSize: 0.65,
-          maxChildSize: 1,
-          builder: (context, scrollController) {
+      return BlocBuilder<TransactionCubit, TransactionState>(
+        builder: (context, state) {
+          if (state is TransactionLoading) {
             return Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                  color: kWhiteColor,
-                  borderRadius:
-                      BorderRadius.vertical(top: Radius.circular(18))),
-              child: Stack(
-                children: [
-                  Container(
-                    margin: const EdgeInsets.only(top: 50),
-                    child: SingleChildScrollView(
-                      controller: scrollController,
-                      child: const Column(
-                        children: [
-                          TransactionItem(
-                              grafik: true, type: 'type', name: 'name'),
-                          TransactionItem(
-                              grafik: true, type: 'type', name: 'name'),
-                          TransactionItem(
-                              grafik: true, type: 'type', name: 'name'),
-                          TransactionItem(
-                              grafik: true, type: 'type', name: 'name'),
-                          TransactionItem(
-                              grafik: true, type: 'type', name: 'name'),
-                          TransactionItem(
-                              grafik: true, type: 'type', name: 'name'),
-                          TransactionItem(
-                              grafik: true, type: 'type', name: 'name'),
-                          TransactionItem(
-                              grafik: true, type: 'type', name: 'name'),
-                          TransactionItem(
-                              grafik: true, type: 'type', name: 'name'),
-                          TransactionItem(
-                              grafik: true, type: 'type', name: 'name'),
-                          TransactionItem(
-                              grafik: true, type: 'type', name: 'name'),
-                          TransactionItem(
-                              grafik: true, type: 'type', name: 'name'),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Container(
-                    child: Column(
+              alignment: Alignment.center,
+              margin: EdgeInsets.only(top: 30),
+              child: CircularProgressIndicator(),
+            );
+          } else if (state is TransactionSuccess) {
+            final response = state.transactions.length != 0
+                ? state.transactions
+                    .map((transaction) => TransactionItem(
+                          transaction: transaction,
+                        ))
+                    .toList()
+                : [
+                    Center(
+                        child: Container(
+                      height: 210,
+                      width: 210,
+                      margin: const EdgeInsets.only(top: 50),
+                      decoration: const BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage("assets/icon_notfound.png"))),
+                    ))
+                  ];
+            return SizedBox.expand(
+              child: DraggableScrollableSheet(
+                initialChildSize: 0.65,
+                minChildSize: 0.65,
+                maxChildSize: 1,
+                builder: (context, scrollController) {
+                  return Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                        color: kWhiteColor,
+                        borderRadius:
+                            BorderRadius.vertical(top: Radius.circular(18))),
+                    child: Stack(
                       children: [
                         Container(
-                          height: 5,
-                          width: 50,
-                          margin: const EdgeInsets.only(bottom: 10),
-                          decoration: BoxDecoration(
-                              color: kDoveGreyColor,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(18))),
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(bottom: 15),
-                          decoration: BoxDecoration(color: kWhiteColor),
-                          child: Row(
-                            children: [
-                              Text(
-                                "Transaksi",
-                                style: blackTextStyle.copyWith(
-                                    fontSize: 16, fontWeight: semibold),
-                              )
-                            ],
+                          margin: const EdgeInsets.only(top: 50),
+                          child: SingleChildScrollView(
+                            controller: scrollController,
+                            child: Column(
+                              children: response,
+                            ),
                           ),
+                        ),
+                        Column(
+                          children: [
+                            Container(
+                              height: 5,
+                              width: 50,
+                              margin: const EdgeInsets.only(bottom: 10),
+                              decoration: BoxDecoration(
+                                  color: kDoveGreyColor,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(18))),
+                            ),
+                            Container(
+                              padding: EdgeInsets.only(bottom: 15),
+                              decoration: BoxDecoration(color: kWhiteColor),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "Transaksi",
+                                    style: blackTextStyle.copyWith(
+                                        fontSize: 16, fontWeight: semibold),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ),
-                ],
+                  );
+                },
               ),
             );
-          },
-        ),
+          }
+          return Container();
+        },
       );
     }
 
