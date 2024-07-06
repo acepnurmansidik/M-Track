@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:tracking/theme.dart';
+import 'package:tracking/widgets/custom_button.dart';
 import 'package:tracking/widgets/custom_dropdown_item.dart';
 import 'package:tracking/widgets/custom_textform_field.dart';
 
@@ -72,22 +73,13 @@ class _TransactionPageState extends State<TransactionPage> {
     }
 
     Widget buttonSubmit() {
-      return Container(
-        width: double.infinity,
-        height: 60,
+      return CustomButton(
+        title: 'Submit',
         margin: const EdgeInsets.only(left: 20, right: 20, top: 50),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10), color: kRedColor),
-        child: TextButton(
-            onPressed: () {},
-            style: TextButton.styleFrom(
-                backgroundColor: kBlackColor,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10))),
-            child: Text(
-              "Submit",
-              style: whiteTextStyle.copyWith(fontSize: 16, fontWeight: medium),
-            )),
+        onPressed: () {
+          Navigator.pushNamedAndRemoveUntil(
+              context, '/success', (route) => false);
+        },
       );
     }
 

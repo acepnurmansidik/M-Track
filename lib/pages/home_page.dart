@@ -36,7 +36,7 @@ class _HomePageState extends State<HomePage> {
                 Container(
                   height: 50,
                   width: 50,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                       shape: BoxShape.circle,
                       image: DecorationImage(
                           image: AssetImage("assets/img_avatar.png"))),
@@ -51,13 +51,13 @@ class _HomePageState extends State<HomePage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Icon(Icons.qr_code_scanner_outlined),
+                      const Icon(Icons.qr_code_scanner_outlined),
                       Container(
                         height: 20,
                         width: 2,
                         decoration: BoxDecoration(color: kGreyColor),
                       ),
-                      Icon(Icons.notification_add_outlined)
+                      const Icon(Icons.notification_add_outlined)
                     ],
                   ),
                 ),
@@ -70,7 +70,7 @@ class _HomePageState extends State<HomePage> {
                   style: greyTextStyle.copyWith(fontSize: 16),
                 )),
             Container(
-                margin: EdgeInsets.only(bottom: 2),
+                margin: const EdgeInsets.only(bottom: 2),
                 child: Text.rich(TextSpan(
                     text: 'Rp ',
                     style: blackTextStyle.copyWith(fontSize: 16),
@@ -80,16 +80,15 @@ class _HomePageState extends State<HomePage> {
                           style: blackTextStyle.copyWith(
                               fontSize: 35, fontWeight: extraBold))
                     ]))),
-            Container(
-                child: Text.rich(TextSpan(
-                    text: '+1.0000',
-                    style: blackTextStyle.copyWith(fontSize: 16),
-                    children: [
+            Text.rich(TextSpan(
+                text: '+1.0000',
+                style: blackTextStyle.copyWith(fontSize: 16),
+                children: [
                   TextSpan(
                       text: " 25.9%",
                       style: greenTextStyle.copyWith(
                           fontSize: 16, fontWeight: medium))
-                ]))),
+                ])),
           ],
         ),
       );
