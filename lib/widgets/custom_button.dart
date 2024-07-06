@@ -23,7 +23,7 @@ class CustomButton extends StatelessWidget {
       child: TextButton(
           onPressed: onPressed,
           style: TextButton.styleFrom(
-              backgroundColor: kPrimaryColor,
+              backgroundColor: kGreenColor,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(28))),
           child: Text(
