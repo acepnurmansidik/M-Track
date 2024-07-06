@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tracking/cubit/transaction_cubit.dart';
 import 'package:tracking/pages/home_page.dart';
 import 'package:tracking/pages/splash_page.dart';
+import 'package:tracking/pages/transaction_page.dart';
 
 void main() => runApp(const MyApp());
 
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
         routes: {
           "/": (context) => const SplashPage(),
           "/home": (context) => const HomePage(),
+          "/add-transaction": (context) => const TransactionPage(),
         },
       ),
     );

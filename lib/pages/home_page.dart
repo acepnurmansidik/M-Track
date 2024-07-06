@@ -196,11 +196,16 @@ class _HomePageState extends State<HomePage> {
           transactionList(),
         ],
       ),
-      bottomNavigationBar: GestureDetector(
-        child: Container(
-          decoration: BoxDecoration(color: kWhiteColor),
-          width: double.infinity,
-          height: 70,
+      bottomNavigationBar: Container(
+        width: 400,
+        height: 70,
+        decoration: BoxDecoration(
+            color: kWhiteColor,
+            border: Border(top: BorderSide(width: 0.2, color: kGreyColor))),
+        child: TextButton(
+          onPressed: () {
+            Navigator.pushNamed(context, '/add-transaction');
+          },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
