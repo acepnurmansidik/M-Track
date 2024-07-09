@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:tracking/model/transaction_model.dart';
 import 'package:tracking/theme.dart';
@@ -28,6 +26,65 @@ class DetailPage extends StatelessWidget {
                 Icons.chevron_left,
                 color: kBlackColor,
               ),
+            )
+          ],
+        ),
+      );
+    }
+
+    Widget noteSection() {
+      return Container(
+        margin: const EdgeInsets.only(top: 30),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CustomPaint(
+              size: const Size(double.infinity, 1),
+              painter: DashedLinePainter(lineColor: kGreyColor),
+            ),
+            Container(
+              margin: const EdgeInsets.only(top: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Note *",
+                    style: greyTextStyle.copyWith(
+                        fontSize: 14, fontWeight: medium),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    transaction.note,
+                    style: greyTextStyle.copyWith(
+                        fontSize: 14, fontWeight: medium),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      );
+    }
+
+    Widget qrCodeSection() {
+      return Container(
+        margin: const EdgeInsets.only(top: 30),
+        child: Column(
+          children: [
+            CustomPaint(
+              size: const Size(double.infinity, 1),
+              painter: DashedLinePainter(
+                  lineColor: kGreenColor, spaceLine: 7, strokeLine: 2),
+            ),
+            Container(
+              height: 220,
+              width: 220,
+              margin: const EdgeInsets.only(top: 20),
+              decoration: const BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage("assets/img_qrcode.png"))),
             )
           ],
         ),
@@ -96,25 +153,8 @@ class DetailPage extends StatelessWidget {
               ),
             ],
           ),
-          Container(
-            margin: const EdgeInsets.only(top: 30),
-            child: Column(
-              children: [
-                CustomPaint(
-                  size: const Size(double.infinity, 1),
-                  painter: DashedLinePainter(),
-                ),
-                Container(
-                  height: 220,
-                  width: 220,
-                  margin: const EdgeInsets.only(top: 20),
-                  decoration: const BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage("assets/img_qrcode.png"))),
-                )
-              ],
-            ),
-          )
+          noteSection(),
+          qrCodeSection()
         ]),
       );
     }
@@ -132,14 +172,21 @@ class DetailPage extends StatelessWidget {
 }
 
 class DashedLinePainter extends CustomPainter {
+  final Color lineColor;
+  final double spaceLine;
+  final double strokeLine;
+
+  DashedLinePainter(
+      {required this.lineColor, this.spaceLine = 0, this.strokeLine = 0.3});
+
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint()
-      ..color = kGreenColor
-      ..strokeWidth = 2;
+      ..color = lineColor
+      ..strokeWidth = strokeLine;
 
-    double dashWidth = 5;
-    double dashSpace = 5;
+    double dashWidth = 7;
+    double dashSpace = spaceLine;
     double startX = 0;
 
     while (startX < size.width) {

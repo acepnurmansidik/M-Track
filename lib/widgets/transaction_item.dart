@@ -20,7 +20,6 @@ class TransactionItem extends StatelessWidget {
       },
       child: Container(
         height: 80,
-        // padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         width: double.infinity,
         decoration: BoxDecoration(
             color: kWhiteColor, borderRadius: BorderRadius.circular(10)),

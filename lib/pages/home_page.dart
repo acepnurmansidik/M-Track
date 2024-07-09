@@ -100,17 +100,12 @@ class _HomePageState extends State<HomePage> {
           if (state is TransactionLoading) {
             return Container(
               alignment: Alignment.center,
-              margin: EdgeInsets.only(top: 30),
-              child: CircularProgressIndicator(),
+              margin: const EdgeInsets.only(top: 30),
+              child: const CircularProgressIndicator(),
             );
           } else if (state is TransactionSuccess) {
-            final response = state.transactions.length != 0
-                ? state.transactions
-                    .map((transaction) => TransactionItem(
-                          transaction: transaction,
-                        ))
-                    .toList()
-                : [
+            final response = state.transactions.isEmpty
+                ? [
                     Center(
                         child: Container(
                       height: 210,
@@ -120,7 +115,12 @@ class _HomePageState extends State<HomePage> {
                           image: DecorationImage(
                               image: AssetImage("assets/icon_notfound.png"))),
                     ))
-                  ];
+                  ]
+                : state.transactions
+                    .map((transaction) => TransactionItem(
+                          transaction: transaction,
+                        ))
+                    .toList();
             return SizedBox.expand(
               child: DraggableScrollableSheet(
                 initialChildSize: 0.65,
@@ -131,8 +131,8 @@ class _HomePageState extends State<HomePage> {
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
                         color: kWhiteColor,
-                        borderRadius:
-                            BorderRadius.vertical(top: Radius.circular(18))),
+                        borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(18))),
                     child: Stack(
                       children: [
                         Container(
@@ -152,11 +152,11 @@ class _HomePageState extends State<HomePage> {
                               margin: const EdgeInsets.only(bottom: 10),
                               decoration: BoxDecoration(
                                   color: kDoveGreyColor,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(18))),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(18))),
                             ),
                             Container(
-                              padding: EdgeInsets.only(bottom: 15),
+                              padding: const EdgeInsets.only(bottom: 15),
                               decoration: BoxDecoration(color: kWhiteColor),
                               child: Row(
                                 children: [

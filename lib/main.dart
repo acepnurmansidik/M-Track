@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tracking/cubit/transaction_cubit.dart';
-import 'package:tracking/pages/detail_page.dart';
 import 'package:tracking/pages/home_page.dart';
 import 'package:tracking/pages/splash_page.dart';
 import 'package:tracking/pages/success_page.dart';
