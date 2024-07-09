@@ -6,19 +6,21 @@ class CustomeTextFormFieldItem extends StatelessWidget {
   final String hintText;
   final String title;
   final bool isNumberOnly;
+  final EdgeInsets padding;
 
   const CustomeTextFormFieldItem(
       {super.key,
       required this.controller,
       required this.title,
       required this.isNumberOnly,
+      this.padding = EdgeInsets.zero,
       required this.hintText});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: padding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

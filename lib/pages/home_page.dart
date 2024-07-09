@@ -128,7 +128,8 @@ class _HomePageState extends State<HomePage> {
                 maxChildSize: 1,
                 builder: (context, scrollController) {
                   return Container(
-                    padding: const EdgeInsets.all(20),
+                    padding:
+                        const EdgeInsets.only(top: 20, left: 20, right: 20),
                     decoration: BoxDecoration(
                         color: kWhiteColor,
                         borderRadius: const BorderRadius.vertical(
