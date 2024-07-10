@@ -100,7 +100,7 @@ class _HomePageState extends State<HomePage> {
           maxChildSize: 1,
           builder: (context, scrollController) {
             return Container(
-              padding: EdgeInsets.only(top: 20, left: 20, right: 20),
+              padding: EdgeInsets.only(top: 20),
               decoration: BoxDecoration(
                   color: kWhiteColor,
                   borderRadius:
@@ -135,7 +135,10 @@ class _HomePageState extends State<HomePage> {
                                 BorderRadius.all(Radius.circular(18))),
                       ),
                       Container(
-                        padding: EdgeInsets.only(bottom: 15),
+                        padding: EdgeInsets.only(
+                            bottom: 15,
+                            left: defaultMargin,
+                            right: defaultMargin),
                         decoration: BoxDecoration(color: kWhiteColor),
                         child: Row(
                           children: [
@@ -179,7 +182,7 @@ class _HomePageState extends State<HomePage> {
             border: Border(top: BorderSide(width: 0.2, color: kGreyColor))),
         child: TextButton(
           onPressed: () {
-            Navigator.pushNamed(context, '/add-transaction');
+            Navigator.pushNamed(context, '/swipe');
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,

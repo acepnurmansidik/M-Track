@@ -4,6 +4,7 @@ import 'package:tracking/pages/signin_page.dart';
 import 'package:tracking/pages/signup_page.dart';
 import 'package:tracking/pages/splash_page.dart';
 import 'package:tracking/pages/success_page.dart';
+import 'package:tracking/pages/swipe_page.dart';
 import 'package:tracking/pages/transaction_page.dart';
 
 void main() => runApp(const MyApp());
@@ -18,6 +19,7 @@ class MyApp extends StatelessWidget {
       routes: {
         "/": (context) => SplashPage(),
         "/sign-up": (context) => SignUpPage(),
+        "/swipe": (context) => SwipePage(),
         "/sign-in": (context) => SignInPage(),
         "/home": (context) => HomePage(),
         "/add-transaction": (context) => TransactionPage(),
