@@ -4,7 +4,7 @@ import 'package:tracking/widgets/custom_button.dart';
 import 'package:tracking/widgets/custom_textform_field.dart';
 
 class SignInPage extends StatelessWidget {
-  const SignInPage({super.key});
+  SignInPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,7 @@ class SignInPage extends StatelessWidget {
 
     Widget header() {
       return Container(
-        margin: const EdgeInsets.only(left: 20, right: 20, top: 30),
+        margin: EdgeInsets.only(left: 20, right: 20, top: 30),
         child: Text(
           "Sign In",
           style: blackTextStyle.copyWith(fontSize: 28, fontWeight: semibold),
@@ -23,7 +23,7 @@ class SignInPage extends StatelessWidget {
 
     Widget formRegister() {
       return Container(
-        margin: const EdgeInsets.only(left: 20, right: 20, top: 40),
+        margin: EdgeInsets.only(left: 20, right: 20, top: 40),
         child: Column(
           children: [
             CustomeTextFormFieldItem(
@@ -44,7 +44,7 @@ class SignInPage extends StatelessWidget {
     Widget buttonSubmit() {
       return CustomButton(
         title: 'Submit',
-        margin: const EdgeInsets.only(left: 20, right: 20, top: 60),
+        margin: EdgeInsets.only(left: 20, right: 20, top: 60),
         onPressed: () {
           Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
         },
@@ -57,7 +57,7 @@ class SignInPage extends StatelessWidget {
           Navigator.pushNamed(context, '/sign-up');
         },
         child: Container(
-          margin: const EdgeInsets.only(top: 30, bottom: 73),
+          margin: EdgeInsets.only(top: 30, bottom: 73),
           alignment: Alignment.center,
           child: Text(
             'Don\'t have account? Sign Up',

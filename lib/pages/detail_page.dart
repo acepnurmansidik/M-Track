@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:tracking/model/transaction_model.dart';
 import 'package:tracking/theme.dart';
 
 class DetailPage extends StatelessWidget {
   final bool grafik = false;
-  final TransactionModel transaction;
 
-  const DetailPage({super.key, required this.transaction});
+  DetailPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,16 +32,16 @@ class DetailPage extends StatelessWidget {
 
     Widget noteSection() {
       return Container(
-        margin: const EdgeInsets.only(top: 30),
+        margin: EdgeInsets.only(top: 30),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CustomPaint(
-              size: const Size(double.infinity, 1),
+              size: Size(double.infinity, 1),
               painter: DashedLinePainter(lineColor: kGreyColor),
             ),
             Container(
-              margin: const EdgeInsets.only(top: 20),
+              margin: EdgeInsets.only(top: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -52,11 +50,11 @@ class DetailPage extends StatelessWidget {
                     style: greyTextStyle.copyWith(
                         fontSize: 14, fontWeight: medium),
                   ),
-                  const SizedBox(
+                  SizedBox(
                     height: 10,
                   ),
                   Text(
-                    transaction.note,
+                    "Ini adalah catatan",
                     style: greyTextStyle.copyWith(
                         fontSize: 14, fontWeight: medium),
                   ),
@@ -70,19 +68,19 @@ class DetailPage extends StatelessWidget {
 
     Widget qrCodeSection() {
       return Container(
-        margin: const EdgeInsets.only(top: 30),
+        margin: EdgeInsets.only(top: 30),
         child: Column(
           children: [
             CustomPaint(
-              size: const Size(double.infinity, 1),
+              size: Size(double.infinity, 1),
               painter: DashedLinePainter(
                   lineColor: kGreenColor, spaceLine: 7, strokeLine: 2),
             ),
             Container(
               height: 220,
               width: 220,
-              margin: const EdgeInsets.only(top: 20),
-              decoration: const BoxDecoration(
+              margin: EdgeInsets.only(top: 20),
+              decoration: BoxDecoration(
                   image: DecorationImage(
                       image: AssetImage("assets/img_qrcode.png"))),
             )
@@ -94,9 +92,8 @@ class DetailPage extends StatelessWidget {
     Widget detailInfo() {
       return Container(
         width: double.infinity,
-        margin: const EdgeInsets.all(20),
-        padding:
-            const EdgeInsets.only(left: 25, right: 25, top: 20, bottom: 25),
+        margin: EdgeInsets.all(20),
+        padding: EdgeInsets.only(left: 25, right: 25, top: 20, bottom: 25),
         decoration: BoxDecoration(
             color: kWhiteColor, borderRadius: BorderRadius.circular(18)),
         child: Column(children: [
@@ -105,7 +102,7 @@ class DetailPage extends StatelessWidget {
             size: 45,
             color: kBlueColor,
           ),
-          const SizedBox(
+          SizedBox(
             height: 6,
           ),
           Text(
@@ -115,12 +112,9 @@ class DetailPage extends StatelessWidget {
           Text.rich(TextSpan(
               text: "20 Dec, 2024",
               style: greyTextStyle.copyWith(fontSize: 12, fontWeight: light),
-              children: const [
-                TextSpan(text: " | "),
-                TextSpan(text: "09:30")
-              ])),
+              children: [TextSpan(text: " | "), TextSpan(text: "09:30")])),
           Container(
-            margin: const EdgeInsets.only(top: 30),
+            margin: EdgeInsets.only(top: 30),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -131,7 +125,7 @@ class DetailPage extends StatelessWidget {
                 ),
                 Text(
                     NumberFormat.currency(symbol: "IDR ", decimalDigits: 0)
-                        .format(transaction.amount),
+                        .format(734000),
                     style: blackTextStyle.copyWith(
                         fontSize: 16, fontWeight: medium))
               ],
@@ -162,8 +156,7 @@ class DetailPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: kBackgroundColor,
       appBar: PreferredSize(
-          preferredSize: const Size(double.infinity, 60),
-          child: appBarSection()),
+          preferredSize: Size(double.infinity, 60), child: appBarSection()),
       body: ListView(
         children: [detailInfo()],
       ),

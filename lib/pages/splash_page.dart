@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 class SplashPage extends StatefulWidget {
-  const SplashPage({super.key});
+  SplashPage({super.key});
 
   @override
   State<SplashPage> createState() => _SplashPageState();
@@ -12,8 +12,8 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
-    Timer(const Duration(seconds: 3), () {
-      Navigator.pushNamedAndRemoveUntil(context, '/sign-up', (route) => false);
+    Timer(Duration(seconds: 3), () {
+      Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
     });
     super.initState();
   }
@@ -25,7 +25,7 @@ class _SplashPageState extends State<SplashPage> {
         child: Container(
           width: 150,
           height: 150,
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
               image: DecorationImage(image: AssetImage("assets/img_logo.png"))),
         ),
       ),

@@ -15,7 +15,6 @@ class TransactionItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 80,
-      // padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
       width: double.infinity,
       decoration: BoxDecoration(
           color: kWhiteColor, borderRadius: BorderRadius.circular(10)),

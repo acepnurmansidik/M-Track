@@ -4,7 +4,7 @@ import 'package:tracking/widgets/transaction_item.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -22,8 +22,8 @@ class _HomePageState extends State<HomePage> {
       return Container(
         height: 250,
         width: double.infinity,
-        margin: const EdgeInsets.only(top: 20),
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+        margin: EdgeInsets.only(top: 20),
+        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> {
                 Container(
                   height: 50,
                   width: 50,
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       image: DecorationImage(
                           image: AssetImage("assets/img_avatar.png"))),
@@ -42,33 +42,33 @@ class _HomePageState extends State<HomePage> {
                 Container(
                   height: 40,
                   width: 95,
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  padding: EdgeInsets.symmetric(horizontal: 12),
                   decoration: BoxDecoration(
                       color: kWhiteColor,
                       borderRadius: BorderRadius.circular(18)),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Icon(Icons.qr_code_scanner_outlined),
+                      Icon(Icons.qr_code_scanner_outlined),
                       Container(
                         height: 20,
                         width: 2,
                         decoration: BoxDecoration(color: kGreyColor),
                       ),
-                      const Icon(Icons.notification_add_outlined)
+                      Icon(Icons.notification_add_outlined)
                     ],
                   ),
                 ),
               ],
             ),
             Container(
-                margin: const EdgeInsets.only(bottom: 5, top: 20),
+                margin: EdgeInsets.only(bottom: 5, top: 20),
                 child: Text(
                   "Current value",
                   style: greyTextStyle.copyWith(fontSize: 16),
                 )),
             Container(
-                margin: const EdgeInsets.only(bottom: 2),
+                margin: EdgeInsets.only(bottom: 2),
                 child: Text.rich(TextSpan(
                     text: 'Rp ',
                     style: blackTextStyle.copyWith(fontSize: 16),
@@ -100,15 +100,15 @@ class _HomePageState extends State<HomePage> {
           maxChildSize: 1,
           builder: (context, scrollController) {
             return Container(
-              padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
+              padding: EdgeInsets.only(top: 20, left: 20, right: 20),
               decoration: BoxDecoration(
                   color: kWhiteColor,
                   borderRadius:
-                      const BorderRadius.vertical(top: Radius.circular(18))),
+                      BorderRadius.vertical(top: Radius.circular(18))),
               child: Stack(
                 children: [
                   Container(
-                    margin: const EdgeInsets.only(top: 50),
+                    margin: EdgeInsets.only(top: 50),
                     child: SingleChildScrollView(
                       controller: scrollController,
                       child: Column(
@@ -128,14 +128,14 @@ class _HomePageState extends State<HomePage> {
                       Container(
                         height: 5,
                         width: 50,
-                        margin: const EdgeInsets.only(bottom: 10),
+                        margin: EdgeInsets.only(bottom: 10),
                         decoration: BoxDecoration(
                             color: kDoveGreyColor,
                             borderRadius:
-                                const BorderRadius.all(Radius.circular(18))),
+                                BorderRadius.all(Radius.circular(18))),
                       ),
                       Container(
-                        padding: const EdgeInsets.only(bottom: 15),
+                        padding: EdgeInsets.only(bottom: 15),
                         decoration: BoxDecoration(color: kWhiteColor),
                         child: Row(
                           children: [
@@ -185,7 +185,7 @@ class _HomePageState extends State<HomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                margin: const EdgeInsets.only(right: 10),
+                margin: EdgeInsets.only(right: 10),
                 decoration: BoxDecoration(
                   border: Border.all(
                       width: 2, color: kGreenColor, style: BorderStyle.solid),

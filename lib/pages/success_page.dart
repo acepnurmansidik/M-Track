@@ -3,7 +3,7 @@ import 'package:tracking/theme.dart';
 import 'package:tracking/widgets/custom_button.dart';
 
 class SuccessPage extends StatelessWidget {
-  const SuccessPage({super.key});
+  SuccessPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,7 @@ class SuccessPage extends StatelessWidget {
             Container(
               width: 200,
               height: 200,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                   image: DecorationImage(
                       image: AssetImage("assets/icon_success.png"))),
             ),
@@ -24,7 +24,7 @@ class SuccessPage extends StatelessWidget {
               style:
                   blackTextStyle.copyWith(fontSize: 28, fontWeight: semibold),
             ),
-            const SizedBox(
+            SizedBox(
               height: 6,
             ),
             Text(
@@ -33,7 +33,7 @@ class SuccessPage extends StatelessWidget {
             ),
             CustomButton(
               title: 'Back to menu',
-              margin: const EdgeInsets.only(left: 20, right: 20, top: 50),
+              margin: EdgeInsets.only(left: 20, right: 20, top: 50),
               widthBtn: 220,
               onPressed: () {
                 Navigator.pushNamedAndRemoveUntil(
