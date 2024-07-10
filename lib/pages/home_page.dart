@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tracking/cubit/transaction_cubit.dart';
 import 'package:tracking/theme.dart';
 import 'package:tracking/widgets/transaction_item.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,7 +13,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   void initState() {
-    context.read<TransactionCubit>().fetchTransaction();
     super.initState();
   }
 
@@ -95,92 +93,69 @@ class _HomePageState extends State<HomePage> {
     }
 
     Widget transactionList() {
-      return BlocBuilder<TransactionCubit, TransactionState>(
-        builder: (context, state) {
-          if (state is TransactionLoading) {
+      return SizedBox.expand(
+        child: DraggableScrollableSheet(
+          initialChildSize: 0.65,
+          minChildSize: 0.65,
+          maxChildSize: 1,
+          builder: (context, scrollController) {
             return Container(
-              alignment: Alignment.center,
-              margin: const EdgeInsets.only(top: 30),
-              child: const CircularProgressIndicator(),
-            );
-          } else if (state is TransactionSuccess) {
-            final response = state.transactions.isEmpty
-                ? [
-                    Center(
-                        child: Container(
-                      height: 210,
-                      width: 210,
-                      margin: const EdgeInsets.only(top: 50),
-                      decoration: const BoxDecoration(
-                          image: DecorationImage(
-                              image: AssetImage("assets/icon_notfound.png"))),
-                    ))
-                  ]
-                : state.transactions
-                    .map((transaction) => TransactionItem(
-                          transaction: transaction,
-                        ))
-                    .toList();
-            return SizedBox.expand(
-              child: DraggableScrollableSheet(
-                initialChildSize: 0.65,
-                minChildSize: 0.65,
-                maxChildSize: 1,
-                builder: (context, scrollController) {
-                  return Container(
-                    padding:
-                        const EdgeInsets.only(top: 20, left: 20, right: 20),
-                    decoration: BoxDecoration(
-                        color: kWhiteColor,
-                        borderRadius: const BorderRadius.vertical(
-                            top: Radius.circular(18))),
-                    child: Stack(
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.only(top: 50),
-                          child: SingleChildScrollView(
-                            controller: scrollController,
-                            child: Column(
-                              children: response,
-                            ),
-                          ),
-                        ),
-                        Column(
+              padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
+              decoration: BoxDecoration(
+                  color: kWhiteColor,
+                  borderRadius:
+                      const BorderRadius.vertical(top: Radius.circular(18))),
+              child: Stack(
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(top: 50),
+                    child: SingleChildScrollView(
+                      controller: scrollController,
+                      child: Column(
+                        children: [
+                          TransactionItem(
+                              grafik: true, type: 'type', name: 'name'),
+                          TransactionItem(
+                              grafik: true, type: 'type', name: 'name'),
+                          TransactionItem(
+                              grafik: true, type: 'type', name: 'name'),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Column(
+                    children: [
+                      Container(
+                        height: 5,
+                        width: 50,
+                        margin: const EdgeInsets.only(bottom: 10),
+                        decoration: BoxDecoration(
+                            color: kDoveGreyColor,
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(18))),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.only(bottom: 15),
+                        decoration: BoxDecoration(color: kWhiteColor),
+                        child: Row(
                           children: [
-                            Container(
-                              height: 5,
-                              width: 50,
-                              margin: const EdgeInsets.only(bottom: 10),
-                              decoration: BoxDecoration(
-                                  color: kDoveGreyColor,
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(18))),
-                            ),
-                            Container(
-                              padding: const EdgeInsets.only(bottom: 15),
-                              decoration: BoxDecoration(color: kWhiteColor),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    "Transaksi",
-                                    style: blackTextStyle.copyWith(
-                                        fontSize: 16, fontWeight: semibold),
-                                  )
-                                ],
-                              ),
-                            ),
+                            Text(
+                              "Transaksi",
+                              style: blackTextStyle.copyWith(
+                                  fontSize: 16, fontWeight: semibold),
+                            )
                           ],
                         ),
-                      ],
-                    ),
-                  );
-                },
+                      ),
+                    ],
+                  ),
+                ],
               ),
             );
-          }
-          return Container();
-        },
+          },
+        ),
       );
+      ;
     }
 
     return Scaffold(

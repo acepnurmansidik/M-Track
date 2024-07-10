@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tracking/cubit/transaction_cubit.dart';
 import 'package:tracking/pages/home_page.dart';
 import 'package:tracking/pages/signin_page.dart';
 import 'package:tracking/pages/signup_page.dart';
@@ -15,23 +13,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) => TransactionCubit(),
-        ),
-      ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        routes: {
-          "/": (context) => const SplashPage(),
-          "/sign-up": (context) => const SignUpPage(),
-          "/sign-in": (context) => const SignInPage(),
-          "/home": (context) => const HomePage(),
-          "/add-transaction": (context) => const TransactionPage(),
-          "/success": (context) => const SuccessPage(),
-        },
-      ),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      routes: {
+        "/": (context) => const SplashPage(),
+        "/sign-up": (context) => const SignUpPage(),
+        "/sign-in": (context) => const SignInPage(),
+        "/home": (context) => const HomePage(),
+        "/add-transaction": (context) => const TransactionPage(),
+        "/success": (context) => const SuccessPage(),
+      },
     );
   }
 }
