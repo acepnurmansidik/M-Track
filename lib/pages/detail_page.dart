@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:tracking/models/transaction_model.dart';
 import 'package:tracking/theme.dart';
 
 class DetailPage extends StatelessWidget {
   final bool grafik = false;
+  final TransactionModel transaction;
 
-  DetailPage({super.key});
+  const DetailPage({super.key, required this.transaction});
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +56,7 @@ class DetailPage extends StatelessWidget {
                     height: 10,
                   ),
                   Text(
-                    "Ini adalah catatan",
+                    transaction.note,
                     style: greyTextStyle.copyWith(
                         fontSize: 14, fontWeight: medium),
                   ),
@@ -106,13 +108,20 @@ class DetailPage extends StatelessWidget {
             height: 6,
           ),
           Text(
-            'Transport',
+            transaction.categoryId["value"],
             style: blackTextStyle.copyWith(fontSize: 16, fontWeight: medium),
           ),
           Text.rich(TextSpan(
-              text: "20 Dec, 2024",
+              text: DateFormat('dd MMMM yyyy')
+                  .format(DateTime.parse(transaction.createdAt)),
+              // text: "22 Dec, 2022",
               style: greyTextStyle.copyWith(fontSize: 12, fontWeight: light),
-              children: [TextSpan(text: " | "), TextSpan(text: "09:30")])),
+              children: [
+                TextSpan(text: " | "),
+                TextSpan(
+                    text: DateFormat('hh:mm')
+                        .format(DateTime.parse(transaction.createdAt)))
+              ])),
           Container(
             margin: EdgeInsets.only(top: 30),
             child: Row(
@@ -125,7 +134,7 @@ class DetailPage extends StatelessWidget {
                 ),
                 Text(
                     NumberFormat.currency(symbol: "IDR ", decimalDigits: 0)
-                        .format(734000),
+                        .format(transaction.amount),
                     style: blackTextStyle.copyWith(
                         fontSize: 16, fontWeight: medium))
               ],
@@ -135,7 +144,7 @@ class DetailPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Category',
+                transaction.typeId["value"],
                 style: greyTextStyle.copyWith(fontSize: 14, fontWeight: medium),
               ),
               Transform.rotate(

@@ -1,26 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:tracking/models/transaction_model.dart';
+import 'package:tracking/pages/detail_page.dart';
 import 'package:tracking/pages/success_page.dart';
 import 'package:tracking/pages/transaction_page.dart';
 import 'package:tracking/theme.dart';
 
 class TransactionItem extends StatelessWidget {
   final bool grafik;
-  final String type;
-  final String name;
-  const TransactionItem(
-      {super.key,
-      required this.grafik,
-      required this.type,
-      required this.name});
+  final TransactionModel transaction;
+
+  const TransactionItem({
+    super.key,
+    required this.grafik,
+    required this.transaction,
+  });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, '/add-transaction');
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => DetailPage(
+                      transaction: transaction,
+                    )));
       },
       child: Dismissible(
-        key: Key("value"),
+        key: Key(transaction.id),
         background: slideEditBackground(),
         secondaryBackground: slideDeleteBackground(),
         confirmDismiss: (direction) async {
@@ -57,12 +65,12 @@ class TransactionItem extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      type,
+                      transaction.typeId["value"],
                       style: blackTextStyle.copyWith(
                           fontSize: 18, fontWeight: medium),
                     ),
                     Text(
-                      name,
+                      transaction.categoryId["value"],
                       style: greyTextStyle.copyWith(fontWeight: light),
                     ),
                   ],
@@ -80,9 +88,10 @@ class TransactionItem extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    "200.000",
+                    NumberFormat.currency(symbol: "IDR ", decimalDigits: 0)
+                        .format(transaction.amount),
                     style: blackTextStyle.copyWith(
-                        fontSize: 18, fontWeight: medium),
+                        fontSize: 16, fontWeight: medium),
                   ),
                 ],
               )

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tracking/cubit/transaction_cubit.dart';
 import 'package:tracking/theme.dart';
 import 'package:tracking/widgets/transaction_item.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,6 +14,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   void initState() {
+    context.read<TransactionCubit>().fetchTransaction();
     super.initState();
   }
 
@@ -93,72 +95,141 @@ class _HomePageState extends State<HomePage> {
     }
 
     Widget transactionList() {
-      return SizedBox.expand(
-        child: DraggableScrollableSheet(
-          initialChildSize: 0.65,
-          minChildSize: 0.65,
-          maxChildSize: 1,
-          builder: (context, scrollController) {
-            return Container(
-              padding: EdgeInsets.only(top: 20),
-              decoration: BoxDecoration(
-                  color: kWhiteColor,
-                  borderRadius:
-                      BorderRadius.vertical(top: Radius.circular(18))),
-              child: Stack(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(top: 50),
-                    child: SingleChildScrollView(
-                      controller: scrollController,
-                      child: Column(
-                        children: [
-                          TransactionItem(
-                              grafik: true, type: 'type', name: 'name'),
-                          TransactionItem(
-                              grafik: true, type: 'type', name: 'name'),
-                          TransactionItem(
-                              grafik: true, type: 'type', name: 'name'),
-                        ],
-                      ),
+      return BlocBuilder<TransactionCubit, TransactionState>(
+        builder: (context, state) {
+          if (state is TransactionSuccess) {
+            final result;
+            if (state.transactions.isEmpty) {
+              result = [];
+            } else {
+              result = state.transactions
+                  .map(
+                    (item) => TransactionItem(
+                      grafik: true,
+                      transaction: item,
                     ),
-                  ),
-                  Column(
-                    children: [
-                      Container(
-                        height: 5,
-                        width: 50,
-                        margin: EdgeInsets.only(bottom: 10),
-                        decoration: BoxDecoration(
-                            color: kDoveGreyColor,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(18))),
-                      ),
-                      Container(
-                        padding: EdgeInsets.only(
-                            bottom: 15,
-                            left: defaultMargin,
-                            right: defaultMargin),
-                        decoration: BoxDecoration(color: kWhiteColor),
-                        child: Row(
+                  )
+                  .toList();
+            }
+            return SizedBox.expand(
+              child: DraggableScrollableSheet(
+                initialChildSize: 0.65,
+                minChildSize: 0.65,
+                maxChildSize: 1,
+                builder: (context, scrollController) {
+                  return Container(
+                    padding: EdgeInsets.only(top: 20),
+                    decoration: BoxDecoration(
+                        color: kWhiteColor,
+                        borderRadius:
+                            BorderRadius.vertical(top: Radius.circular(18))),
+                    child: Stack(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(top: 50),
+                          child: SingleChildScrollView(
+                            controller: scrollController,
+                            child: Column(
+                              children: result,
+                            ),
+                          ),
+                        ),
+                        Column(
                           children: [
-                            Text(
-                              "Transaksi",
-                              style: blackTextStyle.copyWith(
-                                  fontSize: 16, fontWeight: semibold),
-                            )
+                            Container(
+                              height: 5,
+                              width: 50,
+                              margin: EdgeInsets.only(bottom: 10),
+                              decoration: BoxDecoration(
+                                  color: kDoveGreyColor,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(18))),
+                            ),
+                            Container(
+                              padding: EdgeInsets.only(
+                                  bottom: 15,
+                                  left: defaultMargin,
+                                  right: defaultMargin),
+                              decoration: BoxDecoration(color: kWhiteColor),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "Transaksi",
+                                    style: blackTextStyle.copyWith(
+                                        fontSize: 16, fontWeight: semibold),
+                                  )
+                                ],
+                              ),
+                            ),
                           ],
                         ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            );
+          }
+          return SizedBox.expand(
+            child: DraggableScrollableSheet(
+              initialChildSize: 0.65,
+              minChildSize: 0.65,
+              maxChildSize: 1,
+              builder: (context, scrollController) {
+                return Container(
+                  padding: EdgeInsets.only(top: 20),
+                  decoration: BoxDecoration(
+                      color: kWhiteColor,
+                      borderRadius:
+                          BorderRadius.vertical(top: Radius.circular(18))),
+                  child: Stack(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(top: 50),
+                        child: SingleChildScrollView(
+                          controller: scrollController,
+                          child: Column(
+                            children: [],
+                          ),
+                        ),
+                      ),
+                      Column(
+                        children: [
+                          Container(
+                            height: 5,
+                            width: 50,
+                            margin: EdgeInsets.only(bottom: 10),
+                            decoration: BoxDecoration(
+                                color: kDoveGreyColor,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(18))),
+                          ),
+                          Container(
+                            padding: EdgeInsets.only(
+                                bottom: 15,
+                                left: defaultMargin,
+                                right: defaultMargin),
+                            decoration: BoxDecoration(color: kWhiteColor),
+                            child: Row(
+                              children: [
+                                Text(
+                                  "Transaksi",
+                                  style: blackTextStyle.copyWith(
+                                      fontSize: 16, fontWeight: semibold),
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
-              ),
-            );
-          },
-        ),
+                );
+              },
+            ),
+          );
+        },
       );
-      ;
     }
 
     return Scaffold(
@@ -182,7 +253,7 @@ class _HomePageState extends State<HomePage> {
             border: Border(top: BorderSide(width: 0.2, color: kGreyColor))),
         child: TextButton(
           onPressed: () {
-            Navigator.pushNamed(context, '/swipe');
+            Navigator.pushNamed(context, '/add-transaction');
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
