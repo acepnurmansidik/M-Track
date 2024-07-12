@@ -11,12 +11,15 @@ Color kWhiteColor = Color(0xffFFFFFF);
 Color kRedColor = Color(0xffEB70A5);
 Color kBlueColor = Color(0xff4AAEFF);
 Color kBackgroundColor = Color(0xfff0efeb);
+Color kBackgroundNotifColor = Color(0xff464652);
+Color kDarkBlueColor = Color(0xff7c7cfc);
 
 TextStyle blackTextStyle = GoogleFonts.poppins(color: kBlackColor);
 TextStyle greyTextStyle = GoogleFonts.poppins(color: kGreyColor);
 TextStyle greenTextStyle = GoogleFonts.poppins(color: kGreenColor);
 TextStyle whiteTextStyle = GoogleFonts.poppins(color: kWhiteColor);
 TextStyle redTextStyle = GoogleFonts.poppins(color: kRedColor);
+TextStyle darkBlueTextStyle = GoogleFonts.poppins(color: kDarkBlueColor);
 
 FontWeight light = FontWeight.w300;
 FontWeight regular = FontWeight.w400;

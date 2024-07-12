@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:tracking/cubit/transaction_cubit.dart';
+import 'package:tracking/pages/transaction_page.dart';
 import 'package:tracking/theme.dart';
 import 'package:tracking/widgets/transaction_item.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,6 +15,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  bool isActive = false;
+  int _timeCount = 5;
+  Timer? _timer;
+
   @override
   void initState() {
     context.read<TransactionCubit>().fetchTransaction();
@@ -20,6 +27,45 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    Widget customBtnNav() {
+      return Container(
+        width: 400,
+        height: 70,
+        decoration: BoxDecoration(
+            color: kWhiteColor,
+            border: Border(top: BorderSide(width: 0.2, color: kGreyColor))),
+        child: TextButton(
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => TransactionPage()));
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                margin: EdgeInsets.only(right: 10),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                      width: 2, color: kGreenColor, style: BorderStyle.solid),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.add,
+                  color: kGreenColor,
+                  size: 30,
+                ),
+              ),
+              Text(
+                "Add",
+                style:
+                    greenTextStyle.copyWith(fontSize: 16, fontWeight: semibold),
+              )
+            ],
+          ),
+        ),
+      );
+    }
+
     Widget balanceInfo() {
       return Container(
         height: 250,
@@ -107,6 +153,11 @@ class _HomePageState extends State<HomePage> {
                     (item) => TransactionItem(
                       grafik: true,
                       transaction: item,
+                      cancelBtn: (value) {
+                        setState(() {
+                          isActive = value;
+                        });
+                      },
                     ),
                   )
                   .toList();
@@ -232,6 +283,81 @@ class _HomePageState extends State<HomePage> {
       );
     }
 
+    Widget cancelButton() {
+      _timer = Timer(const Duration(seconds: 1), () {
+        if (_timeCount == 1) {
+          setState(() {
+            isActive = false;
+            _timeCount = 5;
+          });
+        } else {
+          setState(() {
+            _timeCount -= 1;
+          });
+        }
+      });
+      return Align(
+        alignment: Alignment.bottomCenter,
+        child: Container(
+          height: 45,
+          margin: EdgeInsets.only(
+              left: defaultMargin, right: defaultMargin, bottom: 25),
+          padding:
+              EdgeInsets.only(left: defaultMargin, right: defaultMargin - 10),
+          decoration: BoxDecoration(
+              color: kBackgroundNotifColor,
+              borderRadius: BorderRadius.circular(10)),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    height: 26,
+                    width: 26,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        CircularProgressIndicator(
+                          backgroundColor: kWhiteColor,
+                          strokeWidth: 2.5,
+                          // value: _timeCount,
+                        ),
+                        Text(
+                          '$_timeCount',
+                          style: whiteTextStyle.copyWith(fontSize: 14),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 15,
+                  ),
+                  Text(
+                    "click for cancel",
+                    style: whiteTextStyle.copyWith(fontSize: 14),
+                  ),
+                ],
+              ),
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    _timeCount = 5;
+                    isActive = false;
+                    _timer?.cancel();
+                  });
+                },
+                child: Text(
+                  "Undo",
+                  style: darkBlueTextStyle.copyWith(fontSize: 14),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
     return Scaffold(
       backgroundColor: kBackgroundColor,
       body: Stack(
@@ -243,43 +369,10 @@ class _HomePageState extends State<HomePage> {
           ),
           balanceInfo(),
           transactionList(),
+          isActive ? cancelButton() : const SizedBox(),
         ],
       ),
-      bottomNavigationBar: Container(
-        width: 400,
-        height: 70,
-        decoration: BoxDecoration(
-            color: kWhiteColor,
-            border: Border(top: BorderSide(width: 0.2, color: kGreyColor))),
-        child: TextButton(
-          onPressed: () {
-            Navigator.pushNamed(context, '/add-transaction');
-          },
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                margin: EdgeInsets.only(right: 10),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                      width: 2, color: kGreenColor, style: BorderStyle.solid),
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  Icons.add,
-                  color: kGreenColor,
-                  size: 30,
-                ),
-              ),
-              Text(
-                "Add",
-                style:
-                    greenTextStyle.copyWith(fontSize: 16, fontWeight: semibold),
-              )
-            ],
-          ),
-        ),
-      ),
+      bottomNavigationBar: customBtnNav(),
     );
   }
 }

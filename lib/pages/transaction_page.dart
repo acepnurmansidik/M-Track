@@ -1,12 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:tracking/models/transaction_model.dart';
 import 'package:tracking/theme.dart';
 import 'package:tracking/widgets/custom_button.dart';
 import 'package:tracking/widgets/custom_dropdown_item.dart';
 import 'package:tracking/widgets/custom_textform_field.dart';
 
 class TransactionPage extends StatefulWidget {
-  TransactionPage({super.key});
+  late TransactionModel transaction;
+
+  TransactionPage({
+    super.key,
+    this.transaction = const TransactionModel(
+      amount: 0,
+      note: "",
+      categoryId: {},
+      typeId: {},
+      createdAt: "",
+    ),
+  });
 
   @override
   State<TransactionPage> createState() => _TransactionPageState();
@@ -19,6 +30,22 @@ class _TransactionPageState extends State<TransactionPage> {
   final TextEditingController categoryController =
       TextEditingController(text: "");
   final TextEditingController typeController = TextEditingController(text: "");
+
+  @override
+  void initState() {
+    amountController.text = widget.transaction.amount.toString() != ""
+        ? widget.transaction.amount.toString()
+        : "";
+    noteController.text =
+        widget.transaction.note != "" ? widget.transaction.note : "";
+    categoryController.text = widget.transaction.categoryId == null
+        ? widget.transaction.categoryId["_id"]
+        : "";
+    typeController.text = widget.transaction.typeId == null
+        ? widget.transaction.typeId["_id"]
+        : "";
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

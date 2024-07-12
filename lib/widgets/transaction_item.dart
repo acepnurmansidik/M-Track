@@ -2,18 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tracking/models/transaction_model.dart';
 import 'package:tracking/pages/detail_page.dart';
-import 'package:tracking/pages/success_page.dart';
 import 'package:tracking/pages/transaction_page.dart';
 import 'package:tracking/theme.dart';
 
 class TransactionItem extends StatelessWidget {
   final bool grafik;
   final TransactionModel transaction;
+  final Function(bool) cancelBtn;
 
   const TransactionItem({
     super.key,
     required this.grafik,
     required this.transaction,
+    required this.cancelBtn,
   });
 
   @override
@@ -34,12 +35,16 @@ class TransactionItem extends StatelessWidget {
         confirmDismiss: (direction) async {
           if (direction == DismissDirection.endToStart) {
             // Dragged to the left
-            return Navigator.push(context,
-                MaterialPageRoute(builder: (context) => TransactionPage()));
+            return cancelBtn(true);
           } else {
             // Dragged to the right
-            return Navigator.push(context,
-                MaterialPageRoute(builder: (context) => SuccessPage()));
+            return Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => TransactionPage(
+                          transaction: transaction,
+                        )));
+            return cancelBtn(false);
           }
         },
         child: Container(
