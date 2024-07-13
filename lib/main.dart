@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tracking/cubit/refparamater_cubit.dart';
 import 'package:tracking/cubit/transaction_cubit.dart';
 import 'package:tracking/pages/home_page.dart';
 import 'package:tracking/pages/signin_page.dart';
@@ -19,7 +20,8 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) => TransactionCubit(),
-        )
+        ),
+        BlocProvider(create: (context) => RefparamaterCubit()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

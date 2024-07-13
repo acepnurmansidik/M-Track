@@ -11,6 +11,7 @@ class TransactionCubit extends Cubit<TransactionState> {
     try {
       emit(TransactionLoading());
       final result = await TransactionService().getTransactions();
+
       emit(TransactionSuccess(result));
     } catch (e) {
       emit(TransactionFailed(e.toString()));

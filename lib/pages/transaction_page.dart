@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tracking/cubit/refparamater_cubit.dart';
 import 'package:tracking/models/transaction_model.dart';
 import 'package:tracking/theme.dart';
 import 'package:tracking/widgets/custom_button.dart';
@@ -31,6 +33,8 @@ class _TransactionPageState extends State<TransactionPage> {
       TextEditingController(text: "");
   final TextEditingController typeController = TextEditingController(text: "");
 
+  int _itemsSecondDropDown = -1;
+
   @override
   void initState() {
     amountController.text = widget.transaction.amount.toString() != ""
@@ -44,6 +48,8 @@ class _TransactionPageState extends State<TransactionPage> {
     typeController.text = widget.transaction.typeId == null
         ? widget.transaction.typeId["_id"]
         : "";
+
+    context.read<RefparamaterCubit>().getRefparam();
     super.initState();
   }
 
@@ -71,35 +77,72 @@ class _TransactionPageState extends State<TransactionPage> {
     }
 
     Widget formSection() {
-      return Container(
-        margin: EdgeInsets.only(top: 5),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            CustomDropdownItem(
-              title: "Category",
-              selectItem: categoryController,
+      return BlocBuilder<RefparamaterCubit, RefparamaterState>(
+        builder: (context, state) {
+          if (state is RefparamaterSuccess) {
+            return Container(
+              margin: EdgeInsets.only(top: 5),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CustomDropdownItem(
+                    title: "Type",
+                    selectItem: typeController,
+                    items: state.refparam,
+                    onChange: (value) {
+                      setState(() {
+                        _itemsSecondDropDown = value;
+                      });
+                    },
+                  ),
+                  if (_itemsSecondDropDown > -1)
+                    CustomDropdownItem(
+                      title: "Category",
+                      selectItem: typeController,
+                      items: state.refparam[_itemsSecondDropDown].items,
+                      onChange: (p0) {},
+                    ),
+                  CustomeTextFormFieldItem(
+                    controller: amountController,
+                    title: "Amount",
+                    isNumberOnly: true,
+                    hintText: "Enter total amount",
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                  ),
+                  CustomeTextFormFieldItem(
+                    controller: noteController,
+                    title: "Note",
+                    isNumberOnly: false,
+                    hintText: "Enter description",
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                  ),
+                ],
+              ),
+            );
+          }
+          return Container(
+            margin: EdgeInsets.only(top: 5),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CustomeTextFormFieldItem(
+                  controller: amountController,
+                  title: "Amount",
+                  isNumberOnly: true,
+                  hintText: "Enter total amount",
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                ),
+                CustomeTextFormFieldItem(
+                  controller: noteController,
+                  title: "Note",
+                  isNumberOnly: false,
+                  hintText: "Enter description",
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                ),
+              ],
             ),
-            CustomDropdownItem(
-              title: "Type",
-              selectItem: typeController,
-            ),
-            CustomeTextFormFieldItem(
-              controller: amountController,
-              title: "Amount",
-              isNumberOnly: true,
-              hintText: "Enter total amount",
-              padding: EdgeInsets.symmetric(horizontal: 20),
-            ),
-            CustomeTextFormFieldItem(
-              controller: noteController,
-              title: "Note",
-              isNumberOnly: false,
-              hintText: "Enter description",
-              padding: EdgeInsets.symmetric(horizontal: 20),
-            ),
-          ],
-        ),
+          );
+        },
       );
     }
 

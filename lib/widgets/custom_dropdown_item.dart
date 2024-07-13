@@ -4,21 +4,26 @@ import 'package:tracking/theme.dart';
 class CustomDropdownItem extends StatefulWidget {
   final String title;
   final TextEditingController selectItem;
+  final List<dynamic> items;
+  final Function(int) onChange;
 
-  const CustomDropdownItem(
-      {super.key, required this.title, required this.selectItem});
+  CustomDropdownItem({
+    super.key,
+    required this.title,
+    required this.selectItem,
+    required this.items,
+    required this.onChange,
+  });
 
   @override
   State<CustomDropdownItem> createState() => _CustomDropdownItemState();
 }
 
 class _CustomDropdownItemState extends State<CustomDropdownItem> {
-  List<String> itemsList = ['Item 1', 'Item 2', 'Item 3', 'Item 4'];
-  String selectedItem = "";
+  String selectedItemName = "";
 
   @override
   void initState() {
-    selectedItem = itemsList[0];
     super.initState();
   }
 
@@ -51,17 +56,22 @@ class _CustomDropdownItemState extends State<CustomDropdownItem> {
             ),
             child: DropdownButton(
               isExpanded: true,
-              hint: Text(selectedItem),
-              items: itemsList.map((String value) {
+              hint: Text(selectedItemName),
+              items: widget.items.asMap().entries.map((el) {
                 return DropdownMenuItem(
-                  value: value,
-                  child: Text(value),
+                  value: {
+                    'id': el.value.id,
+                    'name': el.value.name,
+                    "child_index": el.value.items != null ? el.key : -1,
+                  },
+                  child: Text('${el.value.name}'),
                 );
               }).toList(),
               onChanged: (value) {
+                widget.onChange(value?["child_index"]);
                 setState(() {
-                  selectedItem = value!;
-                  widget.selectItem.text = value;
+                  selectedItemName = value?["name"];
+                  widget.selectItem.text = value?["id"];
                 });
               },
             ),
