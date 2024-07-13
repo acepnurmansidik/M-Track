@@ -120,6 +120,7 @@ class _TransactionPageState extends State<TransactionPage> {
               ),
             );
           }
+          print(state);
           return Container(
             margin: EdgeInsets.only(top: 5),
             child: Column(

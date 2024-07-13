@@ -11,6 +11,8 @@ final class TransactionInitial extends TransactionState {}
 
 final class TransactionLoading extends TransactionState {}
 
+final class TransactionActionSuccess extends TransactionState {}
+
 final class TransactionSuccess extends TransactionState {
   final List<dynamic> transactions;
 

@@ -17,4 +17,36 @@ class TransactionCubit extends Cubit<TransactionState> {
       emit(TransactionFailed(e.toString()));
     }
   }
+
+  void postTrx(body) async {
+    try {
+      emit(TransactionLoading());
+      await TransactionService().createTrx(body);
+      emit(TransactionActionSuccess());
+    } catch (e) {
+      emit(TransactionFailed(e.toString()));
+    }
+  }
+
+  void putTrx(String id, body) async {
+    try {
+      emit(TransactionLoading());
+      await TransactionService().updateTrx(id, body);
+      emit(TransactionActionSuccess());
+    } catch (e) {
+      emit(TransactionFailed(e.toString()));
+    }
+  }
+
+  void deleteTrx(String id) async {
+    try {
+      emit(TransactionLoading());
+      await TransactionService().destroyTrx(id);
+      // fetch data kembali setelah di hapus
+      final result = await TransactionService().getTransactions();
+      emit(TransactionSuccess(result));
+    } catch (e) {
+      emit(TransactionFailed(e.toString()));
+    }
+  }
 }
