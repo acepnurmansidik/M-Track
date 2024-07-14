@@ -14,8 +14,11 @@ class TransactionPage extends StatefulWidget {
     super.key,
     this.transaction = const TrxItemModel(
       amount: 0,
+      totalAmount: 0,
+      kursAmount: 0,
       note: "",
       categoryId: {},
+      kursId: {},
       typeId: {},
       datetime: "",
     ),
