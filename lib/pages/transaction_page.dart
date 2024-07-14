@@ -40,17 +40,17 @@ class _TransactionPageState extends State<TransactionPage> {
 
   @override
   void initState() {
-    amountController.text = widget.transaction.amount.toString() != ""
-        ? widget.transaction.amount.toString()
-        : "";
-    noteController.text =
-        widget.transaction.note != "" ? widget.transaction.note : "";
-    categoryController.text = widget.transaction.categoryId == null
-        ? widget.transaction.categoryId["_id"]
-        : "";
-    typeController.text = widget.transaction.typeId == null
-        ? widget.transaction.typeId["_id"]
-        : "";
+    // amountController.text = widget.transaction.amount.toString() != ""
+    //     ? widget.transaction.amount.toString()
+    //     : "";
+    // noteController.text =
+    //     widget.transaction.note != "" ? widget.transaction.note : "";
+    // categoryController.text = widget.transaction.categoryId == null
+    //     ? widget.transaction.categoryId["_id"]
+    //     : "";
+    // typeController.text = widget.transaction.typeId == null
+    //     ? widget.transaction.typeId["_id"]
+    //     : "";
 
     context.read<RefparamaterCubit>().getRefparam();
     super.initState();

@@ -7,13 +7,12 @@ import 'package:http/http.dart' as http;
 class TransactionService {
   final String baseUrl = "http://10.0.2.2:3022/api/v1";
 
-  Future<List<dynamic>> getTransactions() async {
+  Future<TransactionModel> getTransactions() async {
     try {
       final response = await http.get(Uri.parse('$baseUrl/trx'));
-      final data = json.decode(response.body);
+      final Map<String, dynamic> data = json.decode(response.body);
 
-      List<dynamic> transactions =
-          data["data"].map((item) => TransactionModel.fromJson(item)).toList();
+      TransactionModel transactions = TransactionModel.fromJson(data["data"]);
 
       return transactions;
     } catch (e) {

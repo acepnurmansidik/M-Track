@@ -7,7 +7,10 @@ class DetailPage extends StatelessWidget {
   final bool grafik = false;
   final TrxItemModel transaction;
 
-  const DetailPage({super.key, required this.transaction});
+  const DetailPage({
+    super.key,
+    required this.transaction,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -108,11 +111,13 @@ class DetailPage extends StatelessWidget {
             height: 6,
           ),
           Text(
-            transaction.categoryId["value"],
+            // transaction.categoryId["value"],
+            "transaction.categoryId",
             style: blackTextStyle.copyWith(fontSize: 16, fontWeight: medium),
           ),
           Text(
-            transaction.datetime,
+            // transaction.datetime,
+            "transaction.datetime",
             style: greyTextStyle.copyWith(fontSize: 12, fontWeight: light),
           ),
           Container(
@@ -126,8 +131,9 @@ class DetailPage extends StatelessWidget {
                       blackTextStyle.copyWith(fontSize: 16, fontWeight: medium),
                 ),
                 Text(
-                    NumberFormat.currency(symbol: "IDR ", decimalDigits: 0)
-                        .format(transaction.amount),
+                    // NumberFormat.currency(symbol: "IDR ", decimalDigits: 0)
+                    //     .format(transaction.amount),
+                    "20000",
                     style: blackTextStyle.copyWith(
                         fontSize: 16, fontWeight: medium))
               ],
@@ -137,7 +143,8 @@ class DetailPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                transaction.typeId["value"],
+                // transaction.typeId["value"],
+                "transaction.typeId",
                 style: greyTextStyle.copyWith(fontSize: 14, fontWeight: medium),
               ),
               Transform.rotate(

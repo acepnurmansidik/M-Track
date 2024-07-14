@@ -34,20 +34,41 @@ class TrxItemModel {
       );
 }
 
-class TransactionModel {
+class ListDataTransactionModel {
   final String id;
   final int totalMonthly;
   final List<TrxItemModel> items;
 
-  const TransactionModel(
+  const ListDataTransactionModel(
       {this.id = "", required this.totalMonthly, required this.items});
 
-  factory TransactionModel.fromJson(Map<String, dynamic> json) =>
-      TransactionModel(
+  factory ListDataTransactionModel.fromJson(Map<String, dynamic> json) =>
+      ListDataTransactionModel(
         id: json['_id'],
         totalMonthly: json['total_monthly'],
         items: (json['items'] as List<dynamic>)
             .map((e) => TrxItemModel.fromJson(e))
             .toList(),
       );
+}
+
+class TransactionModel {
+  final int grandTotal;
+  final int currentMonthly;
+  final List<ListDataTransactionModel> listData;
+
+  TransactionModel(
+      {required this.grandTotal,
+      required this.currentMonthly,
+      required this.listData});
+
+  factory TransactionModel.fromJson(Map<String, dynamic> json) {
+    return TransactionModel(
+      grandTotal: json['grand_total'],
+      currentMonthly: json['current_monthly'],
+      listData: (json['list_data'] as List<dynamic>)
+          .map((e) => ListDataTransactionModel.fromJson(e))
+          .toList(),
+    );
+  }
 }

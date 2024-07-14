@@ -1,12 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:tracking/cubit/transaction_cubit.dart';
 import 'package:tracking/models/transaction_model.dart';
 import 'package:tracking/pages/transaction_page.dart';
 import 'package:tracking/theme.dart';
-import 'package:tracking/widgets/transaction_item.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tracking/widgets/transaction_item.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({super.key});
@@ -67,7 +68,7 @@ class _HomePageState extends State<HomePage> {
       );
     }
 
-    Widget balanceInfo() {
+    Widget balanceInfo(TransactionModel dataTrx) {
       return Container(
         height: 250,
         width: double.infinity,
@@ -113,7 +114,7 @@ class _HomePageState extends State<HomePage> {
             Container(
                 margin: EdgeInsets.only(bottom: 5, top: 20),
                 child: Text(
-                  "Current value",
+                  "Current balance",
                   style: greyTextStyle.copyWith(fontSize: 16),
                 )),
             Container(
@@ -123,12 +124,15 @@ class _HomePageState extends State<HomePage> {
                     style: blackTextStyle.copyWith(fontSize: 16),
                     children: [
                       TextSpan(
-                          text: "15.534",
+                          text: NumberFormat.currency(
+                                  symbol: "", decimalDigits: 0)
+                              .format(dataTrx.currentMonthly),
                           style: blackTextStyle.copyWith(
                               fontSize: 35, fontWeight: extraBold))
                     ]))),
             Text.rich(TextSpan(
-                text: '+1.0000',
+                text: NumberFormat.currency(symbol: "", decimalDigits: 0)
+                    .format(dataTrx.grandTotal),
                 style: blackTextStyle.copyWith(fontSize: 16),
                 children: [
                   TextSpan(
@@ -141,183 +145,106 @@ class _HomePageState extends State<HomePage> {
       );
     }
 
-    Widget transactionList() {
-      return BlocBuilder<TransactionCubit, TransactionState>(
-        builder: (context, state) {
-          if (state is TransactionSuccess) {
-            final result;
-            if (state.transactions.isEmpty) {
-              result = [
-                Container(
-                  alignment: Alignment.center,
-                  margin: EdgeInsets.only(top: 30),
+    Widget transactionList(List<ListDataTransactionModel> listData) {
+      final result = listData.map((subItems) {
+        return SizedBox(
+          width: double.infinity,
+          child: Column(
+            children: [
+              Container(
                   width: double.infinity,
-                  height: 220,
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage("assets/icon_notfound.png"))),
-                ),
-                Text(
-                  "Aww... you have not records",
-                  style:
-                      blackTextStyle.copyWith(fontSize: 20, fontWeight: medium),
-                )
-              ];
-            } else {
-              result = state.transactions.map((subItems) {
-                List<Widget> buildItemWidgets(List<TrxItemModel> items) {
-                  return items.map((item) {
-                    return TransactionItem(
-                        grafik: false,
-                        transaction: item,
-                        cancelBtn: (value) {
-                          setState(() {
-                            isActive = value;
-                          });
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                  decoration: BoxDecoration(color: kGreyColor),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        subItems.id,
+                        style: whiteTextStyle.copyWith(
+                            fontSize: 14, fontWeight: semibold),
+                      ),
+                      Text(
+                        NumberFormat.currency(symbol: "Rp. ", decimalDigits: 0)
+                            .format(subItems.totalMonthly),
+                        style: whiteTextStyle.copyWith(
+                            fontSize: 14, fontWeight: semibold),
+                      ),
+                    ],
+                  )),
+              Column(
+                children: subItems.items.map((item) {
+                  return TransactionItem(
+                      grafik: false,
+                      transaction: item,
+                      cancelBtn: (value) {
+                        setState(() {
+                          isActive = value;
                         });
-                  }).toList();
-                }
+                      });
+                }).toList(),
+              )
+            ],
+          ),
+        );
+      }).toList();
 
-                return SizedBox(
-                  width: double.infinity,
-                  child: Column(
+      return SizedBox.expand(
+        child: DraggableScrollableSheet(
+          initialChildSize: 0.65,
+          minChildSize: 0.65,
+          maxChildSize: 1,
+          builder: (context, scrollController) {
+            return Container(
+              padding: EdgeInsets.only(top: 20),
+              decoration: BoxDecoration(
+                  color: kWhiteColor,
+                  borderRadius:
+                      BorderRadius.vertical(top: Radius.circular(18))),
+              child: Stack(
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(top: 50),
+                    child: SingleChildScrollView(
+                      controller: scrollController,
+                      child: Column(
+                        children: result,
+                      ),
+                    ),
+                  ),
+                  Column(
                     children: [
                       Container(
-                          width: double.infinity,
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                          decoration: BoxDecoration(color: kGreyColor),
-                          child: Text(
-                            subItems.id,
-                            style: whiteTextStyle.copyWith(
-                                fontSize: 14, fontWeight: semibold),
-                          )),
-                      Column(
-                        children: buildItemWidgets(subItems.items),
-                      )
-                    ],
-                  ),
-                );
-              }).toList();
-            }
-            return SizedBox.expand(
-              child: DraggableScrollableSheet(
-                initialChildSize: 0.65,
-                minChildSize: 0.65,
-                maxChildSize: 1,
-                builder: (context, scrollController) {
-                  return Container(
-                    padding: EdgeInsets.only(top: 20),
-                    decoration: BoxDecoration(
-                        color: kWhiteColor,
-                        borderRadius:
-                            BorderRadius.vertical(top: Radius.circular(18))),
-                    child: Stack(
-                      children: [
-                        Container(
-                          margin: EdgeInsets.only(top: 50),
-                          child: SingleChildScrollView(
-                            controller: scrollController,
-                            child: Column(
-                              children: result,
-                            ),
-                          ),
-                        ),
-                        Column(
+                        height: 5,
+                        width: 50,
+                        margin: EdgeInsets.only(bottom: 10),
+                        decoration: BoxDecoration(
+                            color: kDoveGreyColor,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(18))),
+                      ),
+                      Container(
+                        padding: EdgeInsets.only(
+                            bottom: 15,
+                            left: defaultMargin,
+                            right: defaultMargin),
+                        decoration: BoxDecoration(color: kWhiteColor),
+                        child: Row(
                           children: [
-                            Container(
-                              height: 5,
-                              width: 50,
-                              margin: EdgeInsets.only(bottom: 10),
-                              decoration: BoxDecoration(
-                                  color: kDoveGreyColor,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(18))),
-                            ),
-                            Container(
-                              padding: EdgeInsets.only(
-                                  bottom: 15,
-                                  left: defaultMargin,
-                                  right: defaultMargin),
-                              decoration: BoxDecoration(color: kWhiteColor),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    "Transaksi",
-                                    style: blackTextStyle.copyWith(
-                                        fontSize: 16, fontWeight: semibold),
-                                  )
-                                ],
-                              ),
-                            ),
+                            Text(
+                              "Transaksi",
+                              style: blackTextStyle.copyWith(
+                                  fontSize: 16, fontWeight: semibold),
+                            )
                           ],
                         ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            );
-          }
-          return SizedBox.expand(
-            child: DraggableScrollableSheet(
-              initialChildSize: 0.65,
-              minChildSize: 0.65,
-              maxChildSize: 1,
-              builder: (context, scrollController) {
-                return Container(
-                  padding: EdgeInsets.only(top: 20),
-                  decoration: BoxDecoration(
-                      color: kWhiteColor,
-                      borderRadius:
-                          BorderRadius.vertical(top: Radius.circular(18))),
-                  child: Stack(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(top: 50),
-                        child: SingleChildScrollView(
-                          controller: scrollController,
-                          child: Column(
-                            children: [],
-                          ),
-                        ),
-                      ),
-                      Column(
-                        children: [
-                          Container(
-                            height: 5,
-                            width: 50,
-                            margin: EdgeInsets.only(bottom: 10),
-                            decoration: BoxDecoration(
-                                color: kDoveGreyColor,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(18))),
-                          ),
-                          Container(
-                            padding: EdgeInsets.only(
-                                bottom: 15,
-                                left: defaultMargin,
-                                right: defaultMargin),
-                            decoration: BoxDecoration(color: kWhiteColor),
-                            child: Row(
-                              children: [
-                                Text(
-                                  "Transaksi",
-                                  style: blackTextStyle.copyWith(
-                                      fontSize: 16, fontWeight: semibold),
-                                )
-                              ],
-                            ),
-                          ),
-                        ],
                       ),
                     ],
                   ),
-                );
-              },
-            ),
-          );
-        },
+                ],
+              ),
+            );
+          },
+        ),
       );
     }
 
@@ -398,17 +325,36 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       backgroundColor: kBackgroundColor,
-      body: Stack(
-        children: [
-          Image.asset(
-            "assets/img_background.png",
-            color: kSecondGreyColor,
-            width: double.infinity,
-          ),
-          balanceInfo(),
-          transactionList(),
-          isActive ? cancelButton() : const SizedBox(),
-        ],
+      body: BlocBuilder<TransactionCubit, TransactionState>(
+        builder: (context, state) {
+          if (state is TransactionSuccess) {
+            return Stack(
+              children: [
+                Image.asset(
+                  "assets/img_background.png",
+                  color: kSecondGreyColor,
+                  width: double.infinity,
+                ),
+                balanceInfo(state.transactions),
+                transactionList(state.transactions.listData),
+                isActive ? cancelButton() : const SizedBox(),
+              ],
+            );
+          }
+          return Stack(
+            children: [
+              Image.asset(
+                "assets/img_background.png",
+                color: kSecondGreyColor,
+                width: double.infinity,
+              ),
+              balanceInfo(TransactionModel(
+                  grandTotal: 0, currentMonthly: 0, listData: [])),
+              transactionList([]),
+              isActive ? cancelButton() : const SizedBox(),
+            ],
+          );
+        },
       ),
       bottomNavigationBar: customBtnNav(),
     );
