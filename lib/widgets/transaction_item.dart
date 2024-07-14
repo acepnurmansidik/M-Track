@@ -8,7 +8,7 @@ import 'package:tracking/theme.dart';
 class TransactionItem extends StatelessWidget {
   final bool grafik;
   final TrxItemModel transaction;
-  final Function(bool) cancelBtn;
+  final Function(bool, String) cancelBtn;
 
   const TransactionItem({
     super.key,
@@ -35,7 +35,7 @@ class TransactionItem extends StatelessWidget {
         confirmDismiss: (direction) async {
           if (direction == DismissDirection.endToStart) {
             // Dragged to the left
-            return cancelBtn(true);
+            return cancelBtn(true, transaction.id);
           } else {
             // Dragged to the right
             return Navigator.push(
@@ -44,7 +44,7 @@ class TransactionItem extends StatelessWidget {
                     builder: (context) => TransactionPage(
                           transaction: transaction,
                         )));
-            return cancelBtn(false);
+            // return cancelBtn(false);
           }
         },
         child: Container(
@@ -94,7 +94,7 @@ class TransactionItem extends StatelessWidget {
                   ),
                   Text(
                     NumberFormat.currency(symbol: "IDR ", decimalDigits: 0)
-                        .format(transaction.amount),
+                        .format(transaction.totalAmount),
                     style: blackTextStyle.copyWith(
                         fontSize: 16, fontWeight: medium),
                   ),

@@ -33,7 +33,7 @@ class TransactionService {
     }
   }
 
-  Future<void> updateTrx(String id, body) async {
+  Future<void> updateTrx(String id, Map<String, dynamic> body) async {
     try {
       final response =
           await http.put(Uri.parse('$baseUrl/trx/$id'), body: body);

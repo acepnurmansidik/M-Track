@@ -20,6 +20,7 @@ class _HomePageState extends State<HomePage> {
   bool isActive = false;
   int _timeCount = 5;
   Timer? _timer;
+  String idTrx = "";
 
   @override
   void initState() {
@@ -38,8 +39,12 @@ class _HomePageState extends State<HomePage> {
             border: Border(top: BorderSide(width: 0.2, color: kGreyColor))),
         child: TextButton(
           onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => TransactionPage()));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => TransactionPage(
+                          isEditBtn: false,
+                        )));
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -176,9 +181,10 @@ class _HomePageState extends State<HomePage> {
                   return TransactionItem(
                       grafik: false,
                       transaction: item,
-                      cancelBtn: (value) {
+                      cancelBtn: (value, id) {
                         setState(() {
                           isActive = value;
+                          idTrx = id;
                         });
                       });
                 }).toList(),
@@ -254,6 +260,7 @@ class _HomePageState extends State<HomePage> {
           setState(() {
             isActive = false;
             _timeCount = 5;
+            context.read<TransactionCubit>().deleteTrx(idTrx);
           });
         } else {
           setState(() {

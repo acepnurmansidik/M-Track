@@ -1,11 +1,13 @@
 class ItemsModel {
   final String id;
+  final int key;
   final String name;
   final String description;
   List? items;
 
   ItemsModel(
       {required this.id,
+      required this.key,
       required this.name,
       required this.description,
       this.items});
@@ -13,6 +15,7 @@ class ItemsModel {
   factory ItemsModel.fromJson(Map<String, dynamic> json) {
     return ItemsModel(
       id: json['_id'],
+      key: json['key'],
       name: json['name'],
       description: json['description'],
     );

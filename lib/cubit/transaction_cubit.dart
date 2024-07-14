@@ -29,7 +29,7 @@ class TransactionCubit extends Cubit<TransactionState> {
     }
   }
 
-  void putTrx(String id, body) async {
+  void putTrx(String id, Map<String, dynamic> body) async {
     try {
       emit(TransactionLoading());
       await TransactionService().updateTrx(id, body);

@@ -7,10 +7,20 @@ part 'refparamater_state.dart';
 class RefparamaterCubit extends Cubit<RefparamaterState> {
   RefparamaterCubit() : super(RefparamaterInitial());
 
-  void getRefparam() async {
+  void getRefparamTypeCategory() async {
     try {
       emit(RefparamaterLoading());
-      final result = await RefparameterService().fetchListParameter();
+      final result = await RefparameterService().fetchListParameter("category");
+      emit(RefparamaterSuccess(result));
+    } catch (e) {
+      emit(RefparamaterFailed(e.toString()));
+    }
+  }
+
+  void getRefKurs() async {
+    try {
+      emit(RefparamaterLoading());
+      final result = await RefparameterService().fetchListParameter("kurs");
       emit(RefparamaterSuccess(result));
     } catch (e) {
       emit(RefparamaterFailed(e.toString()));
