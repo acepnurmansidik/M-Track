@@ -5,7 +5,7 @@ import 'package:tracking/theme.dart';
 
 class DetailPage extends StatelessWidget {
   final bool grafik = false;
-  final TrxItem transaction;
+  final TrxItemModel transaction;
 
   const DetailPage({super.key, required this.transaction});
 

@@ -147,10 +147,25 @@ class _HomePageState extends State<HomePage> {
           if (state is TransactionSuccess) {
             final result;
             if (state.transactions.isEmpty) {
-              result = [];
+              result = [
+                Container(
+                  alignment: Alignment.center,
+                  margin: EdgeInsets.only(top: 30),
+                  width: double.infinity,
+                  height: 220,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage("assets/icon_notfound.png"))),
+                ),
+                Text(
+                  "Aww... you have not records",
+                  style:
+                      blackTextStyle.copyWith(fontSize: 20, fontWeight: medium),
+                )
+              ];
             } else {
               result = state.transactions.map((subItems) {
-                List<Widget> buildItemWidgets(List<TrxItem> items) {
+                List<Widget> buildItemWidgets(List<TrxItemModel> items) {
                   return items.map((item) {
                     return TransactionItem(
                         grafik: false,
@@ -167,7 +182,16 @@ class _HomePageState extends State<HomePage> {
                   width: double.infinity,
                   child: Column(
                     children: [
-                      Text(subItems.id),
+                      Container(
+                          width: double.infinity,
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                          decoration: BoxDecoration(color: kGreyColor),
+                          child: Text(
+                            subItems.id,
+                            style: whiteTextStyle.copyWith(
+                                fontSize: 14, fontWeight: semibold),
+                          )),
                       Column(
                         children: buildItemWidgets(subItems.items),
                       )

@@ -1,4 +1,4 @@
-class TrxItem {
+class TrxItemModel {
   final String id;
   final int amount;
   final String note;
@@ -6,7 +6,7 @@ class TrxItem {
   final Map<String, dynamic> categoryId;
   final String datetime;
 
-  const TrxItem({
+  const TrxItemModel({
     this.id = "",
     required this.amount,
     required this.note,
@@ -15,7 +15,7 @@ class TrxItem {
     required this.datetime,
   });
 
-  factory TrxItem.fromJson(Map<String, dynamic> json) => TrxItem(
+  factory TrxItemModel.fromJson(Map<String, dynamic> json) => TrxItemModel(
         id: json['_id'],
         amount: json['amount'],
         note: json['note'],
@@ -27,7 +27,7 @@ class TrxItem {
 
 class TransactionModel {
   final String id;
-  final List<TrxItem> items;
+  final List<TrxItemModel> items;
 
   const TransactionModel({this.id = "", required this.items});
 
@@ -35,7 +35,7 @@ class TransactionModel {
       TransactionModel(
         id: json['_id'],
         items: (json['items'] as List<dynamic>)
-            .map((e) => TrxItem.fromJson(e))
+            .map((e) => TrxItemModel.fromJson(e))
             .toList(),
       );
 }
