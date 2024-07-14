@@ -8,16 +8,16 @@ import 'package:tracking/widgets/custom_dropdown_item.dart';
 import 'package:tracking/widgets/custom_textform_field.dart';
 
 class TransactionPage extends StatefulWidget {
-  late TransactionModel transaction;
+  late TrxItem transaction;
 
   TransactionPage({
     super.key,
-    this.transaction = const TransactionModel(
+    this.transaction = const TrxItem(
       amount: 0,
       note: "",
       categoryId: {},
       typeId: {},
-      createdAt: "",
+      datetime: "",
     ),
   });
 

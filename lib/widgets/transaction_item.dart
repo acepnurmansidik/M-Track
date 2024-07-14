@@ -7,7 +7,7 @@ import 'package:tracking/theme.dart';
 
 class TransactionItem extends StatelessWidget {
   final bool grafik;
-  final TransactionModel transaction;
+  final TrxItem transaction;
   final Function(bool) cancelBtn;
 
   const TransactionItem({

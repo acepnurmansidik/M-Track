@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:tracking/cubit/transaction_cubit.dart';
+import 'package:tracking/models/transaction_model.dart';
 import 'package:tracking/pages/transaction_page.dart';
 import 'package:tracking/theme.dart';
 import 'package:tracking/widgets/transaction_item.dart';
@@ -148,19 +149,32 @@ class _HomePageState extends State<HomePage> {
             if (state.transactions.isEmpty) {
               result = [];
             } else {
-              result = state.transactions
-                  .map(
-                    (item) => TransactionItem(
-                      grafik: true,
-                      transaction: item,
-                      cancelBtn: (value) {
-                        setState(() {
-                          isActive = value;
+              result = state.transactions.map((subItems) {
+                List<Widget> buildItemWidgets(List<TrxItem> items) {
+                  return items.map((item) {
+                    return TransactionItem(
+                        grafik: false,
+                        transaction: item,
+                        cancelBtn: (value) {
+                          setState(() {
+                            isActive = value;
+                          });
                         });
-                      },
-                    ),
-                  )
-                  .toList();
+                  }).toList();
+                }
+
+                return SizedBox(
+                  width: double.infinity,
+                  child: Column(
+                    children: [
+                      Text(subItems.id),
+                      Column(
+                        children: buildItemWidgets(subItems.items),
+                      )
+                    ],
+                  ),
+                );
+              }).toList();
             }
             return SizedBox.expand(
               child: DraggableScrollableSheet(

@@ -5,7 +5,7 @@ import 'package:tracking/theme.dart';
 
 class DetailPage extends StatelessWidget {
   final bool grafik = false;
-  final TransactionModel transaction;
+  final TrxItem transaction;
 
   const DetailPage({super.key, required this.transaction});
 
@@ -56,7 +56,7 @@ class DetailPage extends StatelessWidget {
                     height: 10,
                   ),
                   Text(
-                    transaction.note,
+                    "transaction.note",
                     style: greyTextStyle.copyWith(
                         fontSize: 14, fontWeight: medium),
                   ),
@@ -111,17 +111,10 @@ class DetailPage extends StatelessWidget {
             transaction.categoryId["value"],
             style: blackTextStyle.copyWith(fontSize: 16, fontWeight: medium),
           ),
-          Text.rich(TextSpan(
-              text: DateFormat('dd MMMM yyyy')
-                  .format(DateTime.parse(transaction.createdAt)),
-              // text: "22 Dec, 2022",
-              style: greyTextStyle.copyWith(fontSize: 12, fontWeight: light),
-              children: [
-                TextSpan(text: " | "),
-                TextSpan(
-                    text: DateFormat('hh:mm')
-                        .format(DateTime.parse(transaction.createdAt)))
-              ])),
+          Text(
+            transaction.datetime,
+            style: greyTextStyle.copyWith(fontSize: 12, fontWeight: light),
+          ),
           Container(
             margin: EdgeInsets.only(top: 30),
             child: Row(
