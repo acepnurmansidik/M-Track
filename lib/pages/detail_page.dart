@@ -111,31 +111,32 @@ class DetailPage extends StatelessWidget {
             height: 6,
           ),
           Text(
-            // transaction.categoryId["value"],
-            "transaction.categoryId",
+            transaction.categoryId["value"],
             style: blackTextStyle.copyWith(fontSize: 16, fontWeight: medium),
           ),
           Text(
-            // transaction.datetime,
-            "transaction.datetime",
+            transaction.datetime,
             style: greyTextStyle.copyWith(fontSize: 12, fontWeight: light),
           ),
+
+          // LIST ITEM INFO
           Container(
             margin: EdgeInsets.only(top: 30),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Total Amount',
+                  transaction.typeId["value"],
                   style:
-                      blackTextStyle.copyWith(fontSize: 16, fontWeight: medium),
+                      greyTextStyle.copyWith(fontSize: 14, fontWeight: medium),
                 ),
-                Text(
-                    // NumberFormat.currency(symbol: "IDR ", decimalDigits: 0)
-                    //     .format(transaction.amount),
-                    "20000",
-                    style: blackTextStyle.copyWith(
-                        fontSize: 16, fontWeight: medium))
+                Transform.rotate(
+                  angle: grafik ? 0.7854 : -0.7854,
+                  child: Icon(
+                    grafik ? Icons.arrow_upward : Icons.arrow_downward,
+                    color: grafik ? kGreenColor : kRedColor,
+                  ),
+                ),
               ],
             ),
           ),
@@ -143,18 +144,62 @@ class DetailPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                // transaction.typeId["value"],
-                "transaction.typeId",
+                "kurs",
                 style: greyTextStyle.copyWith(fontSize: 14, fontWeight: medium),
               ),
-              Transform.rotate(
-                angle: grafik ? 0.7854 : -0.7854,
-                child: Icon(
-                  grafik ? Icons.arrow_upward : Icons.arrow_downward,
-                  color: grafik ? kGreenColor : kRedColor,
-                ),
+              Text(
+                transaction.kursId["value"],
+                style: greyTextStyle.copyWith(fontSize: 14, fontWeight: medium),
               ),
             ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "kurs amount",
+                style: greyTextStyle.copyWith(fontSize: 14, fontWeight: medium),
+              ),
+              Text(
+                NumberFormat.currency(symbol: "", decimalDigits: 0)
+                    .format(transaction.kursAmount),
+                style: greyTextStyle.copyWith(fontSize: 14, fontWeight: medium),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "total",
+                style: greyTextStyle.copyWith(fontSize: 14, fontWeight: medium),
+              ),
+              Text(
+                NumberFormat.currency(symbol: "", decimalDigits: 0)
+                    .format(transaction.amount),
+                style: greyTextStyle.copyWith(fontSize: 14, fontWeight: medium),
+              ),
+            ],
+          ),
+
+          // TOTAL AMOUNT
+          Container(
+            margin: EdgeInsets.only(top: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Grand Total',
+                  style:
+                      blackTextStyle.copyWith(fontSize: 16, fontWeight: medium),
+                ),
+                Text(
+                    NumberFormat.currency(symbol: "IDR ", decimalDigits: 0)
+                        .format(transaction.totalAmount),
+                    style: blackTextStyle.copyWith(
+                        fontSize: 16, fontWeight: medium))
+              ],
+            ),
           ),
           noteSection(),
           qrCodeSection()

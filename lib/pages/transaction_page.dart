@@ -36,8 +36,8 @@ class _TransactionPageState extends State<TransactionPage> {
       TextEditingController(text: "");
   final TextEditingController kursAmountController =
       TextEditingController(text: "");
-  // final TextEditingController kursIdAmountController =
-  //     TextEditingController(text: "");
+  final TextEditingController kursIdAmountController =
+      TextEditingController(text: "");
   final TextEditingController noteController = TextEditingController(text: "");
   final TextEditingController categoryController =
       TextEditingController(text: "");
@@ -94,90 +94,109 @@ class _TransactionPageState extends State<TransactionPage> {
     }
 
     Widget formSection() {
-      return BlocBuilder<RefparamaterCubit, RefparamaterState>(
-        builder: (context, state) {
-          if (state is RefparamaterSuccess) {
-            return Container(
-              margin: EdgeInsets.only(top: 5),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CustomDropdownItem(
-                    title: "Type",
-                    selectItem: typeController,
+      return Container(
+        margin: EdgeInsets.only(top: 5),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            BlocBuilder<RefparamaterCubit, RefparamaterState>(
+              builder: (context, state) {
+                if (state is RefparamaterSuccess) {
+                  return Column(
+                    children: [
+                      CustomDropdownItem(
+                        title: "Type",
+                        selectItem: typeController,
+                        items: state.refparam,
+                        onChange: (value) {
+                          setState(() {
+                            _itemsSecondDropDown = value;
+                          });
+                        },
+                      ),
+                      if (_itemsSecondDropDown > -1)
+                        CustomDropdownItem(
+                          title: "Category",
+                          selectItem: categoryController,
+                          items: state.refparam[_itemsSecondDropDown].items,
+                          onChange: (value) {},
+                        ),
+                    ],
+                  );
+                }
+                return Column(
+                  children: [
+                    CustomDropdownItem(
+                      title: "Type",
+                      selectItem: typeController,
+                      items: [],
+                      onChange: (value) {
+                        setState(() {
+                          _itemsSecondDropDown = value;
+                        });
+                      },
+                    ),
+                    if (_itemsSecondDropDown > -1)
+                      CustomDropdownItem(
+                        title: "Category",
+                        selectItem: categoryController,
+                        items: [],
+                        onChange: (value) {},
+                      ),
+                  ],
+                );
+              },
+            ),
+            BlocBuilder<RefparamaterCubit, RefparamaterState>(
+              builder: (context, state) {
+                if (state is RefparamaterSuccess) {
+                  return CustomDropdownItem(
+                    title: "Kurs",
+                    selectItem: kursIdAmountController,
                     items: state.refparam,
                     onChange: (value) {
                       setState(() {
-                        _itemsSecondDropDown = value;
+                        _showKursAmount = 1;
                       });
                     },
-                  ),
-                  if (_itemsSecondDropDown > -1)
-                    CustomDropdownItem(
-                      title: "Category",
-                      selectItem: categoryController,
-                      items: state.refparam[_itemsSecondDropDown].items,
-                      onChange: (value) {},
-                    ),
-                  // CustomDropdownItem(
-                  //   title: "Kurs",
-                  //   selectItem: kursIdAmountController,
-                  //   items: state.refparam,
-                  //   onChange: (value) {
-                  //     setState(() {
-                  //       _showKursAmount = 1;
-                  //     });
-                  //   },
-                  // ),
-                  // if (_showKursAmount > -1)
-                  CustomeTextFormFieldItem(
-                    controller: kursAmountController,
-                    title: "Kurs amount",
-                    isNumberOnly: true,
-                    hintText: "Enter kurs exchange",
-                    padding: EdgeInsets.symmetric(horizontal: 20),
-                  ),
-                  CustomeTextFormFieldItem(
-                    controller: amountController,
-                    title: "Amount",
-                    isNumberOnly: true,
-                    hintText: "Enter total amount",
-                    padding: EdgeInsets.symmetric(horizontal: 20),
-                  ),
-                  CustomeTextFormFieldItem(
-                    controller: noteController,
-                    title: "Note",
-                    isNumberOnly: false,
-                    hintText: "Enter description",
-                    padding: EdgeInsets.symmetric(horizontal: 20),
-                  ),
-                ],
-              ),
-            );
-          }
-          return Container(
-            margin: EdgeInsets.only(top: 5),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CustomeTextFormFieldItem(
-                  controller: amountController,
-                  title: "Amount",
-                  isNumberOnly: true,
-                  hintText: "Enter total amount",
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                ),
-                CustomeTextFormFieldItem(
-                  controller: noteController,
-                  title: "Note",
-                  isNumberOnly: false,
-                  hintText: "Enter description",
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                ),
-              ],
+                  );
+                }
+                return CustomDropdownItem(
+                  title: "Kurs",
+                  selectItem: kursIdAmountController,
+                  items: [],
+                  onChange: (value) {
+                    setState(() {
+                      _showKursAmount = 1;
+                    });
+                  },
+                );
+              },
             ),
-          );
-        },
+            if (_showKursAmount > -1)
+              CustomeTextFormFieldItem(
+                controller: kursAmountController,
+                title: "Kurs amount",
+                isNumberOnly: true,
+                hintText: "Enter kurs exchange",
+                padding: EdgeInsets.symmetric(horizontal: 20),
+              ),
+            CustomeTextFormFieldItem(
+              controller: amountController,
+              title: "Amount",
+              isNumberOnly: true,
+              hintText: "Enter total amount",
+              padding: EdgeInsets.symmetric(horizontal: 20),
+            ),
+            CustomeTextFormFieldItem(
+              controller: noteController,
+              title: "Note",
+              isNumberOnly: false,
+              hintText: "Enter description",
+              padding: EdgeInsets.symmetric(horizontal: 20),
+            ),
+          ],
+        ),
       );
     }
 
