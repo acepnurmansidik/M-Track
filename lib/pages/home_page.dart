@@ -151,48 +151,75 @@ class _HomePageState extends State<HomePage> {
     }
 
     Widget transactionList(List<ListDataTransactionModel> listData) {
-      final result = listData.map((subItems) {
-        return SizedBox(
-          width: double.infinity,
-          child: Column(
-            children: [
-              Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                  decoration: BoxDecoration(color: kGreyColor),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        subItems.id,
-                        style: whiteTextStyle.copyWith(
-                            fontSize: 14, fontWeight: semibold),
-                      ),
-                      Text(
-                        NumberFormat.currency(symbol: "Rp. ", decimalDigits: 0)
-                            .format(subItems.totalMonthly),
-                        style: whiteTextStyle.copyWith(
-                            fontSize: 14, fontWeight: semibold),
-                      ),
-                    ],
-                  )),
-              Column(
-                children: subItems.items.map((item) {
-                  return TransactionItem(
-                      grafik: false,
-                      transaction: item,
-                      cancelBtn: (value, id) {
-                        setState(() {
-                          isActive = value;
-                          idTrx = id;
+      final result;
+      if (!listData.isEmpty) {
+        result = listData.map((subItems) {
+          return SizedBox(
+            width: double.infinity,
+            child: Column(
+              children: [
+                Container(
+                    width: double.infinity,
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                    decoration: BoxDecoration(color: kGreyColor),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          subItems.id,
+                          style: whiteTextStyle.copyWith(
+                              fontSize: 14, fontWeight: semibold),
+                        ),
+                        Text(
+                          NumberFormat.currency(
+                                  symbol: "Rp. ", decimalDigits: 0)
+                              .format(subItems.totalMonthly),
+                          style: whiteTextStyle.copyWith(
+                              fontSize: 14, fontWeight: semibold),
+                        ),
+                      ],
+                    )),
+                Column(
+                  children: subItems.items.map((item) {
+                    return TransactionItem(
+                        grafik: false,
+                        transaction: item,
+                        cancelBtn: (value, id) {
+                          setState(() {
+                            isActive = value;
+                            idTrx = id;
+                          });
                         });
-                      });
-                }).toList(),
+                  }).toList(),
+                )
+              ],
+            ),
+          );
+        }).toList();
+      } else {
+        List<Widget> widgets = [
+          Center(
+            child: Column(children: [
+              Container(
+                margin: EdgeInsets.only(top: 25),
+                width: 220,
+                height: 220,
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage("assets/icon_notfound.png"))),
+              ),
+              Text(
+                "Aww...you have'nt\ntransaction",
+                style:
+                    blackTextStyle.copyWith(fontSize: 20, fontWeight: medium),
+                textAlign: TextAlign.center,
               )
-            ],
-          ),
-        );
-      }).toList();
+            ]),
+          )
+        ];
+
+        result = widgets;
+      }
 
       return SizedBox.expand(
         child: DraggableScrollableSheet(

@@ -3,6 +3,7 @@ class TrxItemModel {
   final int amount;
   final int totalAmount;
   final int kursAmount;
+  final bool isIncome;
   final String note;
   final Map<String, dynamic> kursId;
   final Map<String, dynamic> typeId;
@@ -14,6 +15,7 @@ class TrxItemModel {
     required this.amount,
     required this.totalAmount,
     required this.kursAmount,
+    required this.isIncome,
     required this.note,
     required this.categoryId,
     required this.kursId,
@@ -28,6 +30,7 @@ class TrxItemModel {
         kursAmount: json['kurs_amount'],
         note: json['note'],
         datetime: json["datetime"],
+        isIncome: json["is_income"],
         typeId: json["type_id"],
         categoryId: json["category_id"],
         kursId: json["kurs_id"],

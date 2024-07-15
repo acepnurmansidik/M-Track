@@ -131,10 +131,12 @@ class DetailPage extends StatelessWidget {
                       greyTextStyle.copyWith(fontSize: 14, fontWeight: medium),
                 ),
                 Transform.rotate(
-                  angle: grafik ? 0.7854 : -0.7854,
+                  angle: transaction.isIncome ? 0.7854 : -0.7854,
                   child: Icon(
-                    grafik ? Icons.arrow_upward : Icons.arrow_downward,
-                    color: grafik ? kGreenColor : kRedColor,
+                    transaction.isIncome
+                        ? Icons.arrow_upward
+                        : Icons.arrow_downward,
+                    color: transaction.isIncome ? kGreenColor : kRedColor,
                   ),
                 ),
               ],
@@ -144,11 +146,11 @@ class DetailPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "kurs",
+                "exchange rate",
                 style: greyTextStyle.copyWith(fontSize: 14, fontWeight: medium),
               ),
               Text(
-                transaction.kursId["value"],
+                transaction.kursId["description"],
                 style: greyTextStyle.copyWith(fontSize: 14, fontWeight: medium),
               ),
             ],
@@ -157,7 +159,7 @@ class DetailPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "kurs amount",
+                "current exchange rate",
                 style: greyTextStyle.copyWith(fontSize: 14, fontWeight: medium),
               ),
               Text(
@@ -171,7 +173,7 @@ class DetailPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "total",
+                "amount",
                 style: greyTextStyle.copyWith(fontSize: 14, fontWeight: medium),
               ),
               Text(
@@ -189,7 +191,7 @@ class DetailPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Grand Total',
+                  'Total',
                   style:
                       blackTextStyle.copyWith(fontSize: 16, fontWeight: medium),
                 ),

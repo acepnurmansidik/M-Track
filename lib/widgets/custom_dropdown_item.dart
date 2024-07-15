@@ -6,6 +6,8 @@ class CustomDropdownItem extends StatefulWidget {
   final TextEditingController selectItem;
   final List<dynamic> items;
   final Function(int) onChange;
+  double width;
+  EdgeInsets padding;
 
   CustomDropdownItem({
     super.key,
@@ -13,6 +15,8 @@ class CustomDropdownItem extends StatefulWidget {
     required this.selectItem,
     required this.items,
     required this.onChange,
+    this.width = double.infinity,
+    this.padding = EdgeInsets.zero,
   });
 
   @override
@@ -30,8 +34,8 @@ class _CustomDropdownItemState extends State<CustomDropdownItem> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 15),
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      margin: const EdgeInsets.only(bottom: 20),
+      padding: widget.padding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -43,8 +47,9 @@ class _CustomDropdownItemState extends State<CustomDropdownItem> {
             height: 6,
           ),
           Container(
-            width: double.infinity, // Set lebar dropdown
-            height: 60, // Set tinggi dropdown
+            alignment: Alignment.center,
+            width: widget.width, // Set lebar dropdown
+            height: 65, // Set tinggi dropdown
             padding: const EdgeInsets.symmetric(horizontal: 12.0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10.0),

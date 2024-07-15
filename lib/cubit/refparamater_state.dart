@@ -12,12 +12,13 @@ final class RefparamaterInitial extends RefparamaterState {}
 final class RefparamaterLoading extends RefparamaterState {}
 
 final class RefparamaterSuccess extends RefparamaterState {
-  final List<dynamic> refparam;
+  List<dynamic> refparam;
+  List<dynamic> reffKurs;
 
-  const RefparamaterSuccess(this.refparam);
+  RefparamaterSuccess({required this.refparam, required this.reffKurs});
 
   @override
-  List<Object> get props => [refparam];
+  List<Object> get props => [reffKurs, refparam];
 }
 
 final class RefparamaterFailed extends RefparamaterState {

@@ -19,6 +19,7 @@ class TransactionPage extends StatefulWidget {
       amount: 0,
       totalAmount: 0,
       kursAmount: 0,
+      isIncome: false,
       note: "",
       categoryId: {},
       kursId: {},
@@ -44,7 +45,6 @@ class _TransactionPageState extends State<TransactionPage> {
   final TextEditingController typeController = TextEditingController(text: "");
 
   int _itemsSecondDropDown = -1;
-  int _showKursAmount = -1;
 
   @override
   void initState() {
@@ -58,6 +58,9 @@ class _TransactionPageState extends State<TransactionPage> {
         widget.transaction.note != "" ? widget.transaction.note : "";
 
     // Init _id section
+    kursIdAmountController.text = widget.transaction.kursId["_id"] != null
+        ? widget.transaction.kursId["_id"]
+        : "";
     categoryController.text = widget.transaction.categoryId["_id"] != null
         ? widget.transaction.categoryId["_id"]
         : "";
@@ -65,8 +68,7 @@ class _TransactionPageState extends State<TransactionPage> {
         ? widget.transaction.typeId["_id"]
         : "";
 
-    context.read<RefparamaterCubit>().getRefparamTypeCategory();
-    context.read<RefparamaterCubit>().getRefKurs();
+    context.read<RefparamaterCubit>().getRefparam();
     super.initState();
   }
 
@@ -94,109 +96,137 @@ class _TransactionPageState extends State<TransactionPage> {
     }
 
     Widget formSection() {
-      return Container(
-        margin: EdgeInsets.only(top: 5),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            BlocBuilder<RefparamaterCubit, RefparamaterState>(
-              builder: (context, state) {
-                if (state is RefparamaterSuccess) {
-                  return Column(
+      return BlocBuilder<RefparamaterCubit, RefparamaterState>(
+        builder: (context, state) {
+          if (state is RefparamaterSuccess) {
+            return Container(
+              margin: EdgeInsets.only(top: 5),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       CustomDropdownItem(
-                        title: "Type",
-                        selectItem: typeController,
-                        items: state.refparam,
-                        onChange: (value) {
-                          setState(() {
-                            _itemsSecondDropDown = value;
-                          });
-                        },
-                      ),
-                      if (_itemsSecondDropDown > -1)
-                        CustomDropdownItem(
-                          title: "Category",
-                          selectItem: categoryController,
-                          items: state.refparam[_itemsSecondDropDown].items,
-                          onChange: (value) {},
-                        ),
-                    ],
-                  );
-                }
-                return Column(
-                  children: [
-                    CustomDropdownItem(
-                      title: "Type",
-                      selectItem: typeController,
-                      items: [],
-                      onChange: (value) {
-                        setState(() {
-                          _itemsSecondDropDown = value;
-                        });
-                      },
-                    ),
-                    if (_itemsSecondDropDown > -1)
-                      CustomDropdownItem(
-                        title: "Category",
-                        selectItem: categoryController,
-                        items: [],
+                        width: 80,
+                        title: "Kurs",
+                        selectItem: kursIdAmountController,
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        items: state.reffKurs[0].items,
                         onChange: (value) {},
                       ),
-                  ],
-                );
-              },
-            ),
-            BlocBuilder<RefparamaterCubit, RefparamaterState>(
-              builder: (context, state) {
-                if (state is RefparamaterSuccess) {
-                  return CustomDropdownItem(
-                    title: "Kurs",
-                    selectItem: kursIdAmountController,
+                      CustomeTextFormFieldItem(
+                        width: MediaQuery.of(context).size.width - (2 * 60),
+                        controller: kursAmountController,
+                        title: "Kurs Amount",
+                        isNumberOnly: true,
+                        hintText: "Enter total amount",
+                        padding: EdgeInsets.only(right: 20),
+                      ),
+                    ],
+                  ),
+                  CustomDropdownItem(
+                    title: "Type",
+                    selectItem: typeController,
                     items: state.refparam,
+                    padding: EdgeInsets.symmetric(horizontal: 20),
                     onChange: (value) {
                       setState(() {
-                        _showKursAmount = 1;
+                        _itemsSecondDropDown = value;
                       });
                     },
-                  );
-                }
-                return CustomDropdownItem(
-                  title: "Kurs",
-                  selectItem: kursIdAmountController,
+                  ),
+                  if (_itemsSecondDropDown > -1)
+                    CustomDropdownItem(
+                      title: "Category",
+                      selectItem: categoryController,
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      items: state.refparam[_itemsSecondDropDown].items,
+                      onChange: (value) {},
+                    ),
+                  CustomeTextFormFieldItem(
+                    controller: amountController,
+                    title: "Amount",
+                    isNumberOnly: true,
+                    hintText: "Enter total amount",
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                  ),
+                  CustomeTextFormFieldItem(
+                    controller: noteController,
+                    title: "Note",
+                    isNumberOnly: false,
+                    hintText: "Enter description",
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                  ),
+                ],
+              ),
+            );
+          }
+          return Container(
+            margin: EdgeInsets.only(top: 5),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    CustomDropdownItem(
+                      width: 80,
+                      title: "Kurs",
+                      selectItem: kursIdAmountController,
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      items: [],
+                      onChange: (value) {},
+                    ),
+                    CustomeTextFormFieldItem(
+                      width: MediaQuery.of(context).size.width - (2 * 60),
+                      controller: amountController,
+                      title: "Kurs Amount",
+                      isNumberOnly: true,
+                      hintText: "Enter total amount",
+                      padding: EdgeInsets.only(right: 20),
+                    ),
+                  ],
+                ),
+                CustomDropdownItem(
+                  title: "Type",
+                  selectItem: typeController,
+                  padding: EdgeInsets.symmetric(horizontal: 20),
                   items: [],
                   onChange: (value) {
                     setState(() {
-                      _showKursAmount = 1;
+                      _itemsSecondDropDown = value;
                     });
                   },
-                );
-              },
+                ),
+                if (_itemsSecondDropDown > -1)
+                  CustomDropdownItem(
+                    title: "Category",
+                    selectItem: categoryController,
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    items: [],
+                    onChange: (value) {},
+                  ),
+                CustomeTextFormFieldItem(
+                  controller: amountController,
+                  title: "Amount",
+                  isNumberOnly: true,
+                  hintText: "Enter total amount",
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                ),
+                CustomeTextFormFieldItem(
+                  controller: noteController,
+                  title: "Note",
+                  isNumberOnly: false,
+                  hintText: "Enter description",
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                ),
+              ],
             ),
-            if (_showKursAmount > -1)
-              CustomeTextFormFieldItem(
-                controller: kursAmountController,
-                title: "Kurs amount",
-                isNumberOnly: true,
-                hintText: "Enter kurs exchange",
-                padding: EdgeInsets.symmetric(horizontal: 20),
-              ),
-            CustomeTextFormFieldItem(
-              controller: amountController,
-              title: "Amount",
-              isNumberOnly: true,
-              hintText: "Enter total amount",
-              padding: EdgeInsets.symmetric(horizontal: 20),
-            ),
-            CustomeTextFormFieldItem(
-              controller: noteController,
-              title: "Note",
-              isNumberOnly: false,
-              hintText: "Enter description",
-              padding: EdgeInsets.symmetric(horizontal: 20),
-            ),
-          ],
-        ),
+          );
+        },
       );
     }
 
@@ -221,7 +251,7 @@ class _TransactionPageState extends State<TransactionPage> {
                 context.read<TransactionCubit>().putTrx(widget.transaction.id, {
                   "category_id": categoryController.text,
                   "type_id": typeController.text,
-                  "kurs_id": "669365e02c2c9f9c783752b2",
+                  "kurs_id": kursIdAmountController.text,
                   "amount": amountController.text,
                   "kurs_amount": kursAmountController.text,
                   "note": noteController.text
@@ -230,7 +260,7 @@ class _TransactionPageState extends State<TransactionPage> {
                 context.read<TransactionCubit>().postTrx({
                   "category_id": categoryController.text,
                   "type_id": typeController.text,
-                  "kurs_id": "669365e02c2c9f9c783752b2",
+                  "kurs_id": kursIdAmountController.text,
                   "amount": amountController.text,
                   "kurs_amount": kursAmountController.text,
                   "note": noteController.text

@@ -7,7 +7,6 @@ import 'package:tracking/pages/signin_page.dart';
 import 'package:tracking/pages/signup_page.dart';
 import 'package:tracking/pages/splash_page.dart';
 import 'package:tracking/pages/success_page.dart';
-import 'package:tracking/pages/transaction_page.dart';
 
 void main() => runApp(const MyApp());
 

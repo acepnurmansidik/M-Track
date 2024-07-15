@@ -7,18 +7,22 @@ class CustomeTextFormFieldItem extends StatelessWidget {
   final String title;
   final bool isNumberOnly;
   final EdgeInsets padding;
+  final double width;
 
-  const CustomeTextFormFieldItem(
-      {super.key,
-      required this.controller,
-      required this.title,
-      required this.isNumberOnly,
-      this.padding = EdgeInsets.zero,
-      required this.hintText});
+  const CustomeTextFormFieldItem({
+    super.key,
+    required this.controller,
+    required this.title,
+    required this.isNumberOnly,
+    this.padding = EdgeInsets.zero,
+    required this.hintText,
+    this.width = double.infinity,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: width,
       margin: const EdgeInsets.only(bottom: 20),
       padding: padding,
       child: Column(

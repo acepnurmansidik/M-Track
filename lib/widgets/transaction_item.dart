@@ -86,10 +86,12 @@ class TransactionItem extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Transform.rotate(
-                    angle: grafik ? 0.7854 : -0.7854,
+                    angle: transaction.isIncome ? 0.7854 : -0.7854,
                     child: Icon(
-                      grafik ? Icons.arrow_upward : Icons.arrow_downward,
-                      color: grafik ? kGreenColor : kRedColor,
+                      transaction.isIncome
+                          ? Icons.arrow_upward
+                          : Icons.arrow_downward,
+                      color: transaction.isIncome ? kGreenColor : kRedColor,
                     ),
                   ),
                   Text(
