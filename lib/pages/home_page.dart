@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:tracking/cubit/transaction_cubit.dart';
 import 'package:tracking/models/transaction_model.dart';
 import 'package:tracking/pages/transaction_page.dart';
+import 'package:tracking/skelaton/skelaton_trx_list.dart';
 import 'package:tracking/theme.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tracking/widgets/transaction_item.dart';
@@ -30,6 +31,10 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    // SKELATON LOADING
+
+    // ============================================
+
     Widget customBtnNav() {
       return Container(
         width: 400,
@@ -362,7 +367,21 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: kBackgroundColor,
       body: BlocBuilder<TransactionCubit, TransactionState>(
         builder: (context, state) {
-          if (state is TransactionSuccess) {
+          if (state is TransactionLoading) {
+            return Stack(
+              children: [
+                Image.asset(
+                  "assets/img_background.png",
+                  color: kSecondGreyColor,
+                  width: double.infinity,
+                ),
+                balanceInfo(TransactionModel(
+                    grandTotal: 0, currentMonthly: 0, listData: [])),
+                const SkelatonTrxList(),
+                isActive ? cancelButton() : const SizedBox(),
+              ],
+            );
+          } else if (state is TransactionSuccess) {
             return Stack(
               children: [
                 Image.asset(
