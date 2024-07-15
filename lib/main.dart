@@ -25,11 +25,11 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         routes: {
-          "/": (context) => SplashPage(),
-          "/sign-up": (context) => SignUpPage(),
-          "/sign-in": (context) => SignInPage(),
-          "/home": (context) => HomePage(),
-          "/success": (context) => SuccessPage(),
+          "/": (context) => const SplashPage(),
+          "/sign-up": (context) => const SignUpPage(),
+          "/sign-in": (context) => const SignInPage(),
+          "/home": (context) => const HomePage(),
+          "/success": (context) => const SuccessPage(),
         },
       ),
     );

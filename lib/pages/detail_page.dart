@@ -37,16 +37,16 @@ class DetailPage extends StatelessWidget {
 
     Widget noteSection() {
       return Container(
-        margin: EdgeInsets.only(top: 30),
+        margin: const EdgeInsets.only(top: 30),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CustomPaint(
-              size: Size(double.infinity, 1),
+              size: const Size(double.infinity, 1),
               painter: DashedLinePainter(lineColor: kGreyColor),
             ),
             Container(
-              margin: EdgeInsets.only(top: 20),
+              margin: const EdgeInsets.only(top: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -55,7 +55,7 @@ class DetailPage extends StatelessWidget {
                     style: greyTextStyle.copyWith(
                         fontSize: 14, fontWeight: medium),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   Text(
@@ -73,19 +73,19 @@ class DetailPage extends StatelessWidget {
 
     Widget qrCodeSection() {
       return Container(
-        margin: EdgeInsets.only(top: 30),
+        margin: const EdgeInsets.only(top: 30),
         child: Column(
           children: [
             CustomPaint(
-              size: Size(double.infinity, 1),
+              size: const Size(double.infinity, 1),
               painter: DashedLinePainter(
                   lineColor: kGreenColor, spaceLine: 7, strokeLine: 2),
             ),
             Container(
               height: 220,
               width: 220,
-              margin: EdgeInsets.only(top: 20),
-              decoration: BoxDecoration(
+              margin: const EdgeInsets.only(top: 20),
+              decoration: const BoxDecoration(
                   image: DecorationImage(
                       image: AssetImage("assets/img_qrcode.png"))),
             )
@@ -97,8 +97,9 @@ class DetailPage extends StatelessWidget {
     Widget detailInfo() {
       return Container(
         width: double.infinity,
-        margin: EdgeInsets.all(20),
-        padding: EdgeInsets.only(left: 25, right: 25, top: 20, bottom: 25),
+        margin: const EdgeInsets.all(20),
+        padding:
+            const EdgeInsets.only(left: 25, right: 25, top: 20, bottom: 25),
         decoration: BoxDecoration(
             color: kWhiteColor, borderRadius: BorderRadius.circular(18)),
         child: Column(children: [
@@ -107,7 +108,7 @@ class DetailPage extends StatelessWidget {
             size: 45,
             color: kBlueColor,
           ),
-          SizedBox(
+          const SizedBox(
             height: 6,
           ),
           Text(
@@ -121,7 +122,7 @@ class DetailPage extends StatelessWidget {
 
           // LIST ITEM INFO
           Container(
-            margin: EdgeInsets.only(top: 30),
+            margin: const EdgeInsets.only(top: 30),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -186,7 +187,7 @@ class DetailPage extends StatelessWidget {
 
           // TOTAL AMOUNT
           Container(
-            margin: EdgeInsets.only(top: 10),
+            margin: const EdgeInsets.only(top: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -212,7 +213,8 @@ class DetailPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: kBackgroundColor,
       appBar: PreferredSize(
-          preferredSize: Size(double.infinity, 60), child: appBarSection()),
+          preferredSize: const Size(double.infinity, 60),
+          child: appBarSection()),
       body: ListView(
         children: [detailInfo()],
       ),

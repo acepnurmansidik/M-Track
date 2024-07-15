@@ -113,7 +113,7 @@ class TransactionItem extends StatelessWidget {
     return Container(
       color: Colors.green,
       height: 80,
-      child: Align(
+      child: const Align(
         alignment: Alignment.centerLeft,
         child: Padding(
           padding: EdgeInsets.only(left: 20.0),
@@ -130,7 +130,7 @@ class TransactionItem extends StatelessWidget {
     return Container(
       color: Colors.red,
       height: 80,
-      child: Align(
+      child: const Align(
         alignment: Alignment.centerRight,
         child: Padding(
           padding: EdgeInsets.only(right: 20.0),

@@ -10,9 +10,9 @@ import 'package:tracking/widgets/custom_textform_field.dart';
 
 class TransactionPage extends StatefulWidget {
   final bool isEditBtn;
-  late TrxItemModel transaction;
+  final TrxItemModel transaction;
 
-  TransactionPage({
+  const TransactionPage({
     super.key,
     this.isEditBtn = true,
     this.transaction = const TrxItemModel(
@@ -58,15 +58,9 @@ class _TransactionPageState extends State<TransactionPage> {
         widget.transaction.note != "" ? widget.transaction.note : "";
 
     // Init _id section
-    kursIdAmountController.text = widget.transaction.kursId["_id"] != null
-        ? widget.transaction.kursId["_id"]
-        : "";
-    categoryController.text = widget.transaction.categoryId["_id"] != null
-        ? widget.transaction.categoryId["_id"]
-        : "";
-    typeController.text = widget.transaction.typeId["_id"] != null
-        ? widget.transaction.typeId["_id"]
-        : "";
+    kursIdAmountController.text = widget.transaction.kursId["_id"] ?? "";
+    categoryController.text = widget.transaction.categoryId["_id"] ?? "";
+    typeController.text = widget.transaction.typeId["_id"] ?? "";
 
     context.read<RefparamaterCubit>().getRefparam();
     super.initState();
@@ -100,7 +94,7 @@ class _TransactionPageState extends State<TransactionPage> {
         builder: (context, state) {
           if (state is RefparamaterSuccess) {
             return Container(
-              margin: EdgeInsets.only(top: 5),
+              margin: const EdgeInsets.only(top: 5),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -112,7 +106,7 @@ class _TransactionPageState extends State<TransactionPage> {
                         width: 80,
                         title: "Kurs",
                         selectItem: kursIdAmountController,
-                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
                         items: state.reffKurs[0].items,
                         onChange: (value) {},
                       ),
@@ -122,7 +116,7 @@ class _TransactionPageState extends State<TransactionPage> {
                         title: "Kurs Amount",
                         isNumberOnly: true,
                         hintText: "Enter total amount",
-                        padding: EdgeInsets.only(right: 20),
+                        padding: const EdgeInsets.only(right: 20),
                       ),
                     ],
                   ),
@@ -130,7 +124,7 @@ class _TransactionPageState extends State<TransactionPage> {
                     title: "Type",
                     selectItem: typeController,
                     items: state.refparam,
-                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
                     onChange: (value) {
                       setState(() {
                         _itemsSecondDropDown = value;
@@ -141,7 +135,7 @@ class _TransactionPageState extends State<TransactionPage> {
                     CustomDropdownItem(
                       title: "Category",
                       selectItem: categoryController,
-                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
                       items: state.refparam[_itemsSecondDropDown].items,
                       onChange: (value) {},
                     ),
@@ -150,21 +144,21 @@ class _TransactionPageState extends State<TransactionPage> {
                     title: "Amount",
                     isNumberOnly: true,
                     hintText: "Enter total amount",
-                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
                   ),
                   CustomeTextFormFieldItem(
                     controller: noteController,
                     title: "Note",
                     isNumberOnly: false,
                     hintText: "Enter description",
-                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
                   ),
                 ],
               ),
             );
           }
           return Container(
-            margin: EdgeInsets.only(top: 5),
+            margin: const EdgeInsets.only(top: 5),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -176,8 +170,8 @@ class _TransactionPageState extends State<TransactionPage> {
                       width: 80,
                       title: "Kurs",
                       selectItem: kursIdAmountController,
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      items: [],
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      items: const [],
                       onChange: (value) {},
                     ),
                     CustomeTextFormFieldItem(
@@ -186,15 +180,15 @@ class _TransactionPageState extends State<TransactionPage> {
                       title: "Kurs Amount",
                       isNumberOnly: true,
                       hintText: "Enter total amount",
-                      padding: EdgeInsets.only(right: 20),
+                      padding: const EdgeInsets.only(right: 20),
                     ),
                   ],
                 ),
                 CustomDropdownItem(
                   title: "Type",
                   selectItem: typeController,
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  items: [],
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  items: const [],
                   onChange: (value) {
                     setState(() {
                       _itemsSecondDropDown = value;
@@ -205,8 +199,8 @@ class _TransactionPageState extends State<TransactionPage> {
                   CustomDropdownItem(
                     title: "Category",
                     selectItem: categoryController,
-                    padding: EdgeInsets.symmetric(horizontal: 20),
-                    items: [],
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    items: const [],
                     onChange: (value) {},
                   ),
                 CustomeTextFormFieldItem(
@@ -214,14 +208,14 @@ class _TransactionPageState extends State<TransactionPage> {
                   title: "Amount",
                   isNumberOnly: true,
                   hintText: "Enter total amount",
-                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                 ),
                 CustomeTextFormFieldItem(
                   controller: noteController,
                   title: "Note",
                   isNumberOnly: false,
                   hintText: "Enter description",
-                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                 ),
               ],
             ),
@@ -274,7 +268,8 @@ class _TransactionPageState extends State<TransactionPage> {
 
     return Scaffold(
       appBar: PreferredSize(
-          preferredSize: Size(double.infinity, 60), child: appBarSection()),
+          preferredSize: const Size(double.infinity, 60),
+          child: appBarSection()),
       body: ListView(
         children: [formSection(), buttonSubmit()],
       ),

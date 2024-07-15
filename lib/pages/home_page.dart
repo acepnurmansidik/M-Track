@@ -10,7 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tracking/widgets/transaction_item.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({super.key});
+  const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -42,7 +42,7 @@ class _HomePageState extends State<HomePage> {
             Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => TransactionPage(
+                    builder: (context) => const TransactionPage(
                           isEditBtn: false,
                         )));
           },
@@ -50,7 +50,7 @@ class _HomePageState extends State<HomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                margin: EdgeInsets.only(right: 10),
+                margin: const EdgeInsets.only(right: 10),
                 decoration: BoxDecoration(
                   border: Border.all(
                       width: 2, color: kGreenColor, style: BorderStyle.solid),
@@ -77,8 +77,8 @@ class _HomePageState extends State<HomePage> {
       return Container(
         height: 250,
         width: double.infinity,
-        margin: EdgeInsets.only(top: 20),
-        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+        margin: const EdgeInsets.only(top: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -89,7 +89,7 @@ class _HomePageState extends State<HomePage> {
                 Container(
                   height: 50,
                   width: 50,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                       shape: BoxShape.circle,
                       image: DecorationImage(
                           image: AssetImage("assets/img_avatar.png"))),
@@ -97,33 +97,33 @@ class _HomePageState extends State<HomePage> {
                 Container(
                   height: 40,
                   width: 95,
-                  padding: EdgeInsets.symmetric(horizontal: 12),
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
                   decoration: BoxDecoration(
                       color: kWhiteColor,
                       borderRadius: BorderRadius.circular(18)),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Icon(Icons.qr_code_scanner_outlined),
+                      const Icon(Icons.qr_code_scanner_outlined),
                       Container(
                         height: 20,
                         width: 2,
                         decoration: BoxDecoration(color: kGreyColor),
                       ),
-                      Icon(Icons.notification_add_outlined)
+                      const Icon(Icons.notification_add_outlined)
                     ],
                   ),
                 ),
               ],
             ),
             Container(
-                margin: EdgeInsets.only(bottom: 5, top: 20),
+                margin: const EdgeInsets.only(bottom: 5, top: 20),
                 child: Text(
                   "Current balance",
                   style: greyTextStyle.copyWith(fontSize: 16),
                 )),
             Container(
-                margin: EdgeInsets.only(bottom: 2),
+                margin: const EdgeInsets.only(bottom: 2),
                 child: Text.rich(TextSpan(
                     text: 'Rp ',
                     style: blackTextStyle.copyWith(fontSize: 16),
@@ -151,8 +151,8 @@ class _HomePageState extends State<HomePage> {
     }
 
     Widget transactionList(List<ListDataTransactionModel> listData) {
-      final result;
-      if (!listData.isEmpty) {
+      final List<Widget> result;
+      if (listData.isNotEmpty) {
         result = listData.map((subItems) {
           return SizedBox(
             width: double.infinity,
@@ -160,7 +160,8 @@ class _HomePageState extends State<HomePage> {
               children: [
                 Container(
                     width: double.infinity,
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                     decoration: BoxDecoration(color: kGreyColor),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -201,10 +202,10 @@ class _HomePageState extends State<HomePage> {
           Center(
             child: Column(children: [
               Container(
-                margin: EdgeInsets.only(top: 25),
+                margin: const EdgeInsets.only(top: 25),
                 width: 220,
                 height: 220,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                     image: DecorationImage(
                         image: AssetImage("assets/icon_notfound.png"))),
               ),
@@ -228,15 +229,15 @@ class _HomePageState extends State<HomePage> {
           maxChildSize: 1,
           builder: (context, scrollController) {
             return Container(
-              padding: EdgeInsets.only(top: 20),
+              padding: const EdgeInsets.only(top: 20),
               decoration: BoxDecoration(
                   color: kWhiteColor,
                   borderRadius:
-                      BorderRadius.vertical(top: Radius.circular(18))),
+                      const BorderRadius.vertical(top: Radius.circular(18))),
               child: Stack(
                 children: [
                   Container(
-                    margin: EdgeInsets.only(top: 50),
+                    margin: const EdgeInsets.only(top: 50),
                     child: SingleChildScrollView(
                       controller: scrollController,
                       child: Column(
@@ -249,11 +250,11 @@ class _HomePageState extends State<HomePage> {
                       Container(
                         height: 5,
                         width: 50,
-                        margin: EdgeInsets.only(bottom: 10),
+                        margin: const EdgeInsets.only(bottom: 10),
                         decoration: BoxDecoration(
                             color: kDoveGreyColor,
                             borderRadius:
-                                BorderRadius.all(Radius.circular(18))),
+                                const BorderRadius.all(Radius.circular(18))),
                       ),
                       Container(
                         padding: EdgeInsets.only(
@@ -311,7 +312,7 @@ class _HomePageState extends State<HomePage> {
             children: [
               Row(
                 children: [
-                  Container(
+                  SizedBox(
                     height: 26,
                     width: 26,
                     child: Stack(

@@ -6,10 +6,10 @@ class CustomDropdownItem extends StatefulWidget {
   final TextEditingController selectItem;
   final List<dynamic> items;
   final Function(int) onChange;
-  double width;
-  EdgeInsets padding;
+  final double width;
+  final EdgeInsets padding;
 
-  CustomDropdownItem({
+  const CustomDropdownItem({
     super.key,
     required this.title,
     required this.selectItem,

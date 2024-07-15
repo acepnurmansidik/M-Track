@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:http/http.dart';
 import 'package:tracking/services/refparameter_service.dart';
 
 part 'refparamater_state.dart';
