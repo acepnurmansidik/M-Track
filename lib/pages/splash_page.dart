@@ -1,6 +1,9 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -12,8 +15,19 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
-    Timer(const Duration(seconds: 3), () {
-      Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+    Timer(const Duration(seconds: 3), () async {
+      // Create storage
+      AndroidOptions getAndroidOptions() => const AndroidOptions(
+            encryptedSharedPreferences: true,
+          );
+      final storage = FlutterSecureStorage(aOptions: getAndroidOptions());
+      String? tokeAvailable = await storage.read(key: 'token');
+      if (tokeAvailable == "") {
+        Navigator.pushNamedAndRemoveUntil(
+            context, '/sign-in', (route) => false);
+      } else {
+        Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+      }
     });
     super.initState();
   }

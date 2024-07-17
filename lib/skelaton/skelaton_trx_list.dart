@@ -31,7 +31,7 @@ class SkelatonTrxList extends StatelessWidget {
                   Container(
                     height: 18,
                     width: 150,
-                    margin: EdgeInsets.only(bottom: 10),
+                    margin: const EdgeInsets.only(bottom: 10),
                     decoration: BoxDecoration(
                         color: kLineDarkColor,
                         borderRadius: BorderRadius.circular(5)),
