@@ -6,6 +6,7 @@ class CustomeTextFormFieldItem extends StatelessWidget {
   final String hintText;
   final String title;
   final bool isNumberOnly;
+  final bool secureType;
   final EdgeInsets padding;
   final double width;
 
@@ -14,6 +15,7 @@ class CustomeTextFormFieldItem extends StatelessWidget {
     required this.controller,
     required this.title,
     required this.isNumberOnly,
+    this.secureType = false,
     this.padding = EdgeInsets.zero,
     required this.hintText,
     this.width = double.infinity,
@@ -36,17 +38,22 @@ class CustomeTextFormFieldItem extends StatelessWidget {
             height: 6,
           ),
           TextFormField(
-              controller: controller,
-              cursorColor: kBlackColor,
-              keyboardType:
-                  isNumberOnly ? TextInputType.number : TextInputType.text,
-              decoration: InputDecoration(
-                  hintText: hintText,
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                  focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      borderSide: BorderSide(color: kGreyColor))))
+            controller: controller,
+            obscureText: secureType,
+            cursorColor: kBlackColor,
+            keyboardType:
+                isNumberOnly ? TextInputType.number : TextInputType.text,
+            decoration: InputDecoration(
+              hintText: hintText,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(color: kGreyColor),
+              ),
+            ),
+          )
         ],
       ),
     );

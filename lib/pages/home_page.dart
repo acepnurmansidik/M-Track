@@ -31,10 +31,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // SKELATON LOADING
-
-    // ============================================
-
     Widget customBtnNav() {
       return Container(
         width: 400,
@@ -91,13 +87,18 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Container(
-                  height: 50,
-                  width: 50,
-                  decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                          image: AssetImage("assets/img_avatar.png"))),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, '/setting');
+                  },
+                  child: Container(
+                    height: 50,
+                    width: 50,
+                    decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                            image: AssetImage("assets/img_avatar.png"))),
+                  ),
                 ),
                 Container(
                   height: 40,

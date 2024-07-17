@@ -40,15 +40,18 @@ class _SignInPageState extends State<SignInPage> {
         child: Column(
           children: [
             CustomeTextFormFieldItem(
-                controller: emailController,
-                title: 'Email',
-                isNumberOnly: false,
-                hintText: 'Enter your email'),
+              controller: emailController,
+              title: 'Email',
+              isNumberOnly: false,
+              hintText: 'Enter your email',
+            ),
             CustomeTextFormFieldItem(
-                controller: passwordController,
-                title: 'Password',
-                isNumberOnly: false,
-                hintText: 'Enter your password'),
+              controller: passwordController,
+              title: 'Password',
+              secureType: true,
+              isNumberOnly: false,
+              hintText: 'Enter your password',
+            ),
           ],
         ),
       );

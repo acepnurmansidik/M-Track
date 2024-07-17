@@ -22,7 +22,7 @@ class _SplashPageState extends State<SplashPage> {
           );
       final storage = FlutterSecureStorage(aOptions: getAndroidOptions());
       String? tokeAvailable = await storage.read(key: 'token');
-      if (tokeAvailable == "") {
+      if (tokeAvailable == null) {
         Navigator.pushNamedAndRemoveUntil(
             context, '/sign-in', (route) => false);
       } else {

@@ -4,6 +4,7 @@ import 'package:tracking/cubit/auth_cubit.dart';
 import 'package:tracking/cubit/refparamater_cubit.dart';
 import 'package:tracking/cubit/transaction_cubit.dart';
 import 'package:tracking/pages/home_page.dart';
+import 'package:tracking/pages/setting_page.dart';
 import 'package:tracking/pages/signin_page.dart';
 import 'package:tracking/pages/signup_page.dart';
 import 'package:tracking/pages/splash_page.dart';
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
           "/sign-in": (context) => const SignInPage(),
           "/home": (context) => const HomePage(),
           "/success": (context) => const SuccessPage(),
+          "/setting": (context) => const SettingPage(),
         },
       ),
     );
