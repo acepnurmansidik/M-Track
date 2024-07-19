@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "908874828956",
+    "project_id": "trackmoney-af0db",
+    "storage_bucket": "trackmoney-af0db.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:908874828956:android:05004579ec07c3b1083159",
+        "android_client_info": {
+          "package_name": "com.example.tracking"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJa7_65ACPCvtrGHWMh2Hiexuoalbk4Fc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
