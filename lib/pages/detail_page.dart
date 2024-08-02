@@ -59,7 +59,7 @@ class DetailPage extends StatelessWidget {
                     height: 10,
                   ),
                   Text(
-                    "transaction.note",
+                    transaction.note,
                     style: greyTextStyle.copyWith(
                         fontSize: 14, fontWeight: medium),
                   ),
@@ -103,10 +103,13 @@ class DetailPage extends StatelessWidget {
         decoration: BoxDecoration(
             color: kWhiteColor, borderRadius: BorderRadius.circular(18)),
         child: Column(children: [
-          Icon(
-            Icons.train,
-            size: 45,
-            color: kBlueColor,
+          Container(
+            width: 45,
+            height: 45,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(50),
+            ),
+            child: Image.network(transaction.categoryId["icon"]),
           ),
           const SizedBox(
             height: 6,
@@ -131,14 +134,16 @@ class DetailPage extends StatelessWidget {
                   style:
                       greyTextStyle.copyWith(fontSize: 14, fontWeight: medium),
                 ),
-                Transform.rotate(
-                  angle: transaction.isIncome ? 0.7854 : -0.7854,
-                  child: Icon(
-                    transaction.isIncome
-                        ? Icons.arrow_upward
-                        : Icons.arrow_downward,
-                    color: transaction.isIncome ? kGreenColor : kRedColor,
-                  ),
+                Container(
+                  width: 20,
+                  height: 20,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50),
+                      image: DecorationImage(
+                        image: NetworkImage(
+                          transaction.typeId["icon"],
+                        ),
+                      )),
                 ),
               ],
             ),
@@ -216,7 +221,9 @@ class DetailPage extends StatelessWidget {
           preferredSize: const Size(double.infinity, 60),
           child: appBarSection()),
       body: ListView(
-        children: [detailInfo()],
+        children: [
+          detailInfo(),
+        ],
       ),
     );
   }

@@ -57,12 +57,15 @@ class TransactionItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
-                margin: const EdgeInsets.only(right: 5),
-                child: Icon(
-                  Icons.train,
-                  color: kBlueColor,
-                  size: 40,
+                width: 48,
+                height: 48,
+                padding: const EdgeInsets.all(7),
+                margin: const EdgeInsets.only(right: 10),
+                decoration: BoxDecoration(
+                  color: kLineDarkColor,
+                  borderRadius: BorderRadius.circular(50),
                 ),
+                child: Image.network(transaction.categoryId["icon"]),
               ),
               Expanded(
                 child: Column(
@@ -85,14 +88,16 @@ class TransactionItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Transform.rotate(
-                    angle: transaction.isIncome ? 0.7854 : -0.7854,
-                    child: Icon(
-                      transaction.isIncome
-                          ? Icons.arrow_upward
-                          : Icons.arrow_downward,
-                      color: transaction.isIncome ? kGreenColor : kRedColor,
-                    ),
+                  Container(
+                    width: 25,
+                    height: 25,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50),
+                        image: DecorationImage(
+                          image: NetworkImage(
+                            transaction.typeId["icon"],
+                          ),
+                        )),
                   ),
                   Text(
                     NumberFormat.currency(symbol: "IDR ", decimalDigits: 0)
