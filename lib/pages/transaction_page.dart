@@ -7,6 +7,7 @@ import 'package:tracking/theme.dart';
 import 'package:tracking/widgets/custom_button.dart';
 import 'package:tracking/widgets/custom_dropdown_item.dart';
 import 'package:tracking/widgets/custom_textform_field.dart';
+import 'package:tracking/widgets/loading_animation.dart';
 
 class TransactionPage extends StatefulWidget {
   final bool isEditBtn;
@@ -224,8 +225,11 @@ class _TransactionPageState extends State<TransactionPage> {
       );
     }
 
-    Widget buttonSubmit() {
-      return BlocConsumer<TransactionCubit, TransactionState>(
+    return Scaffold(
+      appBar: PreferredSize(
+          preferredSize: const Size(double.infinity, 60),
+          child: appBarSection()),
+      body: BlocConsumer<TransactionCubit, TransactionState>(
         listener: (context, state) {
           if (state is TransactionActionSuccess) {
             Navigator.pushNamedAndRemoveUntil(
@@ -233,45 +237,45 @@ class _TransactionPageState extends State<TransactionPage> {
           } else if (state is TransactionFailed) {
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 backgroundColor: kRedColor, content: Text(state.error)));
+          } else if (state is TransactionLoading) {
+            const LoadingAnimation();
           }
         },
         builder: (context, state) {
-          return CustomButton(
-            title: 'Submit',
-            margin: const EdgeInsets.only(
-                left: 20, right: 20, top: 50, bottom: 100),
-            onPressed: () {
-              if (widget.isEditBtn) {
-                context.read<TransactionCubit>().putTrx(widget.transaction.id, {
-                  "category_id": categoryController.text,
-                  "type_id": typeController.text,
-                  "kurs_id": kursIdAmountController.text,
-                  "amount": amountController.text,
-                  "kurs_amount": kursAmountController.text,
-                  "note": noteController.text
-                });
-              } else {
-                context.read<TransactionCubit>().postTrx({
-                  "category_id": categoryController.text,
-                  "type_id": typeController.text,
-                  "kurs_id": kursIdAmountController.text,
-                  "amount": amountController.text,
-                  "kurs_amount": kursAmountController.text,
-                  "note": noteController.text
-                });
-              }
-            },
+          return ListView(
+            children: [
+              formSection(),
+              CustomButton(
+                title: 'Submit',
+                margin: const EdgeInsets.only(
+                    left: 20, right: 20, top: 50, bottom: 100),
+                onPressed: () {
+                  if (widget.isEditBtn) {
+                    context
+                        .read<TransactionCubit>()
+                        .putTrx(widget.transaction.id, {
+                      "category_id": categoryController.text,
+                      "type_id": typeController.text,
+                      "kurs_id": kursIdAmountController.text,
+                      "amount": amountController.text,
+                      "kurs_amount": kursAmountController.text,
+                      "note": noteController.text
+                    });
+                  } else {
+                    context.read<TransactionCubit>().postTrx({
+                      "category_id": categoryController.text,
+                      "type_id": typeController.text,
+                      "kurs_id": kursIdAmountController.text,
+                      "amount": amountController.text,
+                      "kurs_amount": kursAmountController.text,
+                      "note": noteController.text
+                    });
+                  }
+                },
+              ),
+            ],
           );
         },
-      );
-    }
-
-    return Scaffold(
-      appBar: PreferredSize(
-          preferredSize: const Size(double.infinity, 60),
-          child: appBarSection()),
-      body: ListView(
-        children: [formSection(), buttonSubmit()],
       ),
     );
   }
