@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 Color kBlackColor = const Color(0xff222222);
 Color kPrimaryColor = const Color(0xff5C40CC);
+Color kSecondaryColor = const Color(0x1666fa);
 Color kGreyColor = const Color(0xff9698A9);
 Color kSecondGreyColor = const Color(0xffd9d9ce);
 Color kDoveGreyColor = const Color(0xff626262);
@@ -16,11 +17,17 @@ Color kDarkBlueColor = const Color(0xff7c7cfc);
 Color kLineDarkColor = const Color(0xffEAEAEA);
 
 TextStyle blackTextStyle = GoogleFonts.poppins(color: kBlackColor);
+TextStyle secondaryTextStyle = GoogleFonts.poppins(color: kSecondaryColor);
 TextStyle greyTextStyle = GoogleFonts.poppins(color: kGreyColor);
 TextStyle greenTextStyle = GoogleFonts.poppins(color: kGreenColor);
 TextStyle whiteTextStyle = GoogleFonts.poppins(color: kWhiteColor);
 TextStyle redTextStyle = GoogleFonts.poppins(color: kRedColor);
 TextStyle darkBlueTextStyle = GoogleFonts.poppins(color: kDarkBlueColor);
+
+// Versi 2
+Color kSecondaryV2Color = const Color(0xfff5f5fc);
+Color kPrimaryV2Color = const Color(0xff1A56DB);
+TextStyle primaryTextStyle = GoogleFonts.poppins(color: kPrimaryV2Color);
 
 FontWeight light = FontWeight.w300;
 FontWeight regular = FontWeight.w400;

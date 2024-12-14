@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/intl.dart';
 import 'package:tracking/models/transaction_model.dart';
 import 'package:tracking/pages/detail_page.dart';
@@ -65,7 +66,8 @@ class TransactionItem extends StatelessWidget {
                   color: kLineDarkColor,
                   borderRadius: BorderRadius.circular(50),
                 ),
-                child: Image.network(transaction.categoryId["icon"]),
+                child: Image.network(
+                    '${dotenv.env["PUBLIC_API_BASE_IMAGE"]}${transaction.typeId["icon"]["name"]}'),
               ),
               Expanded(
                 child: Column(
@@ -95,7 +97,7 @@ class TransactionItem extends StatelessWidget {
                         borderRadius: BorderRadius.circular(50),
                         image: DecorationImage(
                           image: NetworkImage(
-                            transaction.typeId["icon"],
+                            '${dotenv.env["PUBLIC_API_BASE_IMAGE"]}${transaction.typeId["icon"]["name"]}',
                           ),
                         )),
                   ),

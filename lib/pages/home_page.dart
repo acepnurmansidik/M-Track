@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:tracking/cubit/transaction_cubit.dart';
 import 'package:tracking/models/transaction_model.dart';
-import 'package:tracking/pages/transaction_page.dart';
+import 'package:tracking/pages/form_transaction_page.dart';
 import 'package:tracking/skelaton/skelaton_trx_list.dart';
 import 'package:tracking/theme.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -41,11 +41,14 @@ class _HomePageState extends State<HomePage> {
         child: TextButton(
           onPressed: () {
             Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const TransactionPage(
-                          isEditBtn: false,
-                        )));
+              context,
+              MaterialPageRoute(
+                // builder: (context) => const TransactionPage(
+                //   isEditBtn: false,
+                // ),
+                builder: (context) => const FormTransactionPage(),
+              ),
+            );
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -271,7 +274,7 @@ class _HomePageState extends State<HomePage> {
                         child: Row(
                           children: [
                             Text(
-                              "Transaksi",
+                              "Transactions",
                               style: blackTextStyle.copyWith(
                                   fontSize: 16, fontWeight: semibold),
                             )

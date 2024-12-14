@@ -250,27 +250,31 @@ class _TransactionPageState extends State<TransactionPage> {
                 margin: const EdgeInsets.only(
                     left: 20, right: 20, top: 50, bottom: 100),
                 onPressed: () {
-                  if (widget.isEditBtn) {
-                    context
-                        .read<TransactionCubit>()
-                        .putTrx(widget.transaction.id, {
-                      "category_id": categoryController.text,
-                      "type_id": typeController.text,
-                      "kurs_id": kursIdAmountController.text,
-                      "amount": amountController.text,
-                      "kurs_amount": kursAmountController.text,
-                      "note": noteController.text
-                    });
-                  } else {
-                    context.read<TransactionCubit>().postTrx({
-                      "category_id": categoryController.text,
-                      "type_id": typeController.text,
-                      "kurs_id": kursIdAmountController.text,
-                      "amount": amountController.text,
-                      "kurs_amount": kursAmountController.text,
-                      "note": noteController.text
-                    });
-                  }
+                  print("amountController");
+                  print(amountController.text);
+                  print("kursAmountController");
+                  print(kursAmountController.text);
+                  // if (widget.isEditBtn) {
+                  //   context
+                  //       .read<TransactionCubit>()
+                  //       .putTrx(widget.transaction.id, {
+                  //     "category_id": categoryController.text,
+                  //     "type_id": typeController.text,
+                  //     "kurs_id": kursIdAmountController.text,
+                  //     "amount": amountController.text,
+                  //     "kurs_amount": kursAmountController.text,
+                  //     "note": noteController.text
+                  //   });
+                  // } else {
+                  //   context.read<TransactionCubit>().postTrx({
+                  //     "category_id": categoryController.text,
+                  //     "type_id": typeController.text,
+                  //     "kurs_id": kursIdAmountController.text,
+                  //     "amount": amountController.text,
+                  //     "kurs_amount": kursAmountController.text,
+                  //     "note": noteController.text
+                  //   });
+                  // }
                 },
               ),
             ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/intl.dart';
 import 'package:tracking/models/transaction_model.dart';
 import 'package:tracking/theme.dart';
@@ -56,12 +57,12 @@ class DetailPage extends StatelessWidget {
                         fontSize: 14, fontWeight: medium),
                   ),
                   const SizedBox(
-                    height: 10,
+                    height: 5,
                   ),
                   Text(
                     transaction.note,
                     style: greyTextStyle.copyWith(
-                        fontSize: 14, fontWeight: medium),
+                        fontSize: 12, fontWeight: medium),
                   ),
                 ],
               ),
@@ -74,12 +75,13 @@ class DetailPage extends StatelessWidget {
     Widget qrCodeSection() {
       return Container(
         margin: const EdgeInsets.only(top: 30),
+        width: double.infinity,
         child: Column(
           children: [
             CustomPaint(
-              size: const Size(double.infinity, 1),
+              size: const Size(double.infinity, 2),
               painter: DashedLinePainter(
-                  lineColor: kGreenColor, spaceLine: 7, strokeLine: 2),
+                  lineColor: kGreyColor, spaceLine: 7, strokeLine: 1.7),
             ),
             Container(
               height: 220,
@@ -97,11 +99,11 @@ class DetailPage extends StatelessWidget {
     Widget detailInfo() {
       return Container(
         width: double.infinity,
-        margin: const EdgeInsets.all(20),
+        margin: const EdgeInsets.all(15),
         padding:
             const EdgeInsets.only(left: 25, right: 25, top: 20, bottom: 25),
         decoration: BoxDecoration(
-            color: kWhiteColor, borderRadius: BorderRadius.circular(18)),
+            color: kWhiteColor, borderRadius: BorderRadius.circular(15)),
         child: Column(children: [
           Container(
             width: 45,
@@ -109,7 +111,8 @@ class DetailPage extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(50),
             ),
-            child: Image.network(transaction.categoryId["icon"]),
+            child: Image.network(
+                '${dotenv.env["PUBLIC_API_BASE_IMAGE"]}${transaction.categoryId["icon"]["name"]}'),
           ),
           const SizedBox(
             height: 6,
@@ -141,7 +144,7 @@ class DetailPage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(50),
                       image: DecorationImage(
                         image: NetworkImage(
-                          transaction.typeId["icon"],
+                          '${dotenv.env["PUBLIC_API_BASE_IMAGE"]}${transaction.typeId["icon"]["name"]}',
                         ),
                       )),
                 ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tracking/theme.dart';
 
-class CustomeTextFormFieldItem extends StatelessWidget {
+class CustomeTextFormFieldItem extends StatefulWidget {
   final TextEditingController controller;
   final String hintText;
   final String title;
@@ -22,35 +22,67 @@ class CustomeTextFormFieldItem extends StatelessWidget {
   });
 
   @override
+  State<CustomeTextFormFieldItem> createState() =>
+      _CustomeTextFormFieldItemState();
+}
+
+class _CustomeTextFormFieldItemState extends State<CustomeTextFormFieldItem> {
+  late FocusNode _focusNode;
+  Color focusColor = kGreyColor;
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode = FocusNode();
+
+    // Add listener to focus node
+    _focusNode.addListener(() {
+      setState(() {
+        if (_focusNode.hasFocus) {
+          focusColor = kPrimaryV2Color; // Change title color to blue on focus
+        } else {
+          focusColor = kGreyColor; // Revert title color
+        }
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
-      width: width,
+      width: widget.width,
       margin: const EdgeInsets.only(bottom: 20),
-      padding: padding,
+      padding: widget.padding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            title,
-            style: blackTextStyle.copyWith(fontWeight: regular, fontSize: 14),
-          ),
-          const SizedBox(
-            height: 6,
+            widget.title,
+            style: secondaryTextStyle.copyWith(
+              fontWeight: semibold,
+              fontSize: 14,
+              color: focusColor,
+              letterSpacing: 1,
+            ),
           ),
           TextFormField(
-            controller: controller,
-            obscureText: secureType,
+            focusNode: _focusNode,
+            controller: widget.controller,
+            obscureText: widget.secureType,
             cursorColor: kBlackColor,
             keyboardType:
-                isNumberOnly ? TextInputType.number : TextInputType.text,
+                widget.isNumberOnly ? TextInputType.number : TextInputType.text,
             decoration: InputDecoration(
-              hintText: hintText,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(color: kGreyColor),
+              hintText: widget.hintText,
+              border: InputBorder.none,
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: kPrimaryV2Color, width: 2),
               ),
             ),
           )
