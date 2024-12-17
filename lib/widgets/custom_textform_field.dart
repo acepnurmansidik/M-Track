@@ -9,12 +9,15 @@ class CustomeTextFormFieldItem extends StatefulWidget {
   final bool secureType;
   final EdgeInsets padding;
   final double width;
+  final String? Function(String?)
+      validateFunc; // Ubah tipe menjadi fungsi yang menerima String? dan mengembalikan String?
 
   const CustomeTextFormFieldItem({
     super.key,
     required this.controller,
     required this.title,
     required this.isNumberOnly,
+    required this.validateFunc,
     this.secureType = false,
     this.padding = EdgeInsets.zero,
     required this.hintText,
@@ -61,12 +64,13 @@ class _CustomeTextFormFieldItemState extends State<CustomeTextFormFieldItem> {
       padding: widget.padding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             widget.title,
             style: secondaryTextStyle.copyWith(
               fontWeight: semibold,
-              fontSize: 14,
+              fontSize: 12,
               color: focusColor,
               letterSpacing: 1,
             ),
@@ -76,6 +80,7 @@ class _CustomeTextFormFieldItemState extends State<CustomeTextFormFieldItem> {
             controller: widget.controller,
             obscureText: widget.secureType,
             cursorColor: kBlackColor,
+            validator: widget.validateFunc, // Ubah ini
             keyboardType:
                 widget.isNumberOnly ? TextInputType.number : TextInputType.text,
             decoration: InputDecoration(
@@ -84,6 +89,10 @@ class _CustomeTextFormFieldItemState extends State<CustomeTextFormFieldItem> {
               focusedBorder: UnderlineInputBorder(
                 borderSide: BorderSide(color: kPrimaryV2Color, width: 2),
               ),
+              errorStyle: redTextStyle.copyWith(
+                fontSize: 10,
+              ),
+              errorMaxLines: 1,
             ),
           )
         ],

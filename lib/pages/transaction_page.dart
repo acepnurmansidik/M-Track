@@ -103,14 +103,14 @@ class _TransactionPageState extends State<TransactionPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      CustomDropdownItem(
-                        width: 80,
-                        title: "Kurs",
-                        selectItem: kursIdAmountController,
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        items: state.reffKurs[0].items,
-                        onChange: (value) {},
-                      ),
+                      // CustomDropdownItem(
+                      //   width: 80,
+                      //   title: "Kurs",
+                      //   selectItem: kursIdAmountController,
+                      //   padding: const EdgeInsets.symmetric(horizontal: 20),
+                      //   items: state.reffKurs[0].items,
+                      //   onChange: (value) {},
+                      // ),
                       CustomeTextFormFieldItem(
                         width: MediaQuery.of(context).size.width - (2 * 60),
                         controller: kursAmountController,
@@ -118,13 +118,16 @@ class _TransactionPageState extends State<TransactionPage> {
                         isNumberOnly: true,
                         hintText: "Enter total amount",
                         padding: const EdgeInsets.only(right: 20),
+                        validateFunc: (value) {
+                          return null;
+                        },
                       ),
                     ],
                   ),
                   CustomDropdownItem(
                     title: "Type",
                     selectItem: typeController,
-                    items: state.refparam,
+                    items: state.listCategoryTypeReff,
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     onChange: (value) {
                       setState(() {
@@ -137,7 +140,8 @@ class _TransactionPageState extends State<TransactionPage> {
                       title: "Category",
                       selectItem: categoryController,
                       padding: const EdgeInsets.symmetric(horizontal: 20),
-                      items: state.refparam[_itemsSecondDropDown].items,
+                      items: state
+                          .listCategoryTypeReff[_itemsSecondDropDown].items,
                       onChange: (value) {},
                     ),
                   CustomeTextFormFieldItem(
@@ -146,6 +150,9 @@ class _TransactionPageState extends State<TransactionPage> {
                     isNumberOnly: true,
                     hintText: "Enter total amount",
                     padding: const EdgeInsets.symmetric(horizontal: 20),
+                    validateFunc: (value) {
+                      return null;
+                    },
                   ),
                   CustomeTextFormFieldItem(
                     controller: noteController,
@@ -153,6 +160,9 @@ class _TransactionPageState extends State<TransactionPage> {
                     isNumberOnly: false,
                     hintText: "Enter description",
                     padding: const EdgeInsets.symmetric(horizontal: 20),
+                    validateFunc: (value) {
+                      return null;
+                    },
                   ),
                 ],
               ),
@@ -182,6 +192,9 @@ class _TransactionPageState extends State<TransactionPage> {
                       isNumberOnly: true,
                       hintText: "Enter total amount",
                       padding: const EdgeInsets.only(right: 20),
+                      validateFunc: (value) {
+                        return null;
+                      },
                     ),
                   ],
                 ),
@@ -210,6 +223,9 @@ class _TransactionPageState extends State<TransactionPage> {
                   isNumberOnly: true,
                   hintText: "Enter total amount",
                   padding: const EdgeInsets.symmetric(horizontal: 20),
+                  validateFunc: (value) {
+                    return null;
+                  },
                 ),
                 CustomeTextFormFieldItem(
                   controller: noteController,
@@ -217,6 +233,9 @@ class _TransactionPageState extends State<TransactionPage> {
                   isNumberOnly: false,
                   hintText: "Enter description",
                   padding: const EdgeInsets.symmetric(horizontal: 20),
+                  validateFunc: (value) {
+                    return null;
+                  },
                 ),
               ],
             ),
@@ -231,7 +250,7 @@ class _TransactionPageState extends State<TransactionPage> {
           child: appBarSection()),
       body: BlocConsumer<TransactionCubit, TransactionState>(
         listener: (context, state) {
-          if (state is TransactionActionSuccess) {
+          if (state is TransactionCreateSuccess) {
             Navigator.pushNamedAndRemoveUntil(
                 context, '/success', (route) => false);
           } else if (state is TransactionFailed) {

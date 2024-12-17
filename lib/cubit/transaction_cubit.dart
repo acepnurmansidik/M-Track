@@ -23,7 +23,7 @@ class TransactionCubit extends Cubit<TransactionState> {
     try {
       emit(TransactionLoading());
       await TransactionService().createTrx(body);
-      emit(TransactionActionSuccess());
+      emit(TransactionCreateSuccess());
     } catch (e) {
       emit(TransactionFailed(e.toString()));
     }
@@ -33,7 +33,7 @@ class TransactionCubit extends Cubit<TransactionState> {
     try {
       emit(TransactionLoading());
       await TransactionService().updateTrx(id, body);
-      emit(TransactionActionSuccess());
+      emit(TransactionCreateSuccess());
     } catch (e) {
       emit(TransactionFailed(e.toString()));
     }

@@ -47,15 +47,24 @@ class _SignUpPageState extends State<SignUpPage> {
               title: 'Name',
               isNumberOnly: false,
               hintText: 'Enter your name',
+              validateFunc: (value) {
+                return null;
+              },
             ),
             CustomeTextFormFieldItem(
               controller: emailController,
               title: 'Email',
               isNumberOnly: false,
               hintText: 'Enter your email',
+              validateFunc: (value) {
+                return null;
+              },
             ),
             CustomeTextFormFieldItem(
               controller: passwordController,
+              validateFunc: (value) {
+                return null;
+              },
               title: 'Password',
               isNumberOnly: false,
               secureType: true,
@@ -63,6 +72,9 @@ class _SignUpPageState extends State<SignUpPage> {
             ),
             CustomeTextFormFieldItem(
               controller: confirmPasswordController,
+              validateFunc: (value) {
+                return null;
+              },
               title: 'Confirm Password',
               isNumberOnly: false,
               secureType: true,
@@ -141,6 +153,7 @@ class _SignUpPageState extends State<SignUpPage> {
     }
 
     return Scaffold(
+      backgroundColor: kWhiteColor,
       body: Stack(
         children: [
           ListView(

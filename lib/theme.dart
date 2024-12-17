@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 Color kBlackColor = const Color(0xff222222);
 Color kPrimaryColor = const Color(0xff5C40CC);
-Color kSecondaryColor = const Color(0x1666fa);
+Color kSecondaryColor = const Color(0x001666fa);
 Color kGreyColor = const Color(0xff9698A9);
 Color kSecondGreyColor = const Color(0xffd9d9ce);
 Color kDoveGreyColor = const Color(0xff626262);

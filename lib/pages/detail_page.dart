@@ -19,6 +19,7 @@ class DetailPage extends StatelessWidget {
       return AppBar(
         automaticallyImplyLeading: false,
         elevation: 0,
+        backgroundColor: kWhiteColor,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -159,7 +160,7 @@ class DetailPage extends StatelessWidget {
                 style: greyTextStyle.copyWith(fontSize: 14, fontWeight: medium),
               ),
               Text(
-                transaction.kursId["description"],
+                transaction.kursId["value"],
                 style: greyTextStyle.copyWith(fontSize: 14, fontWeight: medium),
               ),
             ],

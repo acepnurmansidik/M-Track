@@ -21,10 +21,6 @@ class _SplashPageState extends State<SplashPage> {
             encryptedSharedPreferences: true,
           );
       final storage = FlutterSecureStorage(aOptions: getAndroidOptions());
-      await storage.write(
-          key: "token",
-          value:
-              "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG4uZG9lQGdtYWlsLmNvbSIsIm5hbWUiOiJqb2huIGRvZSIsImlhdCI6MTczNDE1NzYxMiwiZXhwIjoxNzM0MjQ0MDEyLCJqdGkiOiI4NDJiMDQzNTg3Yjc0N2U1ODdkNDFmYzQ1ZWQxOGY4MCJ9.hP5Jlpx8FBr5CsVUwElTpnevJy8MQaIe_LoAgoSr0amc8PRB7k-JRpbjnDtKdofxzcNH-oxOS3vqbAjhd1fZnQ");
       String? tokeAvailable = await storage.read(key: 'token');
       if (tokeAvailable == null) {
         Navigator.pushNamedAndRemoveUntil(

@@ -7,17 +7,54 @@ part 'refparamater_state.dart';
 class RefparamaterCubit extends Cubit<RefparamaterState> {
   RefparamaterCubit() : super(RefparamaterInitial());
 
-  void getRefparam() async {
+  void getRefparam({parentId = ""}) async {
     try {
       emit(RefparamaterLoading());
 
-      final reffCategory = await RefparameterService()
-          .fetchListParameter(queryType: "category", preserve: true);
+      final listCategoryTypeReff = await RefparameterService()
+          .fetchListParameter(url: '?type=cashflow_type');
 
-      final reffKurs = await RefparameterService()
-          .fetchListParameter(queryType: "kurs", preserve: true);
+      if (listCategoryTypeReff.isNotEmpty) {
+        parentId = listCategoryTypeReff[0].id;
+      }
 
-      emit(RefparamaterSuccess(reffKurs: reffKurs, refparam: reffCategory));
+      final listCategoryReff = await RefparameterService()
+          .fetchListParameter(url: '?type=category&parent_id=$parentId');
+
+      emit(RefparamaterSuccess(
+        listCategoryTypeReff: listCategoryTypeReff,
+        listCategoryReff: listCategoryReff,
+      ));
+    } catch (e) {
+      emit(RefparamaterFailed(e.toString()));
+    }
+  }
+
+  void refreshCategory({parentId = ""}) async {
+    final state = this.state;
+    try {
+      emit(RefparamaterLoading());
+
+      final listCategoryReff = await RefparameterService()
+          .fetchListParameter(url: '?type=category&parent_id=$parentId');
+
+      if (state is RefparamaterSuccess) {
+        emit(RefparamaterSuccess(
+          listCategoryTypeReff: state.listCategoryTypeReff,
+          listCategoryReff: listCategoryReff,
+        ));
+      }
+    } catch (e) {
+      emit(RefparamaterFailed(e.toString()));
+    }
+  }
+
+  void createNewTransaction(body) async {
+    try {
+      emit(RefparamaterLoading());
+      // call post fucn at service
+      await RefparameterService().createNewReffparam(body);
+      emit(ReffparameterCreateSuccess());
     } catch (e) {
       emit(RefparamaterFailed(e.toString()));
     }

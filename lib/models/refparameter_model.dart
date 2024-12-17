@@ -1,6 +1,8 @@
 class ReffParameterModel {
   final String id;
-  final String name;
+  final String value;
+  final String slug;
+  final String type;
   final String description;
   final Map<String, dynamic> icon;
 
@@ -8,15 +10,19 @@ class ReffParameterModel {
     required this.id,
     required this.description,
     required this.icon,
-    required this.name,
+    required this.value,
+    required this.slug,
+    required this.type,
   });
 
   factory ReffParameterModel.fromJson(Map<String, dynamic> json) {
     return ReffParameterModel(
-      id: json['id'],
+      id: json['_id'],
       description: json['description'],
       icon: json['icon'],
-      name: json['name'],
+      value: json['value'],
+      slug: json['slug'],
+      type: json['type'],
     );
   }
 }
@@ -25,6 +31,7 @@ class ItemsReffParamCustomModel {
   final String id;
   final int key;
   final String name;
+  final String? parent_id;
   final String description;
   List? items;
 
@@ -32,6 +39,7 @@ class ItemsReffParamCustomModel {
     required this.id,
     required this.key,
     required this.name,
+    required this.parent_id,
     required this.description,
     this.items,
   });
@@ -41,6 +49,7 @@ class ItemsReffParamCustomModel {
       id: json['_id'],
       key: json['key'],
       name: json['name'],
+      parent_id: json['parent_id'],
       description: json['description'],
     );
   }

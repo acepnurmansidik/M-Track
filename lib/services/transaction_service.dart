@@ -27,9 +27,10 @@ class TransactionService {
     try {
       final header = await AuthService().authTokenHeaders('json');
       final response = await http.post(
-          Uri.parse('${dotenv.env["PUBLIC_API_BASE_V1"]}/trx'),
-          body: body,
-          headers: header);
+        Uri.parse('${dotenv.env["PUBLIC_API_BASE_V1"]}/trx'),
+        body: body,
+        headers: header,
+      );
       final data = json.decode(response.body);
 
       if (data["code"] >= 400) {
@@ -44,9 +45,10 @@ class TransactionService {
     try {
       final header = await AuthService().authTokenHeaders('json');
       final response = await http.put(
-          Uri.parse('${dotenv.env["PUBLIC_API_BASE_V1"]}/trx/$id'),
-          body: body,
-          headers: header);
+        Uri.parse('${dotenv.env["PUBLIC_API_BASE_V1"]}/trx/$id'),
+        body: body,
+        headers: header,
+      );
       final data = json.decode(response.body);
 
       if (data["code"] >= 400) {

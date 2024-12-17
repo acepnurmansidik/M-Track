@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 part of 'refparamater_cubit.dart';
 
 sealed class RefparamaterState extends Equatable {
@@ -5,20 +7,30 @@ sealed class RefparamaterState extends Equatable {
 
   @override
   List<Object> get props => [];
+
+  get listCategoryTypeReff => null;
 }
 
 final class RefparamaterInitial extends RefparamaterState {}
 
 final class RefparamaterLoading extends RefparamaterState {}
 
-final class RefparamaterSuccess extends RefparamaterState {
-  final List<dynamic> refparam;
-  final List<dynamic> reffKurs;
+final class ReffparameterCreateSuccess extends RefparamaterState {}
 
-  const RefparamaterSuccess({required this.refparam, required this.reffKurs});
+final class RefparamaterSuccess extends RefparamaterState {
+  @override
+  final List<dynamic> listCategoryTypeReff;
+  final List<dynamic> listCategoryReff;
+
+  late String parentID;
+
+  RefparamaterSuccess({
+    required this.listCategoryTypeReff,
+    required this.listCategoryReff,
+  });
 
   @override
-  List<Object> get props => [reffKurs, refparam];
+  List<Object> get props => [listCategoryTypeReff, listCategoryReff];
 }
 
 final class RefparamaterFailed extends RefparamaterState {

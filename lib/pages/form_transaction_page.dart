@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:tracking/cubit/refparamater_cubit.dart';
+import 'package:tracking/cubit/transaction_cubit.dart';
 import 'package:tracking/theme.dart';
 import 'package:tracking/widgets/custom_button.dart';
 import 'package:tracking/widgets/custom_textform_field.dart';
@@ -13,9 +17,12 @@ class FormTransactionPage extends StatefulWidget {
 
 class _FormTransactionPageState extends State<FormTransactionPage> {
   String? selectedValue; // Variabel untuk menyimpan nilai yang dipilih
-  final List<String> items = ['Item 1', 'Item 2', 'Item 3']; // Daftar item
+  List<DropdownMenuItem>? categories;
+  final GlobalKey<FormState> _formKey = GlobalKey();
 
-  int selectedBoxType = 0;
+  bool showNotes = false;
+
+  int selectedIndexBoxType = 0;
   // Text form
   final TextEditingController amountlController =
       TextEditingController(text: "");
@@ -25,6 +32,12 @@ class _FormTransactionPageState extends State<FormTransactionPage> {
       TextEditingController(text: "");
   final TextEditingController notesIdController =
       TextEditingController(text: "");
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<RefparamaterCubit>().getRefparam();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +66,7 @@ class _FormTransactionPageState extends State<FormTransactionPage> {
     Widget nominalSection() {
       return Container(
         width: double.infinity,
-        height: 110,
+        height: 129,
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         decoration: BoxDecoration(
           color: kWhiteColor,
@@ -65,6 +78,12 @@ class _FormTransactionPageState extends State<FormTransactionPage> {
               title: "Nominal",
               isNumberOnly: true,
               hintText: "0",
+              validateFunc: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Field nominal cannot be empty';
+                }
+                return null; // Return null if valid
+              },
             ),
           ],
         ),
@@ -126,27 +145,34 @@ class _FormTransactionPageState extends State<FormTransactionPage> {
         decoration: BoxDecoration(color: kWhiteColor),
         child: Column(
           children: [
-            Container(
-              width: double.infinity,
-              height: 60,
-              margin: const EdgeInsets.symmetric(horizontal: 5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.create,
-                    color: kGreyColor,
-                    size: 22,
-                  ),
-                  const SizedBox(width: 5),
-                  Text(
-                    "Tambah Keterangan",
-                    style: blackTextStyle.copyWith(
-                      fontSize: 14,
-                      fontWeight: semibold,
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  showNotes = true;
+                });
+              },
+              child: Container(
+                width: double.infinity,
+                height: 60,
+                margin: const EdgeInsets.symmetric(horizontal: 5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.create,
+                      color: kGreyColor,
+                      size: 22,
                     ),
-                  ),
-                ],
+                    const SizedBox(width: 5),
+                    Text(
+                      "Tambah Keterangan",
+                      style: blackTextStyle.copyWith(
+                        fontSize: 14,
+                        fontWeight: semibold,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             Container(
@@ -155,136 +181,361 @@ class _FormTransactionPageState extends State<FormTransactionPage> {
               width: MediaQuery.of(context).size.width,
               color: kGreyColor,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      selectedBoxType = 1;
-                    });
-                  },
-                  child: Container(
-                    height: 70,
-                    width: MediaQuery.of(context).size.width / 2.5,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      border: Border.all(
-                        width: selectedBoxType == 1 ? 2 : 1.3,
-                        color:
-                            selectedBoxType == 1 ? kPrimaryV2Color : kGreyColor,
-                      ),
-                    ),
-                    child: Center(
-                      child: Text(
-                        "Income",
-                        style: selectedBoxType == 1
-                            ? primaryTextStyle.copyWith(
-                                fontSize: 16,
-                                fontWeight: semibold,
-                              )
-                            : blackTextStyle.copyWith(
-                                fontSize: 16,
-                                fontWeight: medium,
+            BlocBuilder<RefparamaterCubit, RefparamaterState>(
+              builder: (context, state) {
+                if (state is RefparamaterLoading) {
+                  return SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height / 1.93 - 111,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Shimmer.fromColors(
+                              baseColor: kLineDarkColor,
+                              highlightColor: kWhiteColor,
+                              child: Container(
+                                height: 70,
+                                width: MediaQuery.of(context).size.width / 2.5,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  color: kLineDarkColor,
+                                ),
                               ),
-                      ),
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      selectedBoxType = 2;
-                    });
-                  },
-                  child: Container(
-                    height: 70,
-                    width: MediaQuery.of(context).size.width / 2.5,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      border: Border.all(
-                        width: selectedBoxType == 2 ? 2 : 1.3,
-                        color:
-                            selectedBoxType == 2 ? kPrimaryV2Color : kGreyColor,
-                      ),
-                    ),
-                    child: Center(
-                      child: Text(
-                        "Outcome",
-                        style: selectedBoxType == 2
-                            ? primaryTextStyle.copyWith(
-                                fontSize: 16,
-                                fontWeight: semibold,
-                              )
-                            : blackTextStyle.copyWith(
-                                fontSize: 16,
-                                fontWeight: medium,
+                            ),
+                            Shimmer.fromColors(
+                              baseColor: kLineDarkColor,
+                              highlightColor: kWhiteColor,
+                              child: Container(
+                                height: 70,
+                                width: MediaQuery.of(context).size.width / 2.5,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  color: kLineDarkColor,
+                                ),
                               ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Container(
-              height: 80,
-              width: double.infinity,
-              margin: const EdgeInsets.symmetric(vertical: 10),
-              padding: const EdgeInsets.symmetric(
-                vertical: 7,
-                horizontal: 10,
-              ),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(14),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Category",
-                    style: blackTextStyle.copyWith(
-                      fontSize: 12,
-                      color: kGreyColor,
-                      fontWeight: medium,
-                    ),
-                  ),
-                  DropdownButtonFormField(
-                    dropdownColor: kWhiteColor,
-                    value: selectedValue,
-                    decoration: InputDecoration(
-                        border:
-                            InputBorder.none, // Menghilangkan border default
-                        filled: true,
-                        fillColor: kWhiteColor, // Warna latar belakang dropdown
-                        contentPadding: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 10) // Padding
+                            ),
+                          ],
                         ),
-                    isExpanded: true,
-                    icon: const Icon(Icons.keyboard_arrow_down),
-                    hint: const Text("-"),
-                    items: items.map((item) {
-                      return DropdownMenuItem(
-                        value: item,
-                        child: Text(item),
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        selectedValue = value;
-                      });
-                    },
-                  ),
-                ],
-              ),
+                        const SizedBox(
+                          height: 25,
+                        ),
+                        Shimmer.fromColors(
+                          baseColor: kLineDarkColor,
+                          highlightColor: kWhiteColor,
+                          child: Container(
+                            height: 15,
+                            width: 80,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(7),
+                              color: kLineDarkColor,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Shimmer.fromColors(
+                          baseColor: kLineDarkColor,
+                          highlightColor: kWhiteColor,
+                          child: Container(
+                            height: 40,
+                            width: 200,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(7),
+                              color: kLineDarkColor,
+                            ),
+                          ),
+                        ),
+                        const Spacer(),
+                        Shimmer.fromColors(
+                          baseColor: kLineDarkColor,
+                          highlightColor: kWhiteColor,
+                          child: Container(
+                            margin: const EdgeInsets.only(bottom: 10),
+                            height: 55,
+                            width: MediaQuery.of(context).size.width - 20,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(50),
+                              color: kLineDarkColor,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                } else if (state is RefparamaterSuccess) {
+                  return SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height / 1.93 - 111,
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: state.listCategoryTypeReff
+                              .asMap()
+                              .entries
+                              .map((typeItem) {
+                            return GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  selectedIndexBoxType = typeItem.key;
+                                  typeIdController.text = typeItem.value.id;
+                                  selectedValue = null;
+                                  // Memanggil refreshCategory
+                                  context
+                                      .read<RefparamaterCubit>()
+                                      .refreshCategory(
+                                          parentId: typeItem.value.id);
+                                });
+                              },
+                              child: Container(
+                                height: 70,
+                                width: MediaQuery.of(context).size.width / 2.5,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(15),
+                                  border: Border.all(
+                                    width: selectedIndexBoxType == typeItem.key
+                                        ? 2
+                                        : 1.3,
+                                    color: selectedIndexBoxType == typeItem.key
+                                        ? kPrimaryV2Color
+                                        : kGreyColor,
+                                  ),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    typeItem.value.value,
+                                    style: selectedIndexBoxType == typeItem.key
+                                        ? primaryTextStyle.copyWith(
+                                            fontSize: 16, fontWeight: semibold)
+                                        : blackTextStyle.copyWith(
+                                            fontSize: 16, fontWeight: medium),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                        // Dropdown untuk kategori
+                        Container(
+                          height: 103,
+                          width: double.infinity,
+                          margin: const EdgeInsets.only(top: 15),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 7, horizontal: 10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(14),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Category",
+                                style: blackTextStyle.copyWith(
+                                    fontSize: 12,
+                                    color: kGreyColor,
+                                    fontWeight: medium),
+                              ),
+                              DropdownButtonFormField(
+                                dropdownColor: kWhiteColor,
+                                value: selectedValue,
+                                validator: (value) {
+                                  if (value == null) {
+                                    return 'Please select a category';
+                                  }
+                                  return null;
+                                },
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  filled: true,
+                                  fillColor: kWhiteColor,
+                                  contentPadding: const EdgeInsets.symmetric(
+                                    vertical: 10,
+                                    horizontal: 10,
+                                  ),
+                                ),
+                                isExpanded: true,
+                                icon: const Icon(Icons.keyboard_arrow_down),
+                                hint: const Text("-"),
+                                items: categories ??
+                                    state.listCategoryReff.map((catItem) {
+                                      return DropdownMenuItem(
+                                        value: catItem.id.toString(),
+                                        child: Text(catItem.value),
+                                      );
+                                    }).toList(),
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectedValue = value.toString();
+                                    categoryIdController.text =
+                                        value.toString();
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Spacer(),
+                        BlocConsumer<TransactionCubit, TransactionState>(
+                          listener: (context, state) {
+                            if (state is TransactionCreateSuccess) {
+                              Navigator.pushNamedAndRemoveUntil(
+                                context,
+                                '/success',
+                                (route) => false,
+                              );
+                            } else if (state is TransactionFailed) {
+                              print(state.error.toString());
+                            }
+                          },
+                          builder: (context, state) {
+                            if (state is TransactionLoading) {
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            }
+                            return CustomButton(
+                              title: 'Submit',
+                              margin: const EdgeInsets.symmetric(vertical: 10),
+                              onPressed: () {
+                                if (_formKey.currentState!.validate()) {
+                                  // Jika validasi berhasil, lakukan sesuatu
+                                  if (typeIdController.text.isNotEmpty) {
+                                    context.read<TransactionCubit>().postTrx({
+                                      "amount": amountlController.text,
+                                      "type_id": typeIdController.text,
+                                      "category_id": categoryIdController.text,
+                                      "note": notesIdController.text,
+                                    });
+                                  }
+                                }
+                              },
+                            );
+                          },
+                        )
+                      ],
+                    ),
+                  );
+                }
+                return const Text("Error fetch data, pleaserefresh page");
+              },
             ),
-            const Spacer(),
-            CustomButton(
-              title: 'Submit',
-              margin: const EdgeInsets.symmetric(vertical: 10),
-              onPressed: () {},
-            )
           ],
+        ),
+      );
+    }
+
+    Widget modalAddNote() {
+      return SizedBox.expand(
+        child: NotificationListener(
+          onNotification: (notification) {
+            if (notification is ScrollEndNotification) {
+              setState(() {
+                showNotes = false;
+              });
+            }
+            return true;
+          },
+          child: DraggableScrollableSheet(
+            initialChildSize: 0.4,
+            minChildSize: 0,
+            maxChildSize: 0.4,
+            shouldCloseOnMinExtent: false,
+            builder: (context, scrollController) {
+              return Container(
+                width: MediaQuery.of(context).size.width,
+                padding: const EdgeInsets.symmetric(
+                  vertical: 20,
+                  horizontal: 20,
+                ),
+                decoration: BoxDecoration(
+                  color: kWhiteColor,
+                ),
+                child: SingleChildScrollView(
+                  controller: scrollController,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Tambah Keterangan",
+                            style: blackTextStyle.copyWith(
+                              fontSize: 16,
+                              fontWeight: semibold,
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                showNotes = false;
+                              });
+                            },
+                            child: Icon(
+                              Icons.close,
+                              size: 27,
+                              color: kGreyColor,
+                            ),
+                          )
+                        ],
+                      ),
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        margin: const EdgeInsets.symmetric(vertical: 15),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 2,
+                          horizontal: 15,
+                        ),
+                        decoration: BoxDecoration(
+                          color: kSecondaryV2Color,
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                        child: TextFormField(
+                          maxLines: 2,
+                          controller: notesIdController,
+                          keyboardType: TextInputType.text,
+                          decoration: InputDecoration(
+                            hintText: "Keterangan",
+                            border: InputBorder.none,
+                            fillColor: kGreyColor,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 75,
+                        height: 35,
+                        margin: EdgeInsets.zero,
+                        child: TextButton(
+                          onPressed: () {
+                            setState(() {
+                              showNotes = false;
+                            });
+                          },
+                          style: TextButton.styleFrom(
+                            backgroundColor: kPrimaryV2Color,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18),
+                            ),
+                          ),
+                          child: Text(
+                            'Save',
+                            style: whiteTextStyle.copyWith(
+                              fontSize: 12,
+                              fontWeight: medium,
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
         ),
       );
     }
@@ -294,13 +545,20 @@ class _FormTransactionPageState extends State<FormTransactionPage> {
       appBar: PreferredSize(
           preferredSize: const Size(double.infinity, 60),
           child: appBarSection()),
-      body: ListView(
-        children: [
-          nominalSection(),
-          balanceInfoSection(),
-          additionalSections(),
-        ],
-      ),
+      body: Form(
+          key: _formKey,
+          child: Stack(
+            children: [
+              ListView(
+                children: [
+                  nominalSection(),
+                  balanceInfoSection(),
+                  additionalSections(),
+                ],
+              ),
+              if (showNotes) modalAddNote()
+            ],
+          )),
     );
   }
 }

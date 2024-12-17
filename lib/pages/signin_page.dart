@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tracking/cubit/auth_cubit.dart';
+import 'package:tracking/cubit/page_cubit.dart';
 import 'package:tracking/theme.dart';
 import 'package:tracking/widgets/custom_button.dart';
 import 'package:tracking/widgets/custom_notif.dart';
@@ -44,6 +45,9 @@ class _SignInPageState extends State<SignInPage> {
               title: 'Email',
               isNumberOnly: false,
               hintText: 'Enter your email',
+              validateFunc: (value) {
+                return null;
+              },
             ),
             CustomeTextFormFieldItem(
               controller: passwordController,
@@ -51,6 +55,9 @@ class _SignInPageState extends State<SignInPage> {
               secureType: true,
               isNumberOnly: false,
               hintText: 'Enter your password',
+              validateFunc: (value) {
+                return null;
+              },
             ),
           ],
         ),
@@ -62,7 +69,11 @@ class _SignInPageState extends State<SignInPage> {
         listener: (context, state) {
           if (state is AuthLoginSuccess) {
             Navigator.pushNamedAndRemoveUntil(
-                context, '/home', (route) => false);
+              context,
+              '/home',
+              (route) => false,
+            );
+            context.read<PageCubit>().setPage(0);
           } else if (state is AuthFailed) {
             setState(() {
               _showNotif = true;
@@ -122,6 +133,7 @@ class _SignInPageState extends State<SignInPage> {
     }
 
     return Scaffold(
+      backgroundColor: kWhiteColor,
       body: Stack(
         children: [
           ListView(

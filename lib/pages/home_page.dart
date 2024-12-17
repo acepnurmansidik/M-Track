@@ -8,6 +8,7 @@ import 'package:tracking/pages/form_transaction_page.dart';
 import 'package:tracking/skelaton/skelaton_trx_list.dart';
 import 'package:tracking/theme.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tracking/widgets/custom_buttom_navbar.dart';
 import 'package:tracking/widgets/transaction_item.dart';
 
 class HomePage extends StatefulWidget {
@@ -240,9 +241,11 @@ class _HomePageState extends State<HomePage> {
             return Container(
               padding: const EdgeInsets.only(top: 20),
               decoration: BoxDecoration(
-                  color: kWhiteColor,
-                  borderRadius:
-                      const BorderRadius.vertical(top: Radius.circular(18))),
+                color: kWhiteColor,
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(18),
+                ),
+              ),
               child: Stack(
                 children: [
                   Container(
@@ -414,7 +417,7 @@ class _HomePageState extends State<HomePage> {
           );
         },
       ),
-      bottomNavigationBar: customBtnNav(),
+      bottomNavigationBar: const CustomButtomNavbar(),
     );
   }
 }
