@@ -120,7 +120,7 @@ class _FormTransactionPageState extends State<FormTransactionPage> {
                   ),
                   const SizedBox(height: 5),
                   Text(
-                    NumberFormat.currency(symbol: "Rp. ", decimalDigits: 0)
+                    NumberFormat.currency(symbol: "IDR ", decimalDigits: 0)
                         .format(7000000),
                     style: primaryTextStyle.copyWith(
                       fontSize: 16,

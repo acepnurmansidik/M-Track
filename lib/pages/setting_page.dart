@@ -12,6 +12,7 @@ class SettingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget appBarSection() {
       return AppBar(
+        backgroundColor: kWhiteColor,
         automaticallyImplyLeading: false,
         elevation: 0,
         title: Row(

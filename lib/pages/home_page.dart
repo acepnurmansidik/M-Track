@@ -183,7 +183,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                         Text(
                           NumberFormat.currency(
-                                  symbol: "Rp. ", decimalDigits: 0)
+                                  symbol: "IDR ", decimalDigits: 0)
                               .format(subItems.totalMonthly),
                           style: whiteTextStyle.copyWith(
                               fontSize: 14, fontWeight: semibold),

@@ -90,22 +90,24 @@ class TransactionItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    width: 25,
-                    height: 25,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        image: DecorationImage(
-                          image: NetworkImage(
-                            '${dotenv.env["PUBLIC_API_BASE_IMAGE"]}${transaction.typeId["icon"]["name"]}',
-                          ),
-                        )),
-                  ),
                   Text(
                     NumberFormat.currency(symbol: "IDR ", decimalDigits: 0)
                         .format(transaction.totalAmount),
-                    style: blackTextStyle.copyWith(
-                        fontSize: 16, fontWeight: medium),
+                    style: transaction.isIncome
+                        ? greenTextStyle.copyWith(
+                            fontSize: 16,
+                            fontWeight: semibold,
+                          )
+                        : redTextStyle.copyWith(
+                            fontSize: 16,
+                            fontWeight: semibold,
+                          ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    transaction.datetime,
+                    style: greyTextStyle.copyWith(
+                        fontSize: 12, fontWeight: medium),
                   ),
                 ],
               )
