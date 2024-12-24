@@ -40,11 +40,13 @@ class TransactionItem extends StatelessWidget {
           } else {
             // Dragged to the right
             return Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => TransactionPage(
-                          transaction: transaction,
-                        )));
+              context,
+              MaterialPageRoute(
+                builder: (context) => TransactionPage(
+                  transaction: transaction,
+                ),
+              ),
+            );
             // return cancelBtn(false);
           }
         },
@@ -53,21 +55,23 @@ class TransactionItem extends StatelessWidget {
           width: double.infinity,
           padding: EdgeInsets.symmetric(horizontal: defaultMargin),
           decoration: BoxDecoration(
-              color: kWhiteColor, borderRadius: BorderRadius.circular(10)),
+            color: kWhiteColor,
+            borderRadius: BorderRadius.circular(10),
+          ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
                 width: 48,
                 height: 48,
-                padding: const EdgeInsets.all(7),
+                padding: const EdgeInsets.all(8),
                 margin: const EdgeInsets.only(right: 10),
                 decoration: BoxDecoration(
-                  color: kLineDarkColor,
+                  color: Color.fromARGB(245, 245, 245, 245),
                   borderRadius: BorderRadius.circular(50),
                 ),
                 child: Image.network(
-                    '${dotenv.env["PUBLIC_API_BASE_IMAGE"]}${transaction.typeId["icon"]["name"]}'),
+                    '${dotenv.env["PUBLIC_API_BASE_IMAGE"]}${transaction.categoryId["icon"]["name"]}'),
               ),
               Expanded(
                 child: Column(

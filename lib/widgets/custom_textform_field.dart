@@ -3,6 +3,8 @@ import 'package:tracking/theme.dart';
 
 class CustomeTextFormFieldItem extends StatefulWidget {
   final TextEditingController controller;
+  final double fontSize;
+  final FontWeight fontWeight;
   final String hintText;
   final String title;
   final bool isNumberOnly;
@@ -19,6 +21,8 @@ class CustomeTextFormFieldItem extends StatefulWidget {
     required this.isNumberOnly,
     required this.validateFunc,
     this.secureType = false,
+    this.fontSize = 14,
+    this.fontWeight = FontWeight.w600,
     this.padding = EdgeInsets.zero,
     required this.hintText,
     this.width = double.infinity,
@@ -77,6 +81,10 @@ class _CustomeTextFormFieldItemState extends State<CustomeTextFormFieldItem> {
           ),
           TextFormField(
             focusNode: _focusNode,
+            style: blackTextStyle.copyWith(
+              fontSize: widget.fontSize,
+              fontWeight: widget.fontWeight,
+            ),
             controller: widget.controller,
             obscureText: widget.secureType,
             cursorColor: kBlackColor,

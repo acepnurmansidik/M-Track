@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tracking/cubit/page_cubit.dart';
 import 'package:tracking/theme.dart';
 import 'package:tracking/widgets/custom_button.dart';
 
@@ -36,8 +38,12 @@ class SuccessPage extends StatelessWidget {
               margin: const EdgeInsets.only(left: 20, right: 20, top: 50),
               widthBtn: 220,
               onPressed: () {
+                context.read<PageCubit>().setPage(0);
                 Navigator.pushNamedAndRemoveUntil(
-                    context, '/home', (route) => false);
+                  context,
+                  '/main',
+                  (route) => false,
+                );
               },
             )
           ],

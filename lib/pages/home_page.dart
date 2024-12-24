@@ -8,7 +8,6 @@ import 'package:tracking/pages/form_transaction_page.dart';
 import 'package:tracking/skelaton/skelaton_trx_list.dart';
 import 'package:tracking/theme.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tracking/widgets/custom_buttom_navbar.dart';
 import 'package:tracking/widgets/transaction_item.dart';
 
 class HomePage extends StatefulWidget {
@@ -370,38 +369,9 @@ class _HomePageState extends State<HomePage> {
       );
     }
 
-    return Scaffold(
-      backgroundColor: kBackgroundColor,
-      body: BlocBuilder<TransactionCubit, TransactionState>(
-        builder: (context, state) {
-          if (state is TransactionLoading) {
-            return Stack(
-              children: [
-                Image.asset(
-                  "assets/img_background.png",
-                  color: kSecondGreyColor,
-                  width: double.infinity,
-                ),
-                balanceInfo(TransactionModel(
-                    grandTotal: 0, currentMonthly: 0, listData: [])),
-                const SkelatonTrxList(),
-                isActive ? cancelButton() : const SizedBox(),
-              ],
-            );
-          } else if (state is TransactionSuccess) {
-            return Stack(
-              children: [
-                Image.asset(
-                  "assets/img_background.png",
-                  color: kSecondGreyColor,
-                  width: double.infinity,
-                ),
-                balanceInfo(state.transactions),
-                transactionList(state.transactions.listData),
-                isActive ? cancelButton() : const SizedBox(),
-              ],
-            );
-          }
+    return BlocBuilder<TransactionCubit, TransactionState>(
+      builder: (context, state) {
+        if (state is TransactionLoading) {
           return Stack(
             children: [
               Image.asset(
@@ -411,13 +381,38 @@ class _HomePageState extends State<HomePage> {
               ),
               balanceInfo(TransactionModel(
                   grandTotal: 0, currentMonthly: 0, listData: [])),
-              transactionList([]),
+              const SkelatonTrxList(),
               isActive ? cancelButton() : const SizedBox(),
             ],
           );
-        },
-      ),
-      bottomNavigationBar: const CustomButtomNavbar(),
+        } else if (state is TransactionSuccess) {
+          return Stack(
+            children: [
+              Image.asset(
+                "assets/img_background.png",
+                color: kSecondGreyColor,
+                width: double.infinity,
+              ),
+              balanceInfo(state.transactions),
+              transactionList(state.transactions.listData),
+              isActive ? cancelButton() : const SizedBox(),
+            ],
+          );
+        }
+        return Stack(
+          children: [
+            Image.asset(
+              "assets/img_background.png",
+              color: kSecondGreyColor,
+              width: double.infinity,
+            ),
+            balanceInfo(TransactionModel(
+                grandTotal: 0, currentMonthly: 0, listData: [])),
+            transactionList([]),
+            isActive ? cancelButton() : const SizedBox(),
+          ],
+        );
+      },
     );
   }
 }

@@ -11,14 +11,13 @@ class CustomButtomNavbar extends StatefulWidget {
 }
 
 class _CustomButtomNavbarState extends State<CustomButtomNavbar> {
-  List navLink = ["/home", "/setting", "/form-cashflow", "/setting"];
+  // List navLink = ["/home", "/setting", "/form-cashflow", "/setting"];
   @override
   Widget build(BuildContext context) {
     Widget menuItems({iconName, onPressed, index}) {
       return GestureDetector(
         onTap: () {
           context.read<PageCubit>().setPage(index);
-          Navigator.pushNamed(context, '${navLink[index]}');
         },
         child: SizedBox(
           height: MediaQuery.of(context).size.width,

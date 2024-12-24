@@ -147,22 +147,16 @@ class SettingPage extends StatelessWidget {
       );
     }
 
-    return Scaffold(
-      appBar: PreferredSize(
-          preferredSize: const Size(double.infinity, 50),
-          child: appBarSection()),
-      backgroundColor: kBackgroundColor,
-      body: Stack(
-        children: [
-          versionApp(),
-          ListView(
-            children: [
-              header(),
-              listItem(),
-            ],
-          ),
-        ],
-      ),
+    return Stack(
+      children: [
+        versionApp(),
+        ListView(
+          children: [
+            header(),
+            listItem(),
+          ],
+        ),
+      ],
     );
   }
 }

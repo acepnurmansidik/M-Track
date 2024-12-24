@@ -7,13 +7,10 @@ import 'package:tracking/cubit/page_cubit.dart';
 import 'package:tracking/cubit/refparamater_cubit.dart';
 import 'package:tracking/cubit/transaction_cubit.dart';
 import 'package:tracking/firebase_options.dart';
-import 'package:tracking/pages/form_transaction_page.dart';
-import 'package:tracking/pages/home_page.dart';
-import 'package:tracking/pages/setting_page.dart';
+import 'package:tracking/pages/main_page.dart';
 import 'package:tracking/pages/signin_page.dart';
 import 'package:tracking/pages/signup_page.dart';
 import 'package:tracking/pages/splash_page.dart';
-import 'package:tracking/pages/success_page.dart';
 
 Future main() async {
   await dotenv.load(fileName: '.env');
@@ -40,12 +37,9 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         routes: {
           "/": (context) => const SplashPage(),
+          "/main": (context) => const MainPage(),
           "/sign-up": (context) => const SignUpPage(),
           "/sign-in": (context) => const SignInPage(),
-          "/home": (context) => const HomePage(),
-          "/success": (context) => const SuccessPage(),
-          "/setting": (context) => const SettingPage(),
-          "/form-cashflow": (context) => const FormTransactionPage(),
         },
       ),
     );

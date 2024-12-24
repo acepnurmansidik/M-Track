@@ -70,7 +70,7 @@ class _SignInPageState extends State<SignInPage> {
           if (state is AuthLoginSuccess) {
             Navigator.pushNamedAndRemoveUntil(
               context,
-              '/home',
+              '/main',
               (route) => false,
             );
             context.read<PageCubit>().setPage(0);

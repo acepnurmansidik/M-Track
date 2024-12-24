@@ -1,9 +1,13 @@
+// ignore_for_file: unnecessary_null_comparison
+
+import 'package:currency_textfield/currency_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:tracking/cubit/refparamater_cubit.dart';
 import 'package:tracking/cubit/transaction_cubit.dart';
+import 'package:tracking/pages/success_page.dart';
 import 'package:tracking/theme.dart';
 import 'package:tracking/widgets/custom_button.dart';
 import 'package:tracking/widgets/custom_textform_field.dart';
@@ -24,14 +28,20 @@ class _FormTransactionPageState extends State<FormTransactionPage> {
 
   int selectedIndexBoxType = 0;
   // Text form
-  final TextEditingController amountlController =
-      TextEditingController(text: "");
   final TextEditingController typeIdController =
       TextEditingController(text: "");
   final TextEditingController categoryIdController =
       TextEditingController(text: "");
   final TextEditingController notesIdController =
       TextEditingController(text: "");
+  final CurrencyTextFieldController amountController =
+      CurrencyTextFieldController(
+    showZeroValue: true,
+    currencySymbol: "Rp",
+    currencySeparator: ". ",
+    numberOfDecimals: 0,
+    initDoubleValue: 0.0,
+  );
 
   @override
   void initState() {
@@ -66,7 +76,7 @@ class _FormTransactionPageState extends State<FormTransactionPage> {
     Widget nominalSection() {
       return Container(
         width: double.infinity,
-        height: 129,
+        height: 139,
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         decoration: BoxDecoration(
           color: kWhiteColor,
@@ -74,12 +84,17 @@ class _FormTransactionPageState extends State<FormTransactionPage> {
         child: Column(
           children: [
             CustomeTextFormFieldItem(
-              controller: amountlController,
+              controller: amountController,
+              fontSize: 30,
+              fontWeight: bold,
               title: "Nominal",
               isNumberOnly: true,
               hintText: "0",
               validateFunc: (value) {
-                if (value == null || value.isEmpty) {
+                final result = value!.split("Rp. ").length == 2
+                    ? value.split("Rp. ")[1]
+                    : value;
+                if (value == null || value.isEmpty || result == "0") {
                   return 'Field nominal cannot be empty';
                 }
                 return null; // Return null if valid
@@ -267,6 +282,9 @@ class _FormTransactionPageState extends State<FormTransactionPage> {
                     ),
                   );
                 } else if (state is RefparamaterSuccess) {
+                  if (typeIdController.text.isEmpty) {
+                    typeIdController.text = state.listCategoryTypeReff[0].id;
+                  }
                   return SizedBox(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height / 1.93 - 111,
@@ -383,10 +401,11 @@ class _FormTransactionPageState extends State<FormTransactionPage> {
                         BlocConsumer<TransactionCubit, TransactionState>(
                           listener: (context, state) {
                             if (state is TransactionCreateSuccess) {
-                              Navigator.pushNamedAndRemoveUntil(
+                              Navigator.push(
                                 context,
-                                '/success',
-                                (route) => false,
+                                MaterialPageRoute(
+                                  builder: (context) => const SuccessPage(),
+                                ),
                               );
                             } else if (state is TransactionFailed) {
                               print(state.error.toString());
@@ -405,7 +424,8 @@ class _FormTransactionPageState extends State<FormTransactionPage> {
                                   // Jika validasi berhasil, lakukan sesuatu
                                   if (typeIdController.text.isNotEmpty) {
                                     context.read<TransactionCubit>().postTrx({
-                                      "amount": amountlController.text,
+                                      "amount":
+                                          amountController.intValue.toString(),
                                       "type_id": typeIdController.text,
                                       "category_id": categoryIdController.text,
                                       "note": notesIdController.text,
@@ -540,25 +560,20 @@ class _FormTransactionPageState extends State<FormTransactionPage> {
       );
     }
 
-    return Scaffold(
-      backgroundColor: kBackgroundColor,
-      appBar: PreferredSize(
-          preferredSize: const Size(double.infinity, 60),
-          child: appBarSection()),
-      body: Form(
-          key: _formKey,
-          child: Stack(
+    return Form(
+      key: _formKey,
+      child: Stack(
+        children: [
+          ListView(
             children: [
-              ListView(
-                children: [
-                  nominalSection(),
-                  balanceInfoSection(),
-                  additionalSections(),
-                ],
-              ),
-              if (showNotes) modalAddNote()
+              nominalSection(),
+              balanceInfoSection(),
+              additionalSections(),
             ],
-          )),
+          ),
+          if (showNotes) modalAddNote()
+        ],
+      ),
     );
   }
 }
