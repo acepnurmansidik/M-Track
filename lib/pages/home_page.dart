@@ -31,52 +31,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    Widget customBtnNav() {
-      return Container(
-        width: 400,
-        height: 70,
-        decoration: BoxDecoration(
-            color: kWhiteColor,
-            border: Border(top: BorderSide(width: 0.2, color: kGreyColor))),
-        child: TextButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                // builder: (context) => const TransactionPage(
-                //   isEditBtn: false,
-                // ),
-                builder: (context) => const FormTransactionPage(),
-              ),
-            );
-          },
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                margin: const EdgeInsets.only(right: 10),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                      width: 2, color: kGreenColor, style: BorderStyle.solid),
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  Icons.add,
-                  color: kGreenColor,
-                  size: 30,
-                ),
-              ),
-              Text(
-                "Add",
-                style:
-                    greenTextStyle.copyWith(fontSize: 16, fontWeight: semibold),
-              )
-            ],
-          ),
-        ),
-      );
-    }
-
     Widget balanceInfo(TransactionModel dataTrx) {
       return Container(
         height: 250,
@@ -108,18 +62,52 @@ class _HomePageState extends State<HomePage> {
                   width: 95,
                   padding: const EdgeInsets.symmetric(horizontal: 12),
                   decoration: BoxDecoration(
-                      color: kWhiteColor,
-                      borderRadius: BorderRadius.circular(18)),
+                    color: kWhiteColor,
+                    borderRadius: BorderRadius.circular(18),
+                  ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Icon(Icons.qr_code_scanner_outlined),
+                      Container(
+                        height: 25,
+                        width: 25,
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage('assets/qrcode_scan.png'),
+                          ),
+                        ),
+                      ),
                       Container(
                         height: 20,
                         width: 2,
                         decoration: BoxDecoration(color: kGreyColor),
                       ),
-                      const Icon(Icons.notification_add_outlined)
+                      SizedBox(
+                        height: 25,
+                        width: 25,
+                        child: Stack(
+                          alignment: Alignment.topRight,
+                          children: [
+                            Container(
+                              height: 25,
+                              width: 25,
+                              decoration: const BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage('assets/notif.png'),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              height: 10,
+                              width: 10,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: kRedColor,
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),

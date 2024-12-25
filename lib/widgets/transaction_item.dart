@@ -67,7 +67,7 @@ class TransactionItem extends StatelessWidget {
                 padding: const EdgeInsets.all(8),
                 margin: const EdgeInsets.only(right: 10),
                 decoration: BoxDecoration(
-                  color: Color.fromARGB(245, 245, 245, 245),
+                  color: const Color.fromARGB(245, 245, 245, 245),
                   borderRadius: BorderRadius.circular(50),
                 ),
                 child: Image.network(

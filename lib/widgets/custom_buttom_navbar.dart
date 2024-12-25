@@ -11,7 +11,6 @@ class CustomButtomNavbar extends StatefulWidget {
 }
 
 class _CustomButtomNavbarState extends State<CustomButtomNavbar> {
-  // List navLink = ["/home", "/setting", "/form-cashflow", "/setting"];
   @override
   Widget build(BuildContext context) {
     Widget menuItems({iconName, onPressed, index}) {
@@ -27,8 +26,8 @@ class _CustomButtomNavbarState extends State<CustomButtomNavbar> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                height: 35,
-                width: 35,
+                height: 26,
+                width: 26,
                 decoration: BoxDecoration(
                   color: Colors.transparent,
                   image: DecorationImage(
@@ -45,6 +44,7 @@ class _CustomButtomNavbarState extends State<CustomButtomNavbar> {
                   ),
                 ),
               ),
+              const SizedBox(height: 4),
               AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
                 height: 3,
@@ -74,7 +74,7 @@ class _CustomButtomNavbarState extends State<CustomButtomNavbar> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           menuItems(
-            iconName: 'house',
+            iconName: 'home',
             index: 0,
           ),
           menuItems(
@@ -86,7 +86,7 @@ class _CustomButtomNavbarState extends State<CustomButtomNavbar> {
             index: 2,
           ),
           menuItems(
-            iconName: 'user',
+            iconName: 'profile',
             index: 3,
           ),
         ],

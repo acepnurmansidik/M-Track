@@ -15,7 +15,6 @@ class MainPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kBackgroundColor,
-      // body: SettingPage(),
       body: switch (context.watch<PageCubit>().state) {
         0 => const HomePage(),
         1 => const BankAccountPage(),
