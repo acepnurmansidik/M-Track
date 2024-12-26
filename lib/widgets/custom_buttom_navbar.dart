@@ -78,7 +78,7 @@ class _CustomButtomNavbarState extends State<CustomButtomNavbar> {
             index: 0,
           ),
           menuItems(
-            iconName: 'wallet',
+            iconName: 'card',
             index: 1,
           ),
           menuItems(

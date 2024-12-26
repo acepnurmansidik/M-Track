@@ -13,62 +13,35 @@ class BankAccountPage extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Container(
-              height: 50,
-              width: 50,
-              margin: const EdgeInsets.only(right: 10),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: kPrimaryColor,
-                image: const DecorationImage(
-                  image: AssetImage('assets/img_avatar.png'),
-                ),
-              ),
-            ),
             Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Hello",
+                  "Acep Nurman Sidik",
+                  style: blackTextStyle.copyWith(
+                    fontSize: 16,
+                    fontWeight: semibold,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  "Welcome back",
                   style: blackTextStyle.copyWith(
                     fontSize: 14,
                     fontWeight: medium,
                   ),
                 ),
-                Text(
-                  "Acep Nurman Sidik",
-                  style: blackTextStyle.copyWith(
-                    fontSize: 15,
-                    fontWeight: semibold,
-                  ),
-                ),
               ],
             ),
             const Spacer(),
-            SizedBox(
-              child: Row(
-                children: [
-                  Container(
-                    height: 23,
-                    width: 23,
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage('assets/stopwatch.png'),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 5),
-                  Container(
-                    height: 23,
-                    width: 23,
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage('assets/pie_chart.png'),
-                      ),
-                    ),
-                  ),
-                ],
+            Container(
+              height: 28,
+              width: 28,
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/stopwatch.png'),
+                ),
               ),
             ),
           ],
@@ -326,10 +299,114 @@ class BankAccountPage extends StatelessWidget {
       );
     }
 
+    Widget totalSummary() {
+      Widget totalSummaryItem({
+        String title = "",
+        int nominal = 0,
+        String percent = "",
+      }) {
+        return Container(
+          height: 90,
+          padding: const EdgeInsets.symmetric(vertical: 5),
+          width: (MediaQuery.of(context).size.width / 2) - 47,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: blackTextStyle.copyWith(
+                  fontSize: 14,
+                ),
+              ),
+              const Spacer(),
+              Text(
+                NumberFormat.currency(
+                  symbol: "",
+                  decimalDigits: 0,
+                ).format(nominal),
+                style: blackTextStyle.copyWith(
+                  fontSize: 18,
+                  fontWeight: semibold,
+                ),
+              ),
+              Container(
+                alignment: Alignment.center,
+                height: 25,
+                width: 60,
+                margin: const EdgeInsets.only(top: 2),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(7),
+                  color: kGreenColor.withOpacity(.3),
+                ),
+                child: Text(
+                  "+$percent %",
+                  style: greenTextStyle.copyWith(fontSize: 14),
+                ),
+              )
+            ],
+          ),
+        );
+      }
+
+      return Container(
+        margin: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              margin: const EdgeInsets.symmetric(vertical: 10),
+              child: Text(
+                "Total In & Out",
+                style: blackTextStyle.copyWith(
+                  fontSize: 16,
+                  fontWeight: semibold,
+                ),
+              ),
+            ),
+            Container(
+              height: 200,
+              width: MediaQuery.of(context).size.width,
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              decoration: BoxDecoration(
+                color: kWhiteColor,
+                borderRadius: BorderRadius.circular(18),
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      totalSummaryItem(
+                        title: "In",
+                        nominal: 150000000,
+                        percent: "50",
+                      ),
+                      Container(
+                        height: 70,
+                        width: 1,
+                        decoration:
+                            BoxDecoration(color: kGreyColor.withOpacity(.2)),
+                      ),
+                      totalSummaryItem(
+                        title: "Out",
+                        nominal: 500000,
+                        percent: "50",
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      );
+    }
+
     return ListView(
       children: [
         appBar(),
         virtualCard(),
+        totalSummary(),
         recentActiviy(),
       ],
     );
