@@ -8,11 +8,12 @@ part 'dashboard_state.dart';
 class DashboardCubit extends Cubit<DashboardState> {
   DashboardCubit() : super(DashboardInitial());
 
-  void fetchActivityCategory() async {
+  void fetchActivityCategory({bankId}) async {
     try {
       emit(DashboardLoading());
       // call service service dashboard at section activity category
-      final dActivityCategory = await DashboardService().getActivityCategory();
+      final dActivityCategory =
+          await DashboardService().getActivityCategory(bankId: bankId);
 
       emit(DashboardSuccess(dActivityCategory));
     } catch (e) {

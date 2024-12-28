@@ -1,7 +1,7 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tracking/cubit/dashboard_cubit.dart';
 import 'package:tracking/cubit/wallet_cubit.dart';
@@ -16,6 +16,9 @@ class BankAccountPage extends StatefulWidget {
 }
 
 class _BankAccountPageState extends State<BankAccountPage> {
+  final TextEditingController bankIdController =
+      TextEditingController(text: "");
+  final _controllerCarousel = CarouselSliderController();
   ChartSeriesController? chartSeriesController;
   int? pointIndex;
 
@@ -74,31 +77,41 @@ class _BankAccountPageState extends State<BankAccountPage> {
       Widget addWallet() {
         return Container(
           height: 190,
-          width: MediaQuery.of(context).size.width - 55,
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-          margin: const EdgeInsets.only(bottom: 20),
+          width: double.infinity,
           decoration: BoxDecoration(
-            color: kWhiteColor,
             borderRadius: BorderRadius.circular(18),
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+          child: CarouselSlider(
+            carouselController: _controllerCarousel,
+            options: CarouselOptions(
+              height: MediaQuery.of(context).size.height,
+              viewportFraction: 1,
+              autoPlay: false,
+              enableInfiniteScroll: false,
+              onPageChanged: (index, reason) {},
+            ),
+            items: [
               Container(
-                height: 20,
-                width: 20,
-                margin: const EdgeInsets.only(right: 5),
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('assets/plus.png'),
-                  ),
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(18),
+                  color: kWhiteColor,
                 ),
-              ),
-              Text(
-                'Add New Card',
-                style: blackTextStyle.copyWith(
-                  fontSize: 14,
-                  fontWeight: semibold,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      '+',
+                      style: blackTextStyle.copyWith(
+                        fontSize: 18,
+                      ),
+                    ),
+                    const SizedBox(width: 5),
+                    Text(
+                      'Add New Wallet',
+                      style: blackTextStyle.copyWith(fontSize: 14),
+                    ),
+                  ],
                 ),
               )
             ],
@@ -109,261 +122,232 @@ class _BankAccountPageState extends State<BankAccountPage> {
       Widget loadingWallet() {
         return Container(
           height: 190,
-          width: MediaQuery.of(context).size.width - 55,
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-          margin: const EdgeInsets.only(bottom: 20, right: 20),
+          width: double.infinity,
           decoration: BoxDecoration(
-            color: kWhiteColor,
             borderRadius: BorderRadius.circular(18),
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Shimmer.fromColors(
-                baseColor: kLineDarkColor,
-                highlightColor: kWhiteColor,
-                child: Container(
-                  height: 30,
-                  width: 45,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: kLineDarkColor,
-                  ),
+          child: CarouselSlider(
+            carouselController: _controllerCarousel,
+            options: CarouselOptions(
+              height: MediaQuery.of(context).size.height,
+              viewportFraction: 1,
+              autoPlay: false,
+              enableInfiniteScroll: false,
+              onPageChanged: (index, reason) {},
+            ),
+            items: [
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(18),
+                  color: kWhiteColor,
                 ),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Shimmer.fromColors(
-                    baseColor: kLineDarkColor,
-                    highlightColor: kWhiteColor,
-                    child: Container(
-                      height: 35,
-                      width: 200,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: kLineDarkColor,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ShimmerLoading(
-                            height: 12,
-                            width: 110,
-                            radius: 6,
-                          ),
-                          SizedBox(height: 5),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              ShimmerLoading(
-                                height: 18,
-                                width: 180,
-                                radius: 6,
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 35,
-                        width: 60,
-                        child: ShimmerLoading(
-                          height: 30,
-                          width: 50,
-                          radius: 8,
-                        ),
-                      )
-                    ],
-                  ),
-                ],
-              ),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ShimmerLoading(height: 20, width: 20, radius: 5),
+                    SizedBox(width: 10),
+                    ShimmerLoading(height: 20, width: 100, radius: 5),
+                  ],
+                ),
+              )
             ],
           ),
         );
       }
 
-      return SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: BlocBuilder<WalletCubit, WalletState>(
-          builder: (context, state) {
-            if (state is WalletLoading) {
-              return loadingWallet();
-            } else if (state is WalletFetchSuccess) {
-              final List<Widget> result;
-              if (state.listWallet.isNotEmpty) {
-                result = state.listWallet.map((item) {
-                  return Container(
-                    height: 190,
-                    width: MediaQuery.of(context).size.width - 55,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 15, vertical: 15),
-                    margin: const EdgeInsets.only(bottom: 20, right: 20),
-                    decoration: BoxDecoration(
-                      color: kWhiteColor,
-                      borderRadius: BorderRadius.circular(18),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              height: 35,
-                              width: 40,
-                              decoration: const BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage(
-                                    'assets/visa.png',
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              alignment: Alignment.centerRight,
-                              height: 30,
-                              width: 240,
-                              child: Text(
-                                item.walletName,
-                                style:
-                                    blackTextStyle.copyWith(fontWeight: bold),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              NumberFormat.currency(
-                                      symbol: "IDR ", decimalDigits: 0)
-                                  .format(item.amount),
-                              style: TextStyle(fontSize: 32, fontWeight: bold),
-                            ),
-                            const SizedBox(height: 10),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Virtual Number ID',
-                                      style: blackTextStyle.copyWith(
-                                        fontSize: 12,
-                                        fontWeight: medium,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 5),
-                                    Text(
-                                      item.vaNumber,
-                                      style: blackTextStyle.copyWith(
-                                        fontSize: 16,
-                                        fontWeight: semibold,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 40,
-                                  width: 60,
-                                  child: Stack(
-                                    alignment: Alignment.center,
-                                    children: [
-                                      Container(
-                                        height: 30,
-                                        width: 30,
-                                        margin:
-                                            const EdgeInsets.only(right: 20),
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: kPrimaryColor,
-                                        ),
-                                      ),
-                                      Opacity(
-                                        opacity: .7,
-                                        child: Container(
-                                          height: 30,
-                                          width: 30,
-                                          margin:
-                                              const EdgeInsets.only(left: 20),
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: kGreenColor,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  );
-                }).toList();
-
-                result.add(addWallet());
-              } else {
-                result = [addWallet()];
+      return BlocBuilder<WalletCubit, WalletState>(
+        builder: (context, state) {
+          if (state is WalletLoading) {
+            return loadingWallet();
+          } else if (state is WalletFetchSuccess) {
+            List<Widget> result;
+            if (state.listWallet.isNotEmpty) {
+              if (bankIdController.text.isEmpty) {
+                context
+                    .read<DashboardCubit>()
+                    .fetchActivityCategory(bankId: state.listWallet[0].id);
               }
 
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: result,
-              );
-            }
-
-            return Row(
-              children: [
-                Container(
+              result = state.listWallet.map((item) {
+                return Container(
                   height: 190,
                   width: MediaQuery.of(context).size.width - 55,
                   padding:
                       const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                  margin: const EdgeInsets.only(bottom: 20),
+                  margin: const EdgeInsets.only(bottom: 10),
                   decoration: BoxDecoration(
                     color: kWhiteColor,
                     borderRadius: BorderRadius.circular(18),
                   ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            height: 35,
+                            width: 40,
+                            decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage(
+                                  'assets/visa.png',
+                                ),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            alignment: Alignment.centerRight,
+                            height: 30,
+                            width: 240,
+                            child: Text(
+                              item.walletName,
+                              style: blackTextStyle.copyWith(fontWeight: bold),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            NumberFormat.currency(
+                                    symbol: "IDR ", decimalDigits: 0)
+                                .format(item.amount),
+                            style: TextStyle(fontSize: 32, fontWeight: bold),
+                          ),
+                          const SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Virtual Number ID',
+                                    style: blackTextStyle.copyWith(
+                                      fontSize: 12,
+                                      fontWeight: medium,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 5),
+                                  Text(
+                                    item.vaNumber,
+                                    style: blackTextStyle.copyWith(
+                                      fontSize: 16,
+                                      fontWeight: semibold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 40,
+                                width: 60,
+                                child: Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    Container(
+                                      height: 30,
+                                      width: 30,
+                                      margin: const EdgeInsets.only(right: 20),
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: kPrimaryColor,
+                                      ),
+                                    ),
+                                    Opacity(
+                                      opacity: .7,
+                                      child: Container(
+                                        height: 30,
+                                        width: 30,
+                                        margin: const EdgeInsets.only(left: 20),
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: kGreenColor,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                );
+              }).toList();
+            } else {
+              result = [addWallet()];
+            }
+
+            result.add(addWallet());
+            return Container(
+              height: 190,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(18),
+              ),
+              child: CarouselSlider(
+                carouselController: _controllerCarousel,
+                options: CarouselOptions(
+                  height: MediaQuery.of(context).size.height,
+                  viewportFraction: 1,
+                  autoPlay: false,
+                  enableInfiniteScroll: false,
+                  onPageChanged: (index, reason) {
+                    setState(() {
+                      bankIdController.text = state.listWallet[index].id;
+                      context
+                          .read<DashboardCubit>()
+                          .fetchActivityCategory(bankId: bankIdController.text);
+                    });
+                  },
+                ),
+                items: result,
+              ),
+            );
+          }
+          return Container(
+            height: 190,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(18),
+            ),
+            child: CarouselSlider(
+              carouselController: _controllerCarousel,
+              options: CarouselOptions(
+                height: MediaQuery.of(context).size.height,
+                viewportFraction: 1,
+                autoPlay: false,
+                enableInfiniteScroll: false,
+                onPageChanged: (index, reason) {},
+              ),
+              items: [
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 20),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(18),
+                    color: kWhiteColor,
+                  ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Container(
-                        height: 20,
-                        width: 20,
-                        margin: const EdgeInsets.only(right: 5),
-                        decoration: const BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage('assets/plus.png'),
-                          ),
-                        ),
-                      ),
                       Text(
-                        'Please reload page',
+                        "Refresh drag down",
                         style: blackTextStyle.copyWith(
                           fontSize: 14,
-                          fontWeight: semibold,
                         ),
                       )
                     ],
                   ),
-                ),
+                )
               ],
-            );
-          },
-        ),
+            ),
+          );
+        },
       );
     }
 
@@ -452,50 +436,65 @@ class _BankAccountPageState extends State<BankAccountPage> {
                     ),
                   ),
                   Container(
-                    alignment: Alignment.center,
                     height: 200,
-                    margin: const EdgeInsets.only(bottom: 10),
+                    margin: EdgeInsets.only(
+                      bottom:
+                          state.activityCategory.dataChart.isNotEmpty ? 20 : 30,
+                    ),
                     padding: const EdgeInsets.symmetric(vertical: 4),
                     width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(18),
                       color: kWhiteColor,
                     ),
-                    child: SfCircularChart(
-                      legend: const Legend(
-                        isVisible: true,
-                        position: LegendPosition.left,
-                        shouldAlwaysShowScrollbar: true,
-                        toggleSeriesVisibility: false,
-                      ),
-                      enableMultiSelection: true,
-                      series: <CircularSeries>[
-                        PieSeries<CategoryActivityData, String>(
-                          explode: true,
-                          dataSource:
-                              state.activityCategory.listData.map((item) {
-                            return CategoryActivityData(
-                                item.name, item.totalCategory);
-                          }).toList(),
-                          xValueMapper: (CategoryActivityData data, _) =>
-                              data.category,
-                          yValueMapper: (CategoryActivityData data, _) =>
-                              data.other,
-                          dataLabelSettings:
-                              const DataLabelSettings(isVisible: true),
-                        ),
-                      ],
-                    ),
+                    child: state.activityCategory.listData.isNotEmpty
+                        ? SfCircularChart(
+                            legend: const Legend(
+                              isVisible: true,
+                              position: LegendPosition.left,
+                              shouldAlwaysShowScrollbar: true,
+                              toggleSeriesVisibility: false,
+                            ),
+                            enableMultiSelection: true,
+                            series: <CircularSeries>[
+                              PieSeries<CategoryActivityData, String>(
+                                explode: true,
+                                dataSource:
+                                    state.activityCategory.listData.map((item) {
+                                  return CategoryActivityData(
+                                      item.name, item.totalCategory);
+                                }).toList(),
+                                xValueMapper: (CategoryActivityData data, _) =>
+                                    data.category,
+                                yValueMapper: (CategoryActivityData data, _) =>
+                                    data.other,
+                                dataLabelSettings:
+                                    const DataLabelSettings(isVisible: true),
+                              ),
+                            ],
+                          )
+                        : Container(
+                            height: 150,
+                            width: 170,
+                            decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage('assets/empty-box.png'),
+                              ),
+                            ),
+                          ),
                   ),
-                  Column(
-                    children: state.activityCategory.listData.map((item) {
-                      return activityItem(
-                        title: item.name,
-                        date: item.totalCount,
-                        nominal: item.totalCategory,
-                        imageUrl: item.imageUrl,
-                      );
-                    }).toList(),
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 30),
+                    child: Column(
+                      children: state.activityCategory.listData.map((item) {
+                        return activityItem(
+                          title: item.name,
+                          date: item.totalCount,
+                          nominal: item.totalCategory,
+                          imageUrl: item.imageUrl,
+                        );
+                      }).toList(),
+                    ),
                   )
                 ],
               ),
@@ -562,6 +561,7 @@ class _BankAccountPageState extends State<BankAccountPage> {
         String title = "",
         int nominal = 0,
         String percent = "",
+        String status = "",
       }) {
         return Container(
           height: 90,
@@ -594,11 +594,23 @@ class _BankAccountPageState extends State<BankAccountPage> {
                 margin: const EdgeInsets.only(top: 2),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(7),
-                  color: kGreenColor.withOpacity(.2),
+                  color: status == "up"
+                      ? kGreenColor.withOpacity(.2)
+                      : status == "down"
+                          ? kRedColor.withOpacity(.2)
+                          : status == "stable"
+                              ? kPrimaryV2Color.withOpacity(.2)
+                              : kGreyColor.withOpacity(.2),
                 ),
                 child: Text(
-                  "+$percent %",
-                  style: greenTextStyle.copyWith(fontSize: 14),
+                  percent,
+                  style: status == "up"
+                      ? greenTextStyle.copyWith(fontSize: 14)
+                      : status == "down"
+                          ? redTextStyle.copyWith(fontSize: 14)
+                          : status == "stable"
+                              ? primaryTextStyle.copyWith(fontSize: 14)
+                              : greyTextStyle.copyWith(fontSize: 14),
                 ),
               )
             ],
@@ -614,6 +626,8 @@ class _BankAccountPageState extends State<BankAccountPage> {
               child: const Text("Loading ..."),
             );
           } else if (state is DashboardSuccess) {
+            print(state.activityCategory.income);
+            print(state.activityCategory.outcome);
             return Container(
               margin: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
               child: Column(
@@ -645,8 +659,11 @@ class _BankAccountPageState extends State<BankAccountPage> {
                           children: [
                             totalSummaryItem(
                               title: "In",
-                              nominal: 150000000,
-                              percent: "50",
+                              status: state.activityCategory.income["status"],
+                              nominal:
+                                  state.activityCategory.income["total_amount"],
+                              percent:
+                                  state.activityCategory.income["percentage"],
                             ),
                             Container(
                               height: 70,
@@ -655,8 +672,11 @@ class _BankAccountPageState extends State<BankAccountPage> {
                             ),
                             totalSummaryItem(
                               title: "Out",
-                              nominal: 500000,
-                              percent: "50",
+                              status: state.activityCategory.outcome["status"],
+                              nominal: state
+                                  .activityCategory.outcome["total_amount"],
+                              percent:
+                                  state.activityCategory.outcome["percentage"],
                             ),
                           ],
                         ),

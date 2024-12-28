@@ -6,14 +6,16 @@ import 'package:tracking/services/auth_service.dart';
 import 'package:http/http.dart' as http;
 
 class DashboardService {
-  Future<ActivityCategoryModel> getActivityCategory() async {
+  Future<ActivityCategoryModel> getActivityCategory({bankId}) async {
     try {
       // get token
       final headers = await AuthService().authTokenHeaders('json');
 
       // hit API
       final response = await http.get(
-        Uri.parse('${dotenv.env["PUBLIC_API_BASE_V1"]}/trx/category-activity'),
+        Uri.parse(
+          '${dotenv.env["PUBLIC_API_BASE_V1"]}/trx/category-activity/?bank_id=$bankId',
+        ),
         headers: headers,
       );
 

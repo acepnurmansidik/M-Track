@@ -1,11 +1,20 @@
 class ActivityCategoryModel {
-  List<DataActivityCategoryModel> listData;
-  List<DataChartActivityCategoryModel> dataChart;
+  final Map<String, dynamic> income;
+  final Map<String, dynamic> outcome;
+  final List<DataActivityCategoryModel> listData;
+  final List<DataChartActivityCategoryModel> dataChart;
 
-  ActivityCategoryModel({required this.dataChart, required this.listData});
+  ActivityCategoryModel({
+    required this.dataChart,
+    required this.listData,
+    required this.outcome,
+    required this.income,
+  });
 
   factory ActivityCategoryModel.fromJson(Map<String, dynamic> json) {
     return ActivityCategoryModel(
+      income: json["income"],
+      outcome: json["outcome"],
       dataChart: (json["data_chart"] as List<dynamic>)
           .map((item) => DataChartActivityCategoryModel.fromJson(item))
           .toList(),
