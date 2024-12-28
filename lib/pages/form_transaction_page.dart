@@ -1,4 +1,4 @@
-// ignore_for_file: unnecessary_null_comparison
+// ignore_for_file: unnecessary_null_comparison, unused_element
 
 import 'package:currency_textfield/currency_textfield.dart';
 import 'package:flutter/material.dart';
@@ -408,7 +408,7 @@ class _FormTransactionPageState extends State<FormTransactionPage> {
                                 ),
                               );
                             } else if (state is TransactionFailed) {
-                              print(state.error.toString());
+                              print(state.error);
                             }
                           },
                           builder: (context, state) {

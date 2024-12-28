@@ -31,7 +31,7 @@ class ItemsReffParamCustomModel {
   final String id;
   final int key;
   final String name;
-  final String? parent_id;
+  final String? parentId;
   final String description;
   List? items;
 
@@ -39,7 +39,7 @@ class ItemsReffParamCustomModel {
     required this.id,
     required this.key,
     required this.name,
-    required this.parent_id,
+    required this.parentId,
     required this.description,
     this.items,
   });
@@ -49,7 +49,7 @@ class ItemsReffParamCustomModel {
       id: json['_id'],
       key: json['key'],
       name: json['name'],
-      parent_id: json['parent_id'],
+      parentId: json['parent_id'],
       description: json['description'],
     );
   }

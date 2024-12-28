@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:tracking/cubit/dashboard_cubit.dart';
 import 'package:tracking/cubit/wallet_cubit.dart';
 import 'package:tracking/theme.dart';
 import 'package:tracking/widgets/shimmer_loading.dart';
@@ -21,6 +22,7 @@ class _BankAccountPageState extends State<BankAccountPage> {
   @override
   void initState() {
     context.read<WalletCubit>().fetchWalletList();
+    context.read<DashboardCubit>().fetchActivityCategory();
     super.initState();
   }
 
@@ -229,7 +231,7 @@ class _BankAccountPageState extends State<BankAccountPage> {
                             Container(
                               alignment: Alignment.centerRight,
                               height: 30,
-                              width: 70,
+                              width: 240,
                               child: Text(
                                 item.walletName,
                                 style:
@@ -373,6 +375,7 @@ class _BankAccountPageState extends State<BankAccountPage> {
         CategoryActivityData('Category D', 15),
         CategoryActivityData('Category E', 60),
       ];
+
       Widget activityItem({title, nominal, type, date}) {
         return Container(
           height: 60,
@@ -467,7 +470,7 @@ class _BankAccountPageState extends State<BankAccountPage> {
                     xValueMapper: (CategoryActivityData data, _) =>
                         data.category,
                     yValueMapper: (CategoryActivityData data, _) => data.other,
-                    dataLabelSettings: DataLabelSettings(isVisible: true),
+                    dataLabelSettings: const DataLabelSettings(isVisible: true),
                   ),
                 ],
               ),
@@ -548,142 +551,159 @@ class _BankAccountPageState extends State<BankAccountPage> {
         );
       }
 
-      return Container(
-        margin: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              margin: const EdgeInsets.symmetric(vertical: 10),
-              child: Text(
-                "Total In & Out",
-                style: blackTextStyle.copyWith(
-                  fontSize: 16,
-                  fontWeight: semibold,
-                ),
-              ),
-            ),
-            Container(
-              height: 350,
-              width: MediaQuery.of(context).size.width,
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              decoration: BoxDecoration(
-                color: kWhiteColor,
-                borderRadius: BorderRadius.circular(18),
-              ),
+      return BlocBuilder<DashboardCubit, DashboardState>(
+        builder: (context, state) {
+          if (state is DashboardLoading) {
+            return Container(
+              margin: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
+              child: const Text("Loading ..."),
+            );
+          } else if (state is DashboardSuccess) {
+            return Container(
+              margin: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      totalSummaryItem(
-                        title: "In",
-                        nominal: 150000000,
-                        percent: "50",
+                  Container(
+                    margin: const EdgeInsets.symmetric(vertical: 10),
+                    child: Text(
+                      "Total In & Out",
+                      style: blackTextStyle.copyWith(
+                        fontSize: 16,
+                        fontWeight: semibold,
                       ),
-                      Container(
-                        height: 70,
-                        width: 1,
-                        decoration: BoxDecoration(color: kGreyColor),
-                      ),
-                      totalSummaryItem(
-                        title: "Out",
-                        nominal: 500000,
-                        percent: "50",
-                      ),
-                    ],
+                    ),
                   ),
                   Container(
-                    height: 220,
-                    margin: const EdgeInsets.only(top: 10),
-                    child: SfCartesianChart(
-                      margin: const EdgeInsets.symmetric(vertical: 10),
-                      onChartTouchInteractionMove: (args) {
-                        if (pointIndex != null) {
-                          CartesianChartPoint dragPoint = chartSeriesController!
-                              .pixelToPoint(args.position);
+                    height: 350,
+                    width: MediaQuery.of(context).size.width,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 10),
+                    decoration: BoxDecoration(
+                      color: kWhiteColor,
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            totalSummaryItem(
+                              title: "In",
+                              nominal: 150000000,
+                              percent: "50",
+                            ),
+                            Container(
+                              height: 70,
+                              width: 1,
+                              decoration: BoxDecoration(color: kGreyColor),
+                            ),
+                            totalSummaryItem(
+                              title: "Out",
+                              nominal: 500000,
+                              percent: "50",
+                            ),
+                          ],
+                        ),
+                        Container(
+                          height: 220,
+                          margin: const EdgeInsets.only(top: 10),
+                          child: SfCartesianChart(
+                            margin: const EdgeInsets.symmetric(vertical: 10),
+                            onChartTouchInteractionMove: (args) {
+                              if (pointIndex != null) {
+                                CartesianChartPoint dragPoint =
+                                    chartSeriesController!
+                                        .pixelToPoint(args.position);
 
-                          chartSeriesController!.updateDataSource(
-                              updatedDataIndex:
-                                  pointIndex!); // Refresh the chart
-                        }
-                      },
-                      onChartTouchInteractionUp:
-                          (ChartTouchInteractionArgs args) {
-                        pointIndex = null; // Reset point index after drag
-                      },
-                      zoomPanBehavior: ZoomPanBehavior(
-                        enablePinching: true,
-                        enableDoubleTapZooming: true,
-                        enablePanning: true,
-                        zoomMode: ZoomMode.xy,
-                      ),
-                      tooltipBehavior: TooltipBehavior(enable: true),
-                      primaryXAxis: const CategoryAxis(),
-                      series: <LineSeries<SalesData, String>>[
-                        LineSeries<SalesData, String>(
-                          name: "Income",
-                          color: kGreenColor,
-                          onRendererCreated: (controller) {
-                            chartSeriesController = controller;
-                          },
-                          onPointLongPress: (pointInteractionDetails) {
-                            pointIndex = pointInteractionDetails.pointIndex;
-                          },
-                          dataSource: <SalesData>[
-                            SalesData('Jan', 30, 100),
-                            SalesData('Feb', 40, 25),
-                            SalesData('Mar', 10, 70),
-                            SalesData('Apr', 80, 40),
-                            SalesData('May', 70, 25),
-                            SalesData('Jun', 85, 15),
-                            SalesData('Jul', 65, 4),
-                            SalesData('Aug', 18, 59),
-                            SalesData('Sep', 40, 12),
-                            SalesData('Oct', 60, 49),
-                            SalesData('Nov', 26, 80),
-                            SalesData('Dec', 46, 17),
-                          ],
-                          xValueMapper: (SalesData sales, _) => sales.year,
-                          yValueMapper: (SalesData sales, _) => sales.income,
-                          dataLabelSettings: DataLabelSettings(isVisible: true),
-                        ),
-                        LineSeries<SalesData, String>(
-                          name: "Outcome",
-                          color: kRedColor,
-                          markerSettings: MarkerSettings(isVisible: true),
-                          onRendererCreated: (controller) {
-                            chartSeriesController = controller;
-                          },
-                          onPointLongPress: (pointInteractionDetails) {
-                            pointIndex = pointInteractionDetails.pointIndex;
-                          },
-                          dataSource: <SalesData>[
-                            SalesData('Jan', 30, 100),
-                            SalesData('Feb', 40, 25),
-                            SalesData('Mar', 10, 70),
-                            SalesData('Apr', 80, 40),
-                            SalesData('May', 70, 25),
-                            SalesData('Jun', 85, 15),
-                            SalesData('Jul', 65, 4),
-                            SalesData('Aug', 18, 59),
-                            SalesData('Sep', 40, 12),
-                            SalesData('Oct', 60, 49),
-                            SalesData('Nov', 26, 80),
-                            SalesData('Dec', 46, 17),
-                          ],
-                          xValueMapper: (SalesData sales, _) => sales.year,
-                          yValueMapper: (SalesData sales, _) => sales.outcome,
-                          dataLabelSettings: DataLabelSettings(isVisible: true),
-                        ),
+                                chartSeriesController!.updateDataSource(
+                                  updatedDataIndex: pointIndex!,
+                                ); // Refresh the chart
+                              }
+                            },
+                            onChartTouchInteractionUp:
+                                (ChartTouchInteractionArgs args) {
+                              pointIndex = null; // Reset point index after drag
+                            },
+                            zoomPanBehavior: ZoomPanBehavior(
+                              enablePinching: true,
+                              enableDoubleTapZooming: true,
+                              enablePanning: true,
+                              zoomMode: ZoomMode.xy,
+                            ),
+                            tooltipBehavior: TooltipBehavior(enable: true),
+                            primaryXAxis: const CategoryAxis(),
+                            series: <LineSeries<CashFlowData, String>>[
+                              LineSeries<CashFlowData, String>(
+                                name: "Outcome",
+                                color: kRedColor,
+                                markerSettings:
+                                    const MarkerSettings(isVisible: true),
+                                onRendererCreated: (controller) {
+                                  chartSeriesController = controller;
+                                },
+                                onPointLongPress: (pointInteractionDetails) {
+                                  pointIndex =
+                                      pointInteractionDetails.pointIndex;
+                                },
+                                dataSource: state.activityCategory.dataChart
+                                    .map((item) {
+                                  return CashFlowData(
+                                    item.month,
+                                    item.income,
+                                    item.outcome,
+                                  );
+                                }).toList(),
+                                xValueMapper: (CashFlowData sales, _) =>
+                                    sales.year,
+                                yValueMapper: (CashFlowData sales, _) =>
+                                    sales.outcome,
+                                dataLabelSettings:
+                                    const DataLabelSettings(isVisible: true),
+                              ),
+                              LineSeries<CashFlowData, String>(
+                                name: "Outcome",
+                                color: kGreenColor,
+                                markerSettings:
+                                    const MarkerSettings(isVisible: true),
+                                onRendererCreated: (controller) {
+                                  chartSeriesController = controller;
+                                },
+                                onPointLongPress: (pointInteractionDetails) {
+                                  pointIndex =
+                                      pointInteractionDetails.pointIndex;
+                                },
+                                dataSource: state.activityCategory.dataChart
+                                    .map((item) {
+                                  return CashFlowData(
+                                    item.month,
+                                    item.income,
+                                    item.outcome,
+                                  );
+                                }).toList(),
+                                xValueMapper: (CashFlowData sales, _) =>
+                                    sales.year,
+                                yValueMapper: (CashFlowData sales, _) =>
+                                    sales.income,
+                                dataLabelSettings:
+                                    const DataLabelSettings(isVisible: true),
+                              ),
+                            ],
+                          ),
+                        )
                       ],
                     ),
                   )
                 ],
               ),
-            )
-          ],
-        ),
+            );
+          }
+
+          return Container(
+            margin: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
+            child: const Text("Failed ..."),
+          );
+        },
       );
     }
 
@@ -698,11 +718,11 @@ class _BankAccountPageState extends State<BankAccountPage> {
   }
 }
 
-class SalesData {
-  SalesData(this.year, this.income, this.outcome);
+class CashFlowData {
+  CashFlowData(this.year, this.income, this.outcome);
   final String year;
-  final double income;
-  final double outcome;
+  final int income;
+  final int outcome;
 }
 
 class CategoryActivityData {

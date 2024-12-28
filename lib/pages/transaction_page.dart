@@ -269,10 +269,6 @@ class _TransactionPageState extends State<TransactionPage> {
                 margin: const EdgeInsets.only(
                     left: 20, right: 20, top: 50, bottom: 100),
                 onPressed: () {
-                  print("amountController");
-                  print(amountController.text);
-                  print("kursAmountController");
-                  print(kursAmountController.text);
                   // if (widget.isEditBtn) {
                   //   context
                   //       .read<TransactionCubit>()

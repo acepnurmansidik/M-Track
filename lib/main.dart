@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:tracking/cubit/auth_cubit.dart';
+import 'package:tracking/cubit/dashboard_cubit.dart';
 import 'package:tracking/cubit/page_cubit.dart';
 import 'package:tracking/cubit/refparamater_cubit.dart';
 import 'package:tracking/cubit/transaction_cubit.dart';
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => AuthCubit()),
         BlocProvider(create: (context) => PageCubit()),
         BlocProvider(create: (context) => WalletCubit()),
+        BlocProvider(create: (context) => DashboardCubit()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
