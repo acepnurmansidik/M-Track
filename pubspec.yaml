@@ -48,6 +48,8 @@ dependencies:
   flutter_local_notifications: ^18.0.1
   currency_textfield: ^4.14.1
   flutter_launcher_icons: ^0.14.2
+  syncfusion_flutter_charts: ^26.2.5
+  syncfusion_flutter_core: ^26.2.5
 
 dev_dependencies:
   flutter_test:

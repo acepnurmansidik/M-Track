@@ -6,6 +6,7 @@ import 'package:tracking/cubit/auth_cubit.dart';
 import 'package:tracking/cubit/page_cubit.dart';
 import 'package:tracking/cubit/refparamater_cubit.dart';
 import 'package:tracking/cubit/transaction_cubit.dart';
+import 'package:tracking/cubit/wallet_cubit.dart';
 import 'package:tracking/firebase_options.dart';
 import 'package:tracking/pages/main_page.dart';
 import 'package:tracking/pages/signin_page.dart';
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => RefparamaterCubit()),
         BlocProvider(create: (context) => AuthCubit()),
         BlocProvider(create: (context) => PageCubit()),
+        BlocProvider(create: (context) => WalletCubit()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
