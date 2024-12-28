@@ -1,5 +1,6 @@
 // ignore_for_file: unnecessary_null_comparison, unused_element
 
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:currency_textfield/currency_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -112,79 +113,64 @@ class _FormTransactionPageState extends State<FormTransactionPage> {
 
     Widget balanceInfoSection() {
       Widget balanceLoading() {
-        return Column(
-          children: [
-            SizedBox(
-              width: double.infinity,
-              height: 87,
-              child: Stack(children: [
-                Align(
-                  alignment: Alignment.topRight,
-                  child: Container(
-                    height: 80,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 10,
-                    ),
-                    width: MediaQuery.of(context).size.width - 50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: kPrimaryV2Color,
-                    ),
-                  ),
+        return Container(
+          margin: const EdgeInsets.only(bottom: 7),
+          width: double.infinity,
+          height: 87,
+          child: Stack(children: [
+            Align(
+              alignment: Alignment.topRight,
+              child: Container(
+                height: 80,
+                width: MediaQuery.of(context).size.width - 90,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 10,
                 ),
-                Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Container(
-                    height: 79,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 10,
-                    ),
-                    width: MediaQuery.of(context).size.width - 80,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: kWhiteColor,
-                    ),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: kPrimaryV2Color,
+                ),
+              ),
+            ),
+            Align(
+              alignment: Alignment.bottomLeft,
+              child: Container(
+                height: 79,
+                width: MediaQuery.of(context).size.width - 120,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 10,
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: kWhiteColor,
+                ),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
                       children: [
-                        Row(
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                ShimmerLoading(
-                                  height: 12,
-                                  width: 70,
-                                  radius: 4,
-                                ),
-                                SizedBox(height: 7),
-                                ShimmerLoading(
-                                  height: 20,
-                                  width: 130,
-                                  radius: 6,
-                                ),
-                              ],
-                            ),
+                            ShimmerLoading(height: 12, width: 70, radius: 6),
+                            SizedBox(height: 7),
+                            ShimmerLoading(height: 22, width: 130, radius: 6),
                           ],
                         ),
-                        Align(
-                          alignment: Alignment.topRight,
-                          child: ShimmerLoading(
-                            height: 17,
-                            width: 70,
-                            radius: 6,
-                          ),
-                        )
                       ],
                     ),
-                  ),
-                )
-              ]),
-            ),
-          ],
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: ShimmerLoading(height: 15, width: 70, radius: 5),
+                    )
+                  ],
+                ),
+              ),
+            )
+          ]),
         );
       }
 
@@ -198,11 +184,11 @@ class _FormTransactionPageState extends State<FormTransactionPage> {
               alignment: Alignment.topRight,
               child: Container(
                 height: 80,
+                width: MediaQuery.of(context).size.width - 90,
                 padding: const EdgeInsets.symmetric(
                   horizontal: 20,
                   vertical: 10,
                 ),
-                width: MediaQuery.of(context).size.width - 50,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: kPrimaryV2Color,
@@ -213,14 +199,22 @@ class _FormTransactionPageState extends State<FormTransactionPage> {
               alignment: Alignment.bottomLeft,
               child: Container(
                 height: 79,
+                width: MediaQuery.of(context).size.width - 120,
                 padding: const EdgeInsets.symmetric(
                   horizontal: 20,
                   vertical: 10,
                 ),
-                width: MediaQuery.of(context).size.width - 80,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: kWhiteColor,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5), // Warna bayangan
+                      offset: Offset(3, 3), // Offset bayangan
+                      blurRadius: 10, // Radius kabur
+                      spreadRadius: 2, // Radius penyebaran
+                    ),
+                  ],
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -241,8 +235,8 @@ class _FormTransactionPageState extends State<FormTransactionPage> {
                             Text(
                               '$nominal',
                               style: blackTextStyle.copyWith(
-                                fontSize: 14,
-                                fontWeight: semibold,
+                                fontSize: 16,
+                                fontWeight: bold,
                               ),
                             ),
                           ],
@@ -267,50 +261,103 @@ class _FormTransactionPageState extends State<FormTransactionPage> {
         );
       }
 
-      return Container(
-        height: 110,
-        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: BlocBuilder<WalletCubit, WalletState>(
-            builder: (context, state) {
-              if (state is WalletLoading) {
-                return balanceLoading();
-              } else if (state is WalletFetchSuccess) {
-                final List<Widget> result;
-                if (state.listWallet.isNotEmpty) {
-                  if (bankIdController.text.isEmpty) {
-                    bankIdController.text = state.listWallet[0].id;
-                  }
-                  result = state.listWallet.map((item) {
-                    return balanceItem(
-                      bankName: item.walletName,
-                      nominal: NumberFormat.currency(
-                        symbol: "IDR ",
-                        decimalDigits: 0,
-                      ).format(item.amount),
-                    );
-                  }).toList();
-                } else {
-                  result = [
-                    balanceItem(
-                      bankName: "NO SET",
-                      nominal: "Pleas added wallet",
-                    )
-                  ];
-                }
-                return Column(
-                  children: result,
-                );
+      return BlocBuilder<WalletCubit, WalletState>(
+        builder: (context, state) {
+          if (state is WalletLoading) {
+            return Container(
+              height: 110,
+              color: kRedColor,
+              margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+              child: CarouselSlider(
+                options: CarouselOptions(
+                  scrollDirection: Axis.vertical,
+                  height: MediaQuery.of(context).size.height,
+                  viewportFraction: 1.4,
+                  autoPlay: false,
+                  enableInfiniteScroll: false,
+                  onPageChanged: (index, reason) {},
+                ),
+                items: [
+                  Container(
+                    height: 110,
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 30),
+                    child: balanceLoading(),
+                  ),
+                ],
+              ),
+            );
+          } else if (state is WalletFetchSuccess) {
+            List<Widget> result;
+            if (state.listWallet.isNotEmpty) {
+              if (bankIdController.text.isEmpty) {
+                bankIdController.text = state.listWallet[0].id;
               }
+              result = state.listWallet.map((itemWallet) {
+                return Container(
+                  height: 110,
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+                  child: balanceItem(
+                    bankName: itemWallet.walletName,
+                    nominal: itemWallet.amount,
+                  ),
+                );
+              }).toList();
+            }
+            return Container(
+              height: 110,
+              margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+              child: CarouselSlider(
+                options: CarouselOptions(
+                  scrollDirection: Axis.vertical,
+                  height: MediaQuery.of(context).size.height,
+                  viewportFraction: 1.4,
+                  autoPlay: false,
+                  enableInfiniteScroll: false,
+                  onPageChanged: (index, reason) {
+                    bankIdController.text = state.listWallet[index].id;
+                  },
+                ),
+                items: state.listWallet.map((itemWallet) {
+                  return Container(
+                    height: 110,
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 30),
+                    child: balanceItem(
+                      bankName: itemWallet.walletName,
+                      nominal: itemWallet.amount,
+                    ),
+                  );
+                }).toList(),
+              ),
+            );
+          }
 
-              return balanceItem(
-                bankName: "XXX XXX",
-                nominal: "Reload this page",
-              );
-            },
-          ),
-        ),
+          return Container(
+            height: 110,
+            color: kRedColor,
+            margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+            child: CarouselSlider(
+              options: CarouselOptions(
+                scrollDirection: Axis.vertical,
+                height: MediaQuery.of(context).size.height,
+                viewportFraction: 1.4,
+                autoPlay: false,
+                enableInfiniteScroll: false,
+                onPageChanged: (index, reason) {},
+              ),
+              items: [
+                Container(
+                  height: 110,
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+                  child: balanceItem(bankName: "XXX", nominal: 0),
+                ),
+              ],
+            ),
+          );
+        },
       );
     }
 
