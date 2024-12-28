@@ -376,11 +376,11 @@ class _BankAccountPageState extends State<BankAccountPage> {
         CategoryActivityData('Category E', 60),
       ];
 
-      Widget activityItem({title, nominal, type, date}) {
+      Widget activityItem({title, nominal, imageUrl, date}) {
         return Container(
           height: 60,
           margin: const EdgeInsets.only(bottom: 10),
-          padding: const EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 15),
           width: MediaQuery.of(context).size.width - 40,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
@@ -389,12 +389,12 @@ class _BankAccountPageState extends State<BankAccountPage> {
           child: Row(
             children: [
               Container(
-                height: 40,
-                width: 40,
+                height: 35,
+                width: 35,
                 margin: const EdgeInsets.only(right: 10),
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage('assets/cash_out.png'),
+                    image: NetworkImage(imageUrl),
                   ),
                 ),
               ),
@@ -411,7 +411,7 @@ class _BankAccountPageState extends State<BankAccountPage> {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    date,
+                    '$date item',
                     style: blackTextStyle.copyWith(
                       fontSize: 12,
                       fontWeight: medium,
@@ -432,73 +432,128 @@ class _BankAccountPageState extends State<BankAccountPage> {
         );
       }
 
-      return Container(
-        margin: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              margin: const EdgeInsets.symmetric(vertical: 10),
-              child: Text(
-                "Recent Activity",
-                style: blackTextStyle.copyWith(
-                  fontSize: 16,
-                  fontWeight: semibold,
-                ),
-              ),
-            ),
-            Container(
-              height: 200,
-              margin: const EdgeInsets.only(bottom: 10),
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(18),
-                color: kWhiteColor,
-              ),
-              child: SfCircularChart(
-                legend: const Legend(
-                  isVisible: true,
-                  position: LegendPosition.left,
-                  shouldAlwaysShowScrollbar: true,
-                  toggleSeriesVisibility: false,
-                ),
-                enableMultiSelection: true,
-                series: <CircularSeries>[
-                  PieSeries<CategoryActivityData, String>(
-                    explode: true,
-                    dataSource: chartData,
-                    xValueMapper: (CategoryActivityData data, _) =>
-                        data.category,
-                    yValueMapper: (CategoryActivityData data, _) => data.other,
-                    dataLabelSettings: const DataLabelSettings(isVisible: true),
+      return BlocBuilder<DashboardCubit, DashboardState>(
+        builder: (context, state) {
+          if (state is DashboardLoading) {
+          } else if (state is DashboardSuccess) {
+            return Container(
+              margin: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.symmetric(vertical: 10),
+                    child: Text(
+                      "Recent Activity",
+                      style: blackTextStyle.copyWith(
+                        fontSize: 16,
+                        fontWeight: semibold,
+                      ),
+                    ),
                   ),
+                  Container(
+                    alignment: Alignment.center,
+                    height: 200,
+                    margin: const EdgeInsets.only(bottom: 10),
+                    padding: const EdgeInsets.symmetric(vertical: 4),
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(18),
+                      color: kWhiteColor,
+                    ),
+                    child: SfCircularChart(
+                      legend: const Legend(
+                        isVisible: true,
+                        position: LegendPosition.left,
+                        shouldAlwaysShowScrollbar: true,
+                        toggleSeriesVisibility: false,
+                      ),
+                      enableMultiSelection: true,
+                      series: <CircularSeries>[
+                        PieSeries<CategoryActivityData, String>(
+                          explode: true,
+                          dataSource:
+                              state.activityCategory.listData.map((item) {
+                            return CategoryActivityData(
+                                item.name, item.totalCategory);
+                          }).toList(),
+                          xValueMapper: (CategoryActivityData data, _) =>
+                              data.category,
+                          yValueMapper: (CategoryActivityData data, _) =>
+                              data.other,
+                          dataLabelSettings:
+                              const DataLabelSettings(isVisible: true),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Column(
+                    children: state.activityCategory.listData.map((item) {
+                      return activityItem(
+                        title: item.name,
+                        date: item.totalCount,
+                        nominal: item.totalCategory,
+                        imageUrl: item.imageUrl,
+                      );
+                    }).toList(),
+                  )
                 ],
               ),
-            ),
-            Column(
+            );
+          }
+
+          return Container(
+            margin: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                activityItem(
-                  title: "Top Up Gopay",
-                  date: "20",
-                  nominal: 50000,
-                  type: "cash-out",
+                Container(
+                  margin: const EdgeInsets.symmetric(vertical: 10),
+                  child: Text(
+                    "Recent Activity",
+                    style: blackTextStyle.copyWith(
+                      fontSize: 16,
+                      fontWeight: semibold,
+                    ),
+                  ),
                 ),
-                activityItem(
-                  title: "Top Up Gopay",
-                  date: "20",
-                  nominal: 50000,
-                  type: "cash-out",
+                Container(
+                  height: 200,
+                  margin: const EdgeInsets.only(bottom: 10),
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(18),
+                    color: kWhiteColor,
+                  ),
+                  child: SfCircularChart(
+                    legend: const Legend(
+                      isVisible: true,
+                      position: LegendPosition.left,
+                      shouldAlwaysShowScrollbar: true,
+                      toggleSeriesVisibility: false,
+                    ),
+                    enableMultiSelection: true,
+                    series: <CircularSeries>[
+                      PieSeries<CategoryActivityData, String>(
+                        explode: true,
+                        dataSource: chartData,
+                        xValueMapper: (CategoryActivityData data, _) =>
+                            data.category,
+                        yValueMapper: (CategoryActivityData data, _) =>
+                            data.other,
+                        dataLabelSettings:
+                            const DataLabelSettings(isVisible: true),
+                      ),
+                    ],
+                  ),
                 ),
-                activityItem(
-                  title: "Top Up Gopay",
-                  date: "20",
-                  nominal: 50000,
-                  type: "cash-out",
-                ),
+                const Column(
+                  children: [],
+                )
               ],
-            )
-          ],
-        ),
+            ),
+          );
+        },
       );
     }
 
@@ -728,5 +783,5 @@ class CashFlowData {
 class CategoryActivityData {
   CategoryActivityData(this.category, this.other);
   final String category;
-  final double other;
+  final int other;
 }
