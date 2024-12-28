@@ -7,10 +7,12 @@ import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:tracking/cubit/refparamater_cubit.dart';
 import 'package:tracking/cubit/transaction_cubit.dart';
+import 'package:tracking/cubit/wallet_cubit.dart';
 import 'package:tracking/pages/success_page.dart';
 import 'package:tracking/theme.dart';
 import 'package:tracking/widgets/custom_button.dart';
 import 'package:tracking/widgets/custom_textform_field.dart';
+import 'package:tracking/widgets/shimmer_loading.dart';
 
 class FormTransactionPage extends StatefulWidget {
   const FormTransactionPage({super.key});
@@ -28,6 +30,8 @@ class _FormTransactionPageState extends State<FormTransactionPage> {
 
   int selectedIndexBoxType = 0;
   // Text form
+  final TextEditingController bankIdController =
+      TextEditingController(text: "");
   final TextEditingController typeIdController =
       TextEditingController(text: "");
   final TextEditingController categoryIdController =
@@ -47,6 +51,7 @@ class _FormTransactionPageState extends State<FormTransactionPage> {
   void initState() {
     super.initState();
     context.read<RefparamaterCubit>().getRefparam();
+    context.read<WalletCubit>().fetchWalletList();
   }
 
   @override
@@ -106,49 +111,206 @@ class _FormTransactionPageState extends State<FormTransactionPage> {
     }
 
     Widget balanceInfoSection() {
+      Widget balanceLoading() {
+        return Column(
+          children: [
+            SizedBox(
+              width: double.infinity,
+              height: 87,
+              child: Stack(children: [
+                Align(
+                  alignment: Alignment.topRight,
+                  child: Container(
+                    height: 80,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 10,
+                    ),
+                    width: MediaQuery.of(context).size.width - 50,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: kPrimaryV2Color,
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.bottomLeft,
+                  child: Container(
+                    height: 79,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 10,
+                    ),
+                    width: MediaQuery.of(context).size.width - 80,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: kWhiteColor,
+                    ),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                ShimmerLoading(
+                                  height: 12,
+                                  width: 70,
+                                  radius: 4,
+                                ),
+                                SizedBox(height: 7),
+                                ShimmerLoading(
+                                  height: 20,
+                                  width: 130,
+                                  radius: 6,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: ShimmerLoading(
+                            height: 17,
+                            width: 70,
+                            radius: 6,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                )
+              ]),
+            ),
+          ],
+        );
+      }
+
+      Widget balanceItem({bankName, nominal}) {
+        return Container(
+          margin: const EdgeInsets.only(bottom: 7),
+          width: double.infinity,
+          height: 87,
+          child: Stack(children: [
+            Align(
+              alignment: Alignment.topRight,
+              child: Container(
+                height: 80,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 10,
+                ),
+                width: MediaQuery.of(context).size.width - 50,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: kPrimaryV2Color,
+                ),
+              ),
+            ),
+            Align(
+              alignment: Alignment.bottomLeft,
+              child: Container(
+                height: 79,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 10,
+                ),
+                width: MediaQuery.of(context).size.width - 80,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: kWhiteColor,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              'Balance',
+                              style: blackTextStyle.copyWith(
+                                fontSize: 14,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              '$nominal',
+                              style: blackTextStyle.copyWith(
+                                fontSize: 14,
+                                fontWeight: semibold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: Text(
+                        bankName,
+                        style: blackTextStyle.copyWith(
+                          fontSize: 14,
+                          fontWeight: semibold,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            )
+          ]),
+        );
+      }
+
       return Container(
-        width: MediaQuery.of(context).size.width - (2 * 20),
-        margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 40),
-        height: 90,
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-        decoration: BoxDecoration(
-          color: kWhiteColor,
-          borderRadius: BorderRadius.circular(10),
-          border: Border(
-            bottom: BorderSide(color: kPrimaryV2Color, width: 2),
+        height: 110,
+        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: BlocBuilder<WalletCubit, WalletState>(
+            builder: (context, state) {
+              if (state is WalletLoading) {
+                return balanceLoading();
+              } else if (state is WalletFetchSuccess) {
+                final List<Widget> result;
+                if (state.listWallet.isNotEmpty) {
+                  if (bankIdController.text.isEmpty) {
+                    bankIdController.text = state.listWallet[0].id;
+                  }
+                  result = state.listWallet.map((item) {
+                    return balanceItem(
+                      bankName: item.walletName,
+                      nominal: NumberFormat.currency(
+                        symbol: "IDR ",
+                        decimalDigits: 0,
+                      ).format(item.amount),
+                    );
+                  }).toList();
+                } else {
+                  result = [
+                    balanceItem(
+                      bankName: "NO SET",
+                      nominal: "Pleas added wallet",
+                    )
+                  ];
+                }
+                return Column(
+                  children: result,
+                );
+              }
+
+              return balanceItem(
+                bankName: "XXX XXX",
+                nominal: "Reload this page",
+              );
+            },
           ),
         ),
-        child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Balance",
-                    style: blackTextStyle.copyWith(
-                      fontSize: 12,
-                      fontWeight: semibold,
-                    ),
-                  ),
-                  const SizedBox(height: 5),
-                  Text(
-                    NumberFormat.currency(symbol: "IDR ", decimalDigits: 0)
-                        .format(7000000),
-                    style: primaryTextStyle.copyWith(
-                      fontSize: 16,
-                      fontWeight: bold,
-                    ),
-                  ),
-                ],
-              ),
-              Icon(
-                Icons.remove_red_eye,
-                color: kGreyColor,
-              ),
-            ]),
       );
     }
 
@@ -407,8 +569,6 @@ class _FormTransactionPageState extends State<FormTransactionPage> {
                                   builder: (context) => const SuccessPage(),
                                 ),
                               );
-                            } else if (state is TransactionFailed) {
-                              print(state.error);
                             }
                           },
                           builder: (context, state) {
@@ -427,6 +587,7 @@ class _FormTransactionPageState extends State<FormTransactionPage> {
                                       "amount":
                                           amountController.intValue.toString(),
                                       "type_id": typeIdController.text,
+                                      "bank_id": bankIdController.text,
                                       "category_id": categoryIdController.text,
                                       "note": notesIdController.text,
                                     });
