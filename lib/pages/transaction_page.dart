@@ -9,6 +9,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:tracking/cubit/refparamater_cubit.dart';
 import 'package:tracking/cubit/transaction_cubit.dart';
 import 'package:tracking/cubit/wallet_cubit.dart';
+import 'package:tracking/models/transaction_model.dart';
 import 'package:tracking/pages/success_page.dart';
 import 'package:tracking/theme.dart';
 import 'package:tracking/widgets/custom_button.dart';
@@ -16,7 +17,9 @@ import 'package:tracking/widgets/custom_textform_field.dart';
 import 'package:tracking/widgets/shimmer_loading.dart';
 
 class TransactionPage extends StatefulWidget {
-  const TransactionPage({super.key});
+  final TrxItemModel? transactions;
+
+  const TransactionPage({super.key, this.transactions});
 
   @override
   State<TransactionPage> createState() => _TransactionPageState();
@@ -29,7 +32,6 @@ class _TransactionPageState extends State<TransactionPage> {
 
   bool showNotes = false;
 
-  int selectedIndexBoxType = 0;
   // Text form
   final TextEditingController bankIdController =
       TextEditingController(text: "");
@@ -51,7 +53,20 @@ class _TransactionPageState extends State<TransactionPage> {
   @override
   void initState() {
     super.initState();
-    context.read<RefparamaterCubit>().getRefparam();
+
+    if (widget.transactions != null) {
+      typeIdController.text = widget.transactions!.typeId["_id"];
+      categoryIdController.text = widget.transactions!.categoryId["_id"];
+      bankIdController.text = widget.transactions!.bankId?["_id"];
+      notesIdController.text = widget.transactions!.note;
+      amountController.text = widget.transactions!.amount.toString();
+
+      selectedValue = categoryIdController.text;
+    }
+
+    context
+        .read<RefparamaterCubit>()
+        .getRefparam(parentId: typeIdController.text);
     context.read<WalletCubit>().fetchWalletList();
   }
 
@@ -210,7 +225,7 @@ class _TransactionPageState extends State<TransactionPage> {
                   boxShadow: [
                     BoxShadow(
                       color: Colors.grey.withOpacity(0.5), // Warna bayangan
-                      offset: Offset(3, 3), // Offset bayangan
+                      offset: const Offset(3, 3), // Offset bayangan
                       blurRadius: 10, // Radius kabur
                       spreadRadius: 2, // Radius penyebaran
                     ),
@@ -234,12 +249,15 @@ class _TransactionPageState extends State<TransactionPage> {
                             const SizedBox(height: 4),
                             Text(
                               NumberFormat.currency(
-                                      symbol: "IDR ", decimalDigits: 0)
-                                  .format(nominal),
+                                symbol: "IDR ",
+                                decimalDigits: 0,
+                              ).format(nominal),
                               style: blackTextStyle.copyWith(
                                 fontSize: 16,
                                 fontWeight: bold,
                               ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ],
                         ),
@@ -492,9 +510,11 @@ class _TransactionPageState extends State<TransactionPage> {
                     ),
                   );
                 } else if (state is RefparamaterSuccess) {
+                  // Jika typeIdController.text kosong, set ke nilai pertama
                   if (typeIdController.text.isEmpty) {
                     typeIdController.text = state.listCategoryTypeReff[0].id;
                   }
+
                   return SizedBox(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height / 1.93 - 111,
@@ -509,7 +529,6 @@ class _TransactionPageState extends State<TransactionPage> {
                             return GestureDetector(
                               onTap: () {
                                 setState(() {
-                                  selectedIndexBoxType = typeItem.key;
                                   typeIdController.text = typeItem.value.id;
                                   selectedValue = null;
                                   // Memanggil refreshCategory
@@ -525,10 +544,12 @@ class _TransactionPageState extends State<TransactionPage> {
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(15),
                                   border: Border.all(
-                                    width: selectedIndexBoxType == typeItem.key
+                                    width: typeIdController.text ==
+                                            typeItem.value.id
                                         ? 2
                                         : 1.3,
-                                    color: selectedIndexBoxType == typeItem.key
+                                    color: typeIdController.text ==
+                                            typeItem.value.id
                                         ? kPrimaryV2Color
                                         : kGreyColor,
                                   ),
@@ -536,7 +557,8 @@ class _TransactionPageState extends State<TransactionPage> {
                                 child: Center(
                                   child: Text(
                                     typeItem.value.value,
-                                    style: selectedIndexBoxType == typeItem.key
+                                    style: typeIdController.text ==
+                                            typeItem.value.id
                                         ? primaryTextStyle.copyWith(
                                             fontSize: 16, fontWeight: semibold)
                                         : blackTextStyle.copyWith(

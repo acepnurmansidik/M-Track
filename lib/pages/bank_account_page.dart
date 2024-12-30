@@ -22,6 +22,11 @@ class _BankAccountPageState extends State<BankAccountPage> {
   ChartSeriesController? chartSeriesController;
   int? pointIndex;
 
+  var chartData1 = <CashFlowData>[];
+  var chartData2 = <CashFlowData>[];
+  ChartSeriesController? chartSeriesController1;
+  ChartSeriesController? chartSeriesController2;
+
   @override
   void initState() {
     context.read<WalletCubit>().fetchWalletList();
@@ -62,10 +67,13 @@ class _BankAccountPageState extends State<BankAccountPage> {
             Container(
               height: 28,
               width: 28,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage('assets/stopwatch.png'),
-                ),
+                    image: AssetImage('assets/stopwatch.png'),
+                    colorFilter: ColorFilter.mode(
+                      kPrimaryV2Color,
+                      BlendMode.srcIn,
+                    )),
               ),
             ),
           ],
@@ -960,6 +968,13 @@ class _BankAccountPageState extends State<BankAccountPage> {
                             ),
                             tooltipBehavior: TooltipBehavior(enable: true),
                             primaryXAxis: const CategoryAxis(),
+                            primaryYAxis: NumericAxis(
+                              numberFormat: NumberFormat.compactCurrency(
+                                symbol: 'IDR ',
+                                decimalDigits: 0,
+                                locale: "id",
+                              ),
+                            ),
                             series: <LineSeries<CashFlowData, String>>[
                               LineSeries<CashFlowData, String>(
                                 name: "Outcome",

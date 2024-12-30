@@ -14,7 +14,7 @@ class RefparamaterCubit extends Cubit<RefparamaterState> {
       final listCategoryTypeReff = await RefparameterService()
           .fetchListParameter(url: '?type=cashflow_type');
 
-      if (listCategoryTypeReff.isNotEmpty) {
+      if (parentId.isEmpty) {
         parentId = listCategoryTypeReff[0].id;
       }
 
