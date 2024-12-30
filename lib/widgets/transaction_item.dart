@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:intl/intl.dart';
 import 'package:tracking/models/transaction_model.dart';
-import 'package:tracking/pages/detail_page.dart';
 import 'package:tracking/pages/transaction_page.dart';
+import 'package:tracking/pages/detail_page.dart';
 import 'package:tracking/theme.dart';
 
 class TransactionItem extends StatelessWidget {
@@ -23,11 +23,13 @@ class TransactionItem extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => DetailPage(
-                      transaction: transaction,
-                    )));
+          context,
+          MaterialPageRoute(
+            builder: (context) => DetailPage(
+              transaction: transaction,
+            ),
+          ),
+        );
       },
       child: Dismissible(
         key: Key(transaction.id),
@@ -42,9 +44,7 @@ class TransactionItem extends StatelessWidget {
             return Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => TransactionPage(
-                  transaction: transaction,
-                ),
+                builder: (context) => TransactionPage(),
               ),
             );
             // return cancelBtn(false);

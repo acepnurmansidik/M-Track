@@ -215,7 +215,12 @@ class _BankAccountPageState extends State<BankAccountPage> {
                             NumberFormat.currency(
                                     symbol: "IDR ", decimalDigits: 0)
                                 .format(item.amount),
-                            style: TextStyle(fontSize: 32, fontWeight: bold),
+                            style: TextStyle(
+                              fontSize: 32,
+                              fontWeight: bold,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            maxLines: 1,
                           ),
                           const SizedBox(height: 10),
                           Row(
@@ -352,14 +357,6 @@ class _BankAccountPageState extends State<BankAccountPage> {
     }
 
     Widget recentActiviy() {
-      final List<CategoryActivityData> chartData = [
-        CategoryActivityData('Category A', 30),
-        CategoryActivityData('Category B', 25),
-        CategoryActivityData('Category C', 20),
-        CategoryActivityData('Category D', 15),
-        CategoryActivityData('Category E', 60),
-      ];
-
       Widget activityItem({title, nominal, imageUrl, date}) {
         return Container(
           height: 60,
@@ -419,6 +416,117 @@ class _BankAccountPageState extends State<BankAccountPage> {
       return BlocBuilder<DashboardCubit, DashboardState>(
         builder: (context, state) {
           if (state is DashboardLoading) {
+            List<Widget> pieChartLoading = [];
+            for (var i = 0; i < 5; i++) {
+              pieChartLoading.add(
+                const Row(
+                  children: [
+                    ShimmerLoading(
+                      height: 17,
+                      width: 17,
+                      radius: 10,
+                    ),
+                    SizedBox(width: 5),
+                    ShimmerLoading(
+                      height: 17,
+                      width: 100,
+                      radius: 10,
+                    ),
+                  ],
+                ),
+              );
+            }
+            return Container(
+              margin: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.symmetric(vertical: 10),
+                    child: Text(
+                      "Recent Activity",
+                      style: blackTextStyle.copyWith(
+                        fontSize: 16,
+                        fontWeight: semibold,
+                      ),
+                    ),
+                  ),
+                  Container(
+                      height: 200,
+                      margin: const EdgeInsets.only(bottom: 20),
+                      padding: const EdgeInsets.all(20),
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(18),
+                        color: kWhiteColor,
+                      ),
+                      child: Row(
+                        children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: pieChartLoading,
+                          ),
+                          const Spacer(),
+                          const ShimmerLoading(
+                            height: 140,
+                            width: 140,
+                            radius: 200,
+                          )
+                        ],
+                      )),
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 30),
+                    child: Column(
+                      children: [
+                        Container(
+                          height: 60,
+                          margin: const EdgeInsets.only(bottom: 10),
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          width: MediaQuery.of(context).size.width - 40,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16),
+                            color: kWhiteColor,
+                          ),
+                          child: const Row(
+                            children: [
+                              ShimmerLoading(
+                                height: 35,
+                                width: 35,
+                                radius: 200,
+                              ),
+                              SizedBox(width: 10),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  ShimmerLoading(
+                                    height: 14,
+                                    width: 50,
+                                    radius: 10,
+                                  ),
+                                  SizedBox(height: 7),
+                                  ShimmerLoading(
+                                    height: 12,
+                                    width: 100,
+                                    radius: 10,
+                                  ),
+                                ],
+                              ),
+                              Spacer(),
+                              ShimmerLoading(
+                                height: 18,
+                                width: 70,
+                                radius: 10,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
           } else if (state is DashboardSuccess) {
             return Container(
               margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -462,7 +570,9 @@ class _BankAccountPageState extends State<BankAccountPage> {
                                 dataSource:
                                     state.activityCategory.listData.map((item) {
                                   return CategoryActivityData(
-                                      item.name, item.totalCategory);
+                                    item.name,
+                                    item.totalCategory,
+                                  );
                                 }).toList(),
                                 xValueMapper: (CategoryActivityData data, _) =>
                                     data.category,
@@ -518,37 +628,77 @@ class _BankAccountPageState extends State<BankAccountPage> {
                 ),
                 Container(
                   height: 200,
-                  margin: const EdgeInsets.only(bottom: 10),
+                  margin: const EdgeInsets.only(bottom: 20),
+                  padding: const EdgeInsets.all(20),
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(18),
                     color: kWhiteColor,
                   ),
-                  child: SfCircularChart(
-                    legend: const Legend(
-                      isVisible: true,
-                      position: LegendPosition.left,
-                      shouldAlwaysShowScrollbar: true,
-                      toggleSeriesVisibility: false,
-                    ),
-                    enableMultiSelection: true,
-                    series: <CircularSeries>[
-                      PieSeries<CategoryActivityData, String>(
-                        explode: true,
-                        dataSource: chartData,
-                        xValueMapper: (CategoryActivityData data, _) =>
-                            data.category,
-                        yValueMapper: (CategoryActivityData data, _) =>
-                            data.other,
-                        dataLabelSettings:
-                            const DataLabelSettings(isVisible: true),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        height: 20,
+                        width: 20,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: const AssetImage('assets/refresh.png'),
+                            colorFilter: ColorFilter.mode(
+                              kPrimaryV2Color,
+                              BlendMode.srcIn,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 5),
+                      Text(
+                        'Refresh page',
+                        style: primaryTextStyle.copyWith(fontSize: 16),
                       ),
                     ],
                   ),
                 ),
-                const Column(
-                  children: [],
-                )
+                Container(
+                  margin: const EdgeInsets.only(bottom: 30),
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 60,
+                        margin: const EdgeInsets.only(bottom: 10),
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        width: MediaQuery.of(context).size.width - 40,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          color: kWhiteColor,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              height: 20,
+                              width: 20,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: const AssetImage('assets/refresh.png'),
+                                  colorFilter: ColorFilter.mode(
+                                    kPrimaryV2Color,
+                                    BlendMode.srcIn,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 5),
+                            Text(
+                              'Refresh page',
+                              style: primaryTextStyle.copyWith(fontSize: 16),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           );
@@ -585,7 +735,9 @@ class _BankAccountPageState extends State<BankAccountPage> {
                 style: blackTextStyle.copyWith(
                   fontSize: 18,
                   fontWeight: semibold,
+                  overflow: TextOverflow.ellipsis,
                 ),
+                maxLines: 1,
               ),
               Container(
                 alignment: Alignment.center,
@@ -618,16 +770,116 @@ class _BankAccountPageState extends State<BankAccountPage> {
         );
       }
 
+      Widget lineChartLoading() {
+        return Container(
+          margin: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 10),
+                child: Text(
+                  "Total In & Out",
+                  style: blackTextStyle.copyWith(
+                    fontSize: 16,
+                    fontWeight: semibold,
+                  ),
+                ),
+              ),
+              Container(
+                height: 350,
+                width: MediaQuery.of(context).size.width,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                decoration: BoxDecoration(
+                  color: kWhiteColor,
+                  borderRadius: BorderRadius.circular(18),
+                ),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          height: 90,
+                          padding: const EdgeInsets.symmetric(vertical: 5),
+                          width: (MediaQuery.of(context).size.width / 2) - 47,
+                          child: const Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ShimmerLoading(
+                                height: 17,
+                                width: 30,
+                                radius: 5,
+                              ),
+                              SizedBox(height: 10),
+                              ShimmerLoading(
+                                height: 20,
+                                width: 100,
+                                radius: 5,
+                              ),
+                              SizedBox(height: 8),
+                              ShimmerLoading(
+                                height: 20,
+                                width: 60,
+                                radius: 5,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          height: 70,
+                          width: 1,
+                          decoration: BoxDecoration(color: kGreyColor),
+                        ),
+                        Container(
+                          height: 90,
+                          padding: const EdgeInsets.symmetric(vertical: 5),
+                          width: (MediaQuery.of(context).size.width / 2) - 47,
+                          child: const Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ShimmerLoading(
+                                height: 17,
+                                width: 30,
+                                radius: 5,
+                              ),
+                              SizedBox(height: 10),
+                              ShimmerLoading(
+                                height: 20,
+                                width: 100,
+                                radius: 5,
+                              ),
+                              SizedBox(height: 8),
+                              ShimmerLoading(
+                                height: 20,
+                                width: 60,
+                                radius: 5,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    const ShimmerLoading(
+                      height: 210,
+                      width: double.infinity,
+                      radius: 10,
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
+        );
+      }
+
       return BlocBuilder<DashboardCubit, DashboardState>(
         builder: (context, state) {
           if (state is DashboardLoading) {
-            return Container(
-              margin: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
-              child: const Text("Loading ..."),
-            );
+            return lineChartLoading();
           } else if (state is DashboardSuccess) {
-            print(state.activityCategory.income);
-            print(state.activityCategory.outcome);
             return Container(
               margin: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
               child: Column(
@@ -687,9 +939,9 @@ class _BankAccountPageState extends State<BankAccountPage> {
                             margin: const EdgeInsets.symmetric(vertical: 10),
                             onChartTouchInteractionMove: (args) {
                               if (pointIndex != null) {
-                                CartesianChartPoint dragPoint =
-                                    chartSeriesController!
-                                        .pixelToPoint(args.position);
+                                // CartesianChartPoint dragPoint =
+                                //     chartSeriesController!
+                                //         .pixelToPoint(args.position);
 
                                 chartSeriesController!.updateDataSource(
                                   updatedDataIndex: pointIndex!,
@@ -776,7 +1028,74 @@ class _BankAccountPageState extends State<BankAccountPage> {
 
           return Container(
             margin: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
-            child: const Text("Failed ..."),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  margin: const EdgeInsets.symmetric(vertical: 10),
+                  child: Text(
+                    "Total In & Out",
+                    style: blackTextStyle.copyWith(
+                      fontSize: 16,
+                      fontWeight: semibold,
+                    ),
+                  ),
+                ),
+                Container(
+                  height: 350,
+                  width: MediaQuery.of(context).size.width,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  decoration: BoxDecoration(
+                    color: kWhiteColor,
+                    borderRadius: BorderRadius.circular(18),
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          totalSummaryItem(
+                            title: "In",
+                            status: "stable",
+                            nominal: 0,
+                            percent: ". . .",
+                          ),
+                          Container(
+                            height: 70,
+                            width: 1,
+                            decoration: BoxDecoration(color: kGreyColor),
+                          ),
+                          totalSummaryItem(
+                            title: "Out",
+                            status: "stable",
+                            nominal: 0,
+                            percent: ". . .",
+                          ),
+                        ],
+                      ),
+                      Container(
+                        height: 220,
+                        margin: const EdgeInsets.only(top: 10),
+                        child: SfCartesianChart(
+                          margin: const EdgeInsets.symmetric(vertical: 10),
+                          onChartTouchInteractionMove: (args) {},
+                          zoomPanBehavior: ZoomPanBehavior(
+                            enablePinching: true,
+                            enableDoubleTapZooming: true,
+                            enablePanning: true,
+                            zoomMode: ZoomMode.xy,
+                          ),
+                          tooltipBehavior: TooltipBehavior(enable: true),
+                          primaryXAxis: const CategoryAxis(),
+                          series: const <LineSeries<CashFlowData, String>>[],
+                        ),
+                      )
+                    ],
+                  ),
+                )
+              ],
+            ),
           );
         },
       );

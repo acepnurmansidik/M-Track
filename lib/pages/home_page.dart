@@ -179,14 +179,15 @@ class _HomePageState extends State<HomePage> {
                 Column(
                   children: subItems.items.map((item) {
                     return TransactionItem(
-                        grafik: false,
-                        transaction: item,
-                        cancelBtn: (value, id) {
-                          setState(() {
-                            isActive = value;
-                            idTrx = id;
-                          });
+                      grafik: false,
+                      transaction: item,
+                      cancelBtn: (value, id) {
+                        setState(() {
+                          isActive = value;
+                          idTrx = id;
                         });
+                      },
+                    );
                   }).toList(),
                 )
               ],
@@ -265,7 +266,9 @@ class _HomePageState extends State<HomePage> {
                             Text(
                               "Transactions",
                               style: blackTextStyle.copyWith(
-                                  fontSize: 16, fontWeight: semibold),
+                                fontSize: 16,
+                                fontWeight: semibold,
+                              ),
                             )
                           ],
                         ),
