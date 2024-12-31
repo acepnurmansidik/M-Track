@@ -204,7 +204,7 @@ class _HomePageState extends State<HomePage> {
                 height: 220,
                 decoration: const BoxDecoration(
                     image: DecorationImage(
-                        image: AssetImage("assets/icon_notfound.png"))),
+                        image: AssetImage("assets/empty-box.png"))),
               ),
               Text(
                 "Aww...you have'nt\ntransaction",

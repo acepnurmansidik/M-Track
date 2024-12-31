@@ -69,7 +69,7 @@ class _BankAccountPageState extends State<BankAccountPage> {
               width: 28,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                    image: AssetImage('assets/stopwatch.png'),
+                    image: const AssetImage('assets/stopwatch.png'),
                     colorFilter: ColorFilter.mode(
                       kPrimaryV2Color,
                       BlendMode.srcIn,
@@ -312,10 +312,12 @@ class _BankAccountPageState extends State<BankAccountPage> {
                   enableInfiniteScroll: false,
                   onPageChanged: (index, reason) {
                     setState(() {
-                      bankIdController.text = state.listWallet[index].id;
-                      context
-                          .read<DashboardCubit>()
-                          .fetchActivityCategory(bankId: bankIdController.text);
+                      if (state.listWallet.isNotEmpty &&
+                          state.listWallet.length > index) {
+                        bankIdController.text = state.listWallet[index].id;
+                        context.read<DashboardCubit>().fetchActivityCategory(
+                            bankId: bankIdController.text);
+                      }
                     });
                   },
                 ),

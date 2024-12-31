@@ -19,7 +19,7 @@ class SuccessPage extends StatelessWidget {
               height: 200,
               decoration: const BoxDecoration(
                   image: DecorationImage(
-                      image: AssetImage("assets/icon_success.png"))),
+                      image: AssetImage("assets/saving-money.png"))),
             ),
             Text(
               "Yeay, you did it 😍",
