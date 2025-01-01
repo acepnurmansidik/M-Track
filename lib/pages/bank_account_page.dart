@@ -97,82 +97,59 @@ class _BankAccountPageState extends State<BankAccountPage> {
     Widget virtualCard() {
       Widget addWallet() {
         return Container(
-          height: 190,
-          width: double.infinity,
+          height: 100,
+          width: MediaQuery.of(context).size.width - 55,
+          padding: const EdgeInsets.only(bottom: 10),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(18),
           ),
-          child: CarouselSlider(
-            carouselController: _controllerCarousel,
-            options: CarouselOptions(
-              height: MediaQuery.of(context).size.height,
-              viewportFraction: 1,
-              autoPlay: false,
-              enableInfiniteScroll: false,
-              onPageChanged: (index, reason) {},
+          child: Container(
+            // height: 20,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(18),
+              color: kWhiteColor,
             ),
-            items: [
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 20),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(18),
-                  color: kWhiteColor,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  '+',
+                  style: blackTextStyle.copyWith(
+                    fontSize: 18,
+                  ),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      '+',
-                      style: blackTextStyle.copyWith(
-                        fontSize: 18,
-                      ),
-                    ),
-                    const SizedBox(width: 5),
-                    Text(
-                      'Add New Wallet',
-                      style: blackTextStyle.copyWith(fontSize: 14),
-                    ),
-                  ],
+                const SizedBox(width: 5),
+                Text(
+                  'Add New Wallet',
+                  style: blackTextStyle.copyWith(fontSize: 14),
                 ),
-              )
-            ],
+              ],
+            ),
           ),
         );
       }
 
       Widget loadingWallet() {
         return Container(
-          height: 190,
+          height: 180,
           width: double.infinity,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(18),
           ),
-          child: CarouselSlider(
-            carouselController: _controllerCarousel,
-            options: CarouselOptions(
-              height: MediaQuery.of(context).size.height,
-              viewportFraction: 1,
-              autoPlay: false,
-              enableInfiniteScroll: false,
-              onPageChanged: (index, reason) {},
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 20),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(18),
+              color: kWhiteColor,
             ),
-            items: [
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 20),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(18),
-                  color: kWhiteColor,
-                ),
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ShimmerLoading(height: 20, width: 20, radius: 5),
-                    SizedBox(width: 10),
-                    ShimmerLoading(height: 20, width: 100, radius: 5),
-                  ],
-                ),
-              )
-            ],
+            child: const Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ShimmerLoading(height: 20, width: 20, radius: 5),
+                SizedBox(width: 10),
+                ShimmerLoading(height: 20, width: 100, radius: 5),
+              ],
+            ),
           ),
         );
       }
@@ -320,7 +297,7 @@ class _BankAccountPageState extends State<BankAccountPage> {
                 carouselController: _controllerCarousel,
                 options: CarouselOptions(
                   height: MediaQuery.of(context).size.height,
-                  viewportFraction: 1,
+                  viewportFraction: .9,
                   autoPlay: false,
                   enableInfiniteScroll: false,
                   onPageChanged: (index, reason) {
@@ -551,6 +528,8 @@ class _BankAccountPageState extends State<BankAccountPage> {
               ),
             );
           } else if (state is DashboardSuccess) {
+            print("KESIDS");
+
             return Container(
               margin: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
@@ -763,9 +742,8 @@ class _BankAccountPageState extends State<BankAccountPage> {
                 maxLines: 1,
               ),
               Container(
-                alignment: Alignment.center,
                 height: 25,
-                width: 60,
+                padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
                 margin: const EdgeInsets.only(top: 2),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(7),
