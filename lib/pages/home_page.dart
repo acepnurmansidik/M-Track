@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> {
       return Container(
         height: 250,
         width: double.infinity,
-        margin: const EdgeInsets.only(top: 20),
+        margin: const EdgeInsets.only(top: 30),
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

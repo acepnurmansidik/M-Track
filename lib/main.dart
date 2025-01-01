@@ -10,6 +10,7 @@ import 'package:tracking/cubit/transaction_cubit.dart';
 import 'package:tracking/cubit/wallet_cubit.dart';
 import 'package:tracking/firebase_options.dart';
 import 'package:tracking/pages/main_page.dart';
+import 'package:tracking/pages/reminder_page.dart';
 import 'package:tracking/pages/signin_page.dart';
 import 'package:tracking/pages/signup_page.dart';
 import 'package:tracking/pages/splash_page.dart';
@@ -44,6 +45,7 @@ class MyApp extends StatelessWidget {
           "/main": (context) => const MainPage(),
           "/sign-up": (context) => const SignUpPage(),
           "/sign-in": (context) => const SignInPage(),
+          "/reminder": (context) => const ReminderPage(),
         },
       ),
     );

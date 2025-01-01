@@ -76,7 +76,6 @@ class _CustomeTextFormFieldItemState extends State<CustomeTextFormFieldItem> {
               fontWeight: semibold,
               fontSize: 12,
               color: focusColor,
-              letterSpacing: 1,
             ),
           ),
           TextFormField(

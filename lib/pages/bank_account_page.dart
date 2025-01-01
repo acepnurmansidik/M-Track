@@ -64,16 +64,29 @@ class _BankAccountPageState extends State<BankAccountPage> {
               ],
             ),
             const Spacer(),
-            Container(
-              height: 28,
-              width: 28,
-              decoration: BoxDecoration(
-                image: DecorationImage(
+            GestureDetector(
+              onTap: () {
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => const ReminderPage(),
+                //   ),
+                // );
+
+                Navigator.pushNamed(context, '/reminder');
+              },
+              child: Container(
+                height: 28,
+                width: 28,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
                     image: const AssetImage('assets/stopwatch.png'),
                     colorFilter: ColorFilter.mode(
                       kPrimaryV2Color,
                       BlendMode.srcIn,
-                    )),
+                    ),
+                  ),
+                ),
               ),
             ),
           ],

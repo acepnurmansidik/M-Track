@@ -84,9 +84,16 @@ class _TransactionPageState extends State<TransactionPage> {
               onTap: () {
                 Navigator.pop(context);
               },
-              child: Icon(
-                Icons.chevron_left,
-                color: kBlackColor,
+              child: Container(
+                height: 35,
+                width: 35,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.arrow_back,
+                  color: kBlackColor,
+                ),
               ),
             )
           ],
@@ -792,9 +799,9 @@ class _TransactionPageState extends State<TransactionPage> {
     }
 
     return Scaffold(
-      backgroundColor: kBackgroundColor,
+      backgroundColor: kWhiteColor,
       appBar: PreferredSize(
-        preferredSize: const Size(double.infinity, 40),
+        preferredSize: const Size(double.infinity, 55),
         child: appBarSection(),
       ),
       body: Form(
