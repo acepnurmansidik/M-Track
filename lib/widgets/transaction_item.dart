@@ -44,8 +44,10 @@ class TransactionItem extends StatelessWidget {
             return Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) =>
-                    TransactionPage(transactions: transaction),
+                builder: (context) => TransactionPage(
+                  transactions: transaction,
+                  isEdit: true,
+                ),
               ),
             );
             // return cancelBtn(false);

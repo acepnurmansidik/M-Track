@@ -51,9 +51,11 @@ class _HomePageState extends State<HomePage> {
                     height: 50,
                     width: 50,
                     decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        image: DecorationImage(
-                            image: AssetImage("assets/img_avatar.png"))),
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        image: AssetImage("assets/img_avatar.png"),
+                      ),
+                    ),
                   ),
                 ),
                 Container(
@@ -119,18 +121,22 @@ class _HomePageState extends State<HomePage> {
                   style: greyTextStyle.copyWith(fontSize: 16),
                 )),
             Container(
-                margin: const EdgeInsets.only(bottom: 2),
-                child: Text.rich(TextSpan(
-                    text: 'Rp ',
-                    style: blackTextStyle.copyWith(fontSize: 16),
-                    children: [
-                      TextSpan(
-                          text: NumberFormat.currency(
-                                  symbol: "", decimalDigits: 0)
-                              .format(dataTrx.currentMonthly),
-                          style: blackTextStyle.copyWith(
-                              fontSize: 35, fontWeight: extraBold))
-                    ]))),
+              margin: const EdgeInsets.only(bottom: 2),
+              child: Text.rich(
+                TextSpan(
+                  text: 'Rp ',
+                  style: blackTextStyle.copyWith(fontSize: 16),
+                  children: [
+                    TextSpan(
+                        text:
+                            NumberFormat.currency(symbol: "", decimalDigits: 0)
+                                .format(dataTrx.currentMonthly),
+                        style: blackTextStyle.copyWith(
+                            fontSize: 35, fontWeight: extraBold))
+                  ],
+                ),
+              ),
+            ),
             Text.rich(TextSpan(
                 text: NumberFormat.currency(symbol: "", decimalDigits: 0)
                     .format(dataTrx.grandTotal),

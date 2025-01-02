@@ -18,13 +18,17 @@ class SuccessPage extends StatelessWidget {
               width: 200,
               height: 200,
               decoration: const BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage("assets/saving-money.png"))),
+                image: DecorationImage(
+                  image: AssetImage("assets/saving-money.png"),
+                ),
+              ),
             ),
             Text(
               "Yeay, you did it 😍",
-              style:
-                  blackTextStyle.copyWith(fontSize: 28, fontWeight: semibold),
+              style: blackTextStyle.copyWith(
+                fontSize: 28,
+                fontWeight: semibold,
+              ),
             ),
             const SizedBox(
               height: 6,

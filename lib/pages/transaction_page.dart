@@ -18,8 +18,9 @@ import 'package:tracking/widgets/shimmer_loading.dart';
 
 class TransactionPage extends StatefulWidget {
   final TrxItemModel? transactions;
+  final bool? isEdit;
 
-  const TransactionPage({super.key, this.transactions});
+  const TransactionPage({super.key, this.transactions, this.isEdit});
 
   @override
   State<TransactionPage> createState() => _TransactionPageState();
@@ -362,7 +363,6 @@ class _TransactionPageState extends State<TransactionPage> {
 
           return Container(
             height: 110,
-            color: kRedColor,
             margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
             child: CarouselSlider(
               options: CarouselOptions(
@@ -657,17 +657,26 @@ class _TransactionPageState extends State<TransactionPage> {
                               title: 'Submit',
                               margin: const EdgeInsets.symmetric(vertical: 10),
                               onPressed: () {
+                                final body = {
+                                  "amount":
+                                      amountController.intValue.toString(),
+                                  "type_id": typeIdController.text,
+                                  "bank_id": bankIdController.text,
+                                  "category_id": categoryIdController.text,
+                                  "note": notesIdController.text,
+                                };
                                 if (_formKey.currentState!.validate()) {
                                   // Jika validasi berhasil, lakukan sesuatu
-                                  if (typeIdController.text.isNotEmpty) {
-                                    context.read<TransactionCubit>().postTrx({
-                                      "amount":
-                                          amountController.intValue.toString(),
-                                      "type_id": typeIdController.text,
-                                      "bank_id": bankIdController.text,
-                                      "category_id": categoryIdController.text,
-                                      "note": notesIdController.text,
-                                    });
+                                  if (typeIdController.text.isNotEmpty &&
+                                      widget.isEdit == null) {
+                                    context
+                                        .read<TransactionCubit>()
+                                        .postTrx(body);
+                                  } else if (typeIdController.text.isNotEmpty &&
+                                      widget.isEdit == true) {
+                                    context
+                                        .read<TransactionCubit>()
+                                        .putTrx(widget.transactions!.id, body);
                                   }
                                 }
                               },

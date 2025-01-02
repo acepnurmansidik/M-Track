@@ -2,7 +2,7 @@ class WalletModel {
   final String id;
   final String vaNumber;
   final String walletName;
-  final int amount;
+  final double amount;
 
   WalletModel({
     required this.id,

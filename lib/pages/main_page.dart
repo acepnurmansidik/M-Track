@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 import "package:tracking/cubit/page_cubit.dart";
 import "package:tracking/pages/bank_account_page.dart";
-import "package:tracking/pages/debt_page.dart";
+import "package:tracking/pages/loan_page.dart";
 import "package:tracking/pages/home_page.dart";
 import "package:tracking/pages/setting_page.dart";
 import "package:tracking/theme.dart";
@@ -23,7 +23,7 @@ class MainPage extends StatelessWidget {
             child: switch (context.watch<PageCubit>().state) {
               0 => const HomePage(),
               1 => const BankAccountPage(),
-              2 => const DebtPage(),
+              2 => const LoanPage(),
               3 => const SettingPage(),
               int() => throw UnimplementedError(),
             },

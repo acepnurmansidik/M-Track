@@ -6,14 +6,14 @@ import 'package:tracking/theme.dart';
 import 'package:tracking/widgets/custom_button.dart';
 import 'package:tracking/widgets/custom_textform_field.dart';
 
-class DebtPage extends StatefulWidget {
-  const DebtPage({super.key});
+class LoanPage extends StatefulWidget {
+  const LoanPage({super.key});
 
   @override
-  State<DebtPage> createState() => _DebtPageState();
+  State<LoanPage> createState() => _LoanPageState();
 }
 
-class _DebtPageState extends State<DebtPage> {
+class _LoanPageState extends State<LoanPage> {
   final GlobalKey<FormState> _formKey = GlobalKey();
   TextEditingController fromController = TextEditingController(text: "You");
   TextEditingController toController = TextEditingController(text: "Me");

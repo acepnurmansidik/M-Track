@@ -340,12 +340,24 @@ class _BankAccountPageState extends State<BankAccountPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        "Refresh drag down",
-                        style: blackTextStyle.copyWith(
-                          fontSize: 14,
+                      Container(
+                        height: 20,
+                        width: 20,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: const AssetImage('assets/refresh.png'),
+                            colorFilter: ColorFilter.mode(
+                              kPrimaryV2Color,
+                              BlendMode.srcIn,
+                            ),
+                          ),
                         ),
-                      )
+                      ),
+                      const SizedBox(width: 5),
+                      Text(
+                        'Refresh page',
+                        style: primaryTextStyle.copyWith(fontSize: 16),
+                      ),
                     ],
                   ),
                 )
@@ -528,8 +540,6 @@ class _BankAccountPageState extends State<BankAccountPage> {
               ),
             );
           } else if (state is DashboardSuccess) {
-            print("KESIDS");
-
             return Container(
               margin: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
