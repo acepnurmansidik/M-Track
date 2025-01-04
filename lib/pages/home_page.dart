@@ -395,6 +395,7 @@ class _HomePageState extends State<HomePage> {
             ],
           );
         }
+
         return Stack(
           children: [
             Image.asset(

@@ -273,11 +273,16 @@ class _TransactionPageState extends State<TransactionPage> {
                     ),
                     Align(
                       alignment: Alignment.topRight,
-                      child: Text(
-                        bankName,
-                        style: blackTextStyle.copyWith(
-                          fontSize: 14,
-                          fontWeight: semibold,
+                      child: Container(
+                        alignment: Alignment.topRight,
+                        width: MediaQuery.of(context).size.width - 300,
+                        child: Text(
+                          bankName,
+                          style: blackTextStyle.copyWith(
+                            fontSize: 14,
+                            fontWeight: semibold,
+                          ),
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     )

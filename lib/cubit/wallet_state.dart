@@ -11,6 +11,8 @@ final class WalletInitial extends WalletState {}
 
 final class WalletLoading extends WalletState {}
 
+final class WalletSuccess extends WalletState {}
+
 final class WalletFetchSuccess extends WalletState {
   final List<dynamic> listWallet;
 

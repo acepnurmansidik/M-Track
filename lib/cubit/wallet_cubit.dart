@@ -19,4 +19,34 @@ class WalletCubit extends Cubit<WalletState> {
       emit(WalletFailed(e.toString()));
     }
   }
+
+  void postWallet(body) async {
+    try {
+      emit(WalletLoading());
+      await WalletService().createWallet(body);
+      emit(WalletSuccess());
+    } catch (e) {
+      emit(WalletFailed(e.toString()));
+    }
+  }
+
+  void putWallet(body) async {
+    try {
+      emit(WalletLoading());
+      // await WalletService().createWallet(body);
+      emit(WalletSuccess());
+    } catch (e) {
+      emit(WalletFailed(e.toString()));
+    }
+  }
+
+  void deleteWallet(id) async {
+    try {
+      emit(WalletLoading());
+      await WalletService().deleteWallet(id);
+      emit(WalletSuccess());
+    } catch (e) {
+      emit(WalletFailed(e.toString()));
+    }
+  }
 }

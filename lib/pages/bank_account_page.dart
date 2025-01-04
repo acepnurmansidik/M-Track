@@ -4,7 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tracking/cubit/dashboard_cubit.dart';
+import 'package:tracking/cubit/page_cubit.dart';
 import 'package:tracking/cubit/wallet_cubit.dart';
+import 'package:tracking/pages/form_bank_account_page.dart';
 import 'package:tracking/theme.dart';
 import 'package:tracking/widgets/shimmer_loading.dart';
 
@@ -16,6 +18,9 @@ class BankAccountPage extends StatefulWidget {
 }
 
 class _BankAccountPageState extends State<BankAccountPage> {
+  // Setting function ================================
+  bool showEditMode = false;
+  // =================================================
   final TextEditingController bankIdController =
       TextEditingController(text: "");
   final _controllerCarousel = CarouselSliderController();
@@ -96,34 +101,44 @@ class _BankAccountPageState extends State<BankAccountPage> {
 
     Widget virtualCard() {
       Widget addWallet() {
-        return Container(
-          height: 100,
-          width: MediaQuery.of(context).size.width - 55,
-          padding: const EdgeInsets.only(bottom: 10),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(18),
-          ),
+        return GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const FormBankAccountPage(),
+              ),
+            );
+          },
           child: Container(
-            // height: 20,
+            height: 100,
+            width: MediaQuery.of(context).size.width - 55,
+            padding: const EdgeInsets.only(bottom: 10),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(18),
-              color: kWhiteColor,
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  '+',
-                  style: blackTextStyle.copyWith(
-                    fontSize: 18,
+            child: Container(
+              // height: 20,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(18),
+                color: kWhiteColor,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    '+',
+                    style: blackTextStyle.copyWith(
+                      fontSize: 18,
+                    ),
                   ),
-                ),
-                const SizedBox(width: 5),
-                Text(
-                  'Add New Wallet',
-                  style: blackTextStyle.copyWith(fontSize: 14),
-                ),
-              ],
+                  const SizedBox(width: 5),
+                  Text(
+                    'Add New Wallet',
+                    style: blackTextStyle.copyWith(fontSize: 14),
+                  ),
+                ],
+              ),
             ),
           ),
         );
@@ -168,117 +183,166 @@ class _BankAccountPageState extends State<BankAccountPage> {
               }
 
               result = state.listWallet.map((item) {
-                return Container(
-                  height: 190,
-                  width: MediaQuery.of(context).size.width - 55,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                  margin: const EdgeInsets.only(bottom: 10),
-                  decoration: BoxDecoration(
-                    color: kWhiteColor,
-                    borderRadius: BorderRadius.circular(18),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            height: 35,
-                            width: 40,
-                            decoration: const BoxDecoration(
-                              image: DecorationImage(
-                                image: AssetImage(
-                                  'assets/visa.png',
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      showEditMode = false;
+                    });
+                  },
+                  onLongPress: () {
+                    setState(() {
+                      showEditMode = true;
+                    });
+                  },
+                  child: Container(
+                    height: 190,
+                    width: MediaQuery.of(context).size.width - 55,
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15, vertical: 15),
+                    margin: const EdgeInsets.only(bottom: 10),
+                    decoration: BoxDecoration(
+                      color: kWhiteColor,
+                      borderRadius: BorderRadius.circular(18),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              height: 35,
+                              width: 40,
+                              decoration: const BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage(
+                                    'assets/visa.png',
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          Container(
-                            alignment: Alignment.centerRight,
-                            height: 30,
-                            width: 240,
-                            child: Text(
-                              item.walletName,
-                              style: blackTextStyle.copyWith(fontWeight: bold),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            NumberFormat.currency(
-                                    symbol: "IDR ", decimalDigits: 0)
-                                .format(item.amount),
-                            style: TextStyle(
-                              fontSize: 32,
-                              fontWeight: bold,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            maxLines: 1,
-                          ),
-                          const SizedBox(height: 10),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Virtual Number ID',
-                                    style: blackTextStyle.copyWith(
-                                      fontSize: 12,
-                                      fontWeight: medium,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 5),
-                                  Text(
-                                    item.vaNumber,
-                                    style: blackTextStyle.copyWith(
-                                      fontSize: 16,
-                                      fontWeight: semibold,
-                                    ),
-                                  ),
-                                ],
+                            if (!showEditMode)
+                              Container(
+                                alignment: Alignment.centerRight,
+                                height: 30,
+                                width: 240,
+                                child: Text(
+                                  item.walletName,
+                                  style:
+                                      blackTextStyle.copyWith(fontWeight: bold),
+                                ),
                               ),
-                              SizedBox(
-                                height: 40,
-                                width: 60,
-                                child: Stack(
-                                  alignment: Alignment.center,
+                            if (showEditMode)
+                              GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    context
+                                        .read<WalletCubit>()
+                                        .deleteWallet(item.id);
+                                    context
+                                        .read<WalletCubit>()
+                                        .fetchWalletList();
+                                    context
+                                        .read<DashboardCubit>()
+                                        .fetchActivityCategory();
+
+                                    context.read<PageCubit>().setPage(1);
+                                    showEditMode = false;
+                                  });
+                                },
+                                child: Container(
+                                  height: 28,
+                                  width: 28,
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image: const AssetImage(
+                                          'assets/trash.png',
+                                        ),
+                                        colorFilter: ColorFilter.mode(
+                                          kRedColor,
+                                          BlendMode.srcIn,
+                                        )),
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              NumberFormat.currency(
+                                      symbol: "IDR ", decimalDigits: 0)
+                                  .format(item.amount),
+                              style: TextStyle(
+                                fontSize: 32,
+                                fontWeight: bold,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              maxLines: 1,
+                            ),
+                            const SizedBox(height: 10),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Container(
-                                      height: 30,
-                                      width: 30,
-                                      margin: const EdgeInsets.only(right: 20),
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: kPrimaryColor,
+                                    Text(
+                                      'Virtual Number ID',
+                                      style: blackTextStyle.copyWith(
+                                        fontSize: 12,
+                                        fontWeight: medium,
                                       ),
                                     ),
-                                    Opacity(
-                                      opacity: .7,
-                                      child: Container(
-                                        height: 30,
-                                        width: 30,
-                                        margin: const EdgeInsets.only(left: 20),
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: kGreenColor,
-                                        ),
+                                    const SizedBox(height: 5),
+                                    Text(
+                                      item.vaNumber,
+                                      style: blackTextStyle.copyWith(
+                                        fontSize: 16,
+                                        fontWeight: semibold,
                                       ),
                                     ),
                                   ],
                                 ),
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
+                                SizedBox(
+                                  height: 40,
+                                  width: 60,
+                                  child: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      Container(
+                                        height: 30,
+                                        width: 30,
+                                        margin:
+                                            const EdgeInsets.only(right: 20),
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: kPrimaryColor,
+                                        ),
+                                      ),
+                                      Opacity(
+                                        opacity: .7,
+                                        child: Container(
+                                          height: 30,
+                                          width: 30,
+                                          margin:
+                                              const EdgeInsets.only(left: 20),
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: kGreenColor,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 );
               }).toList();
@@ -315,6 +379,7 @@ class _BankAccountPageState extends State<BankAccountPage> {
               ),
             );
           }
+
           return Container(
             height: 190,
             width: double.infinity,
