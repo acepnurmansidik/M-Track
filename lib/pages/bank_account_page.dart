@@ -7,6 +7,7 @@ import 'package:tracking/cubit/dashboard_cubit.dart';
 import 'package:tracking/cubit/page_cubit.dart';
 import 'package:tracking/cubit/wallet_cubit.dart';
 import 'package:tracking/pages/form_bank_account_page.dart';
+import 'package:tracking/pages/reminder_page.dart';
 import 'package:tracking/theme.dart';
 import 'package:tracking/widgets/shimmer_loading.dart';
 
@@ -41,6 +42,26 @@ class _BankAccountPageState extends State<BankAccountPage> {
 
   @override
   Widget build(BuildContext context) {
+    Route _createRoute(targetPage) {
+      return PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => targetPage,
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          const begin = Offset(1.0, 0.0); // Mulai dari kanan
+          const end = Offset.zero; // Berhenti di posisi normal
+          const curve = Curves.easeInOut;
+
+          var tween =
+              Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+          var offsetAnimation = animation.drive(tween);
+
+          return SlideTransition(
+            position: offsetAnimation,
+            child: child,
+          );
+        },
+      );
+    }
+
     Widget appBar() {
       return Container(
         margin: const EdgeInsets.only(left: 20, right: 20, bottom: 20, top: 10),
@@ -77,8 +98,7 @@ class _BankAccountPageState extends State<BankAccountPage> {
                 //     builder: (context) => const ReminderPage(),
                 //   ),
                 // );
-
-                Navigator.pushNamed(context, '/reminder');
+                Navigator.of(context).push(_createRoute(const ReminderPage()));
               },
               child: Container(
                 height: 28,

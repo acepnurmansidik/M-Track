@@ -64,6 +64,7 @@ class WalletService {
 
       // decode response
       final data = json.decode(response.body);
+
       // check response
       if (data["code"] >= 400) {
         throw HttpException(data["message"]);
