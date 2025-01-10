@@ -2,12 +2,18 @@
 
 import 'package:currency_textfield/currency_textfield.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tracking/cubit/loan_cubit.dart';
+import 'package:tracking/models/loan_model.dart';
 import 'package:tracking/theme.dart';
 import 'package:tracking/widgets/custom_button.dart';
 import 'package:tracking/widgets/custom_textform_field.dart';
 
 class FormLoanPage extends StatefulWidget {
-  const FormLoanPage({super.key});
+  final LoanModel? dataLoan;
+  final bool isEdit;
+
+  FormLoanPage({super.key, this.dataLoan, this.isEdit = false});
 
   @override
   State<FormLoanPage> createState() => _FormLoanPageState();
@@ -16,8 +22,8 @@ class FormLoanPage extends StatefulWidget {
 class _FormLoanPageState extends State<FormLoanPage> {
   final GlobalKey<FormState> _formKey = GlobalKey();
   TextEditingController fromController = TextEditingController(text: "You");
-  TextEditingController toController = TextEditingController(text: "Me");
-  TextEditingController notesController = TextEditingController();
+  TextEditingController toController = TextEditingController(text: "");
+  TextEditingController notesController = TextEditingController(text: "");
   final CurrencyTextFieldController amountController =
       CurrencyTextFieldController(
     showZeroValue: true,
@@ -38,6 +44,17 @@ class _FormLoanPageState extends State<FormLoanPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.dataLoan != null) {
+      toController.text = widget.dataLoan!.toName;
+      fromController.text = widget.dataLoan!.fromName;
+      notesController.text = widget.dataLoan!.note;
+      amountController.text = widget.dataLoan!.nominal.toString();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     Widget appBarSection() {
       return AppBar(
@@ -54,7 +71,7 @@ class _FormLoanPageState extends State<FormLoanPage> {
               child: Container(
                 height: 35,
                 width: 35,
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
@@ -81,38 +98,12 @@ class _FormLoanPageState extends State<FormLoanPage> {
       return Align(
         alignment: Alignment.center,
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 300),
+          duration: Duration(milliseconds: 300),
           width: MediaQuery.of(context).size.width,
-          padding: const EdgeInsets.only(left: 20, right: 20, bottom: 10),
+          padding: EdgeInsets.symmetric(horizontal: 10),
           margin: EdgeInsets.only(
             right: isTop ? 30 : 0,
             left: isTop ? 0 : 30,
-          ),
-          decoration: BoxDecoration(
-            border: Border(
-              top: BorderSide(
-                width: borderSizeTop,
-                color: kGreyColor.withOpacity(.5),
-              ),
-              bottom: BorderSide(
-                width: borderSizeBottom,
-                color: kGreyColor.withOpacity(.5),
-              ),
-              left: BorderSide(
-                width: 1.2,
-                color: kGreyColor.withOpacity(.5),
-              ),
-              right: BorderSide(
-                width: 1.2,
-                color: kGreyColor.withOpacity(.5),
-              ),
-            ),
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(bottomLeftRadius),
-              bottomRight: Radius.circular(bottomRightRadius),
-              topRight: Radius.circular(topRightRadius),
-              topLeft: Radius.circular(topLeftRadius),
-            ),
           ),
           child: TextFormField(
             controller: controller,
@@ -122,9 +113,23 @@ class _FormLoanPageState extends State<FormLoanPage> {
             ),
             decoration: InputDecoration(
               hintText: "Enter name",
-              border: InputBorder.none,
-              focusedBorder: UnderlineInputBorder(
+              focusColor: Colors.transparent,
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(bottomLeftRadius),
+                  bottomRight: Radius.circular(bottomRightRadius),
+                  topRight: Radius.circular(topRightRadius),
+                  topLeft: Radius.circular(topLeftRadius),
+                ),
                 borderSide: BorderSide(color: kPrimaryV2Color, width: 2),
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(bottomLeftRadius),
+                  bottomRight: Radius.circular(bottomRightRadius),
+                  topRight: Radius.circular(topRightRadius),
+                  topLeft: Radius.circular(topLeftRadius),
+                ),
               ),
               errorStyle: redTextStyle.copyWith(
                 fontSize: 10,
@@ -139,10 +144,41 @@ class _FormLoanPageState extends State<FormLoanPage> {
       );
     }
 
+    Widget buttonSubmit() {
+      return BlocConsumer<LoanCubit, LoanState>(
+        listener: (context, state) {},
+        builder: (context, state) {
+          if (state is LoanLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          return CustomButton(
+            title: 'Submit',
+            margin: const EdgeInsets.only(top: 50),
+            onPressed: () {
+              if (_formKey.currentState!.validate()) {
+                final body = {
+                  "from_name": fromController.text.toString(),
+                  "to_name": toController.text.toString(),
+                  "nominal": amountController.intValue.toString(),
+                  "note": notesController.text.toString(),
+                  "is_income": _isSwitch.toString()
+                };
+                if (widget.isEdit == false) {
+                  context.read<LoanCubit>().postLoan(body);
+                } else {
+                  context.read<LoanCubit>().puttLoan(body, widget.dataLoan!.id);
+                }
+              }
+            },
+          );
+        },
+      );
+    }
+
     return Scaffold(
       backgroundColor: kWhiteColor,
       appBar: PreferredSize(
-        preferredSize: const Size(double.infinity, 55),
+        preferredSize: Size(double.infinity, 55),
         child: appBarSection(),
       ),
       body: Container(
@@ -152,7 +188,7 @@ class _FormLoanPageState extends State<FormLoanPage> {
         child: Form(
           key: _formKey,
           child: ListView(
-            padding: const EdgeInsets.only(right: 20, left: 20, top: 40),
+            padding: EdgeInsets.only(right: 20, left: 20, top: 40),
             children: [
               Stack(
                 alignment: Alignment.center,
@@ -176,7 +212,7 @@ class _FormLoanPageState extends State<FormLoanPage> {
                     ],
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 40, right: 20),
+                    padding: EdgeInsets.only(left: 40, right: 20),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -198,7 +234,7 @@ class _FormLoanPageState extends State<FormLoanPage> {
                             child: Container(
                               height: 45,
                               width: 45,
-                              padding: const EdgeInsets.all(7),
+                              padding: EdgeInsets.all(7),
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: kWhiteColor,
@@ -210,8 +246,14 @@ class _FormLoanPageState extends State<FormLoanPage> {
                               child: Container(
                                 height: double.infinity,
                                 width: double.infinity,
-                                decoration: const BoxDecoration(
+                                decoration: BoxDecoration(
                                   image: DecorationImage(
+                                    colorFilter: ColorFilter.mode(
+                                      _isSwitch == true
+                                          ? kGreenColor
+                                          : kRedColor,
+                                      BlendMode.srcIn,
+                                    ),
                                     image: AssetImage('assets/exchange.png'),
                                   ),
                                 ),
@@ -224,7 +266,7 @@ class _FormLoanPageState extends State<FormLoanPage> {
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
               CustomeTextFormFieldItem(
                 controller: amountController,
                 fontSize: 30,
@@ -251,14 +293,7 @@ class _FormLoanPageState extends State<FormLoanPage> {
                   return null;
                 },
               ),
-              const SizedBox(height: 40),
-              CustomButton(
-                title: 'Submit',
-                margin: const EdgeInsets.symmetric(vertical: 10),
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {}
-                },
-              )
+              buttonSubmit()
             ],
           ),
         ),

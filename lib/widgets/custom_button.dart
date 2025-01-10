@@ -7,12 +7,13 @@ class CustomButton extends StatelessWidget {
   final EdgeInsets margin;
   final Function() onPressed;
 
-  const CustomButton(
-      {super.key,
-      this.widthBtn = double.infinity,
-      required this.title,
-      required this.margin,
-      required this.onPressed});
+  const CustomButton({
+    super.key,
+    this.widthBtn = double.infinity,
+    required this.title,
+    required this.margin,
+    required this.onPressed,
+  });
 
   @override
   Widget build(BuildContext context) {

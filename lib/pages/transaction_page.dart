@@ -10,7 +10,6 @@ import 'package:tracking/cubit/refparamater_cubit.dart';
 import 'package:tracking/cubit/transaction_cubit.dart';
 import 'package:tracking/cubit/wallet_cubit.dart';
 import 'package:tracking/models/transaction_model.dart';
-import 'package:tracking/pages/success_page.dart';
 import 'package:tracking/theme.dart';
 import 'package:tracking/widgets/custom_button.dart';
 import 'package:tracking/widgets/custom_textform_field.dart';
@@ -645,18 +644,15 @@ class _TransactionPageState extends State<TransactionPage> {
                         BlocConsumer<TransactionCubit, TransactionState>(
                           listener: (context, state) {
                             if (state is TransactionCreateSuccess) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const SuccessPage(),
-                                ),
-                              );
+                              Navigator.pushNamedAndRemoveUntil(
+                                  context, '/success-page', (route) => false);
                             }
                           },
                           builder: (context, state) {
                             if (state is TransactionLoading) {
                               return const Center(
-                                  child: CircularProgressIndicator());
+                                child: CircularProgressIndicator(),
+                              );
                             }
                             return CustomButton(
                               title: 'Submit',

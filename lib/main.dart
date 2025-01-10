@@ -14,6 +14,7 @@ import 'package:tracking/pages/main_page.dart';
 import 'package:tracking/pages/signin_page.dart';
 import 'package:tracking/pages/signup_page.dart';
 import 'package:tracking/pages/splash_page.dart';
+import 'package:tracking/pages/success_page.dart';
 
 Future main() async {
   await dotenv.load(fileName: '.env');
@@ -29,9 +30,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (context) => TransactionCubit(),
-        ),
+        BlocProvider(create: (context) => TransactionCubit()),
         BlocProvider(create: (context) => RefparamaterCubit()),
         BlocProvider(create: (context) => AuthCubit()),
         BlocProvider(create: (context) => PageCubit()),
@@ -46,6 +45,7 @@ class MyApp extends StatelessWidget {
           "/main": (context) => const MainPage(),
           "/sign-up": (context) => const SignUpPage(),
           "/sign-in": (context) => const SignInPage(),
+          "/success-page": (context) => const SuccessPage(),
         },
       ),
     );

@@ -81,7 +81,7 @@ class _CustomButtomNavbarState extends State<CustomButtomNavbar> {
             menuItems(iconName: 'home', index: 0),
             menuItems(iconName: 'card', index: 1),
             menuItems(iconName: 'plus', index: 9, isMain: true),
-            menuItems(iconName: 'debt', index: 2),
+            menuItems(iconName: 'schedule', index: 2),
             menuItems(iconName: 'profile', index: 3),
           ],
         ),
@@ -102,6 +102,25 @@ class _CustomButtomNavbarState extends State<CustomButtomNavbar> {
                     builder: (context) => const TransactionPage(),
                   ),
                 );
+                // switch (context.read<PageCubit>().state) {
+                //   case 0:
+                //     Navigator.push(
+                //       context,
+                //       MaterialPageRoute(
+                //         builder: (context) => const TransactionPage(),
+                //       ),
+                //     );
+                //     break;
+                //   case 2:
+                //     Navigator.push(
+                //       context,
+                //       MaterialPageRoute(
+                //         builder: (context) => FormLoanPage(),
+                //       ),
+                //     );
+                //     break;
+                //   default:
+                // }
               },
               child: Container(
                 height: 50,

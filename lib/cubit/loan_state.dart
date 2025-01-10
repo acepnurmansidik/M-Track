@@ -11,6 +11,8 @@ final class LoanInitial extends LoanState {}
 
 final class LoanLoading extends LoanState {}
 
+final class LoanActionSuccess extends LoanState {}
+
 final class LoanSuccesss extends LoanState {
   final List<dynamic> loanList;
 

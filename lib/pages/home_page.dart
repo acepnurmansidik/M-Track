@@ -236,7 +236,7 @@ class _HomePageState extends State<HomePage> {
               decoration: BoxDecoration(
                 color: kWhiteColor,
                 borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(18),
+                  top: Radius.circular(32),
                 ),
               ),
               child: Stack(
@@ -257,15 +257,18 @@ class _HomePageState extends State<HomePage> {
                         width: 50,
                         margin: const EdgeInsets.only(bottom: 10),
                         decoration: BoxDecoration(
-                            color: kDoveGreyColor,
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(18))),
+                          color: kDoveGreyColor,
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(18),
+                          ),
+                        ),
                       ),
                       Container(
                         padding: EdgeInsets.only(
-                            bottom: 15,
-                            left: defaultMargin,
-                            right: defaultMargin),
+                          bottom: 15,
+                          left: defaultMargin,
+                          right: defaultMargin,
+                        ),
                         decoration: BoxDecoration(color: kWhiteColor),
                         child: Row(
                           children: [
