@@ -42,7 +42,7 @@ class _BankAccountPageState extends State<BankAccountPage> {
 
   @override
   Widget build(BuildContext context) {
-    Route _createRoute(targetPage) {
+    Route createRoute(targetPage) {
       return PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) => targetPage,
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
@@ -98,7 +98,7 @@ class _BankAccountPageState extends State<BankAccountPage> {
                 //     builder: (context) => const ReminderPage(),
                 //   ),
                 // );
-                Navigator.of(context).push(_createRoute(const ReminderPage()));
+                Navigator.of(context).push(createRoute(const ReminderPage()));
               },
               child: Container(
                 height: 28,

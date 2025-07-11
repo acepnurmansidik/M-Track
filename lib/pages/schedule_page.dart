@@ -40,7 +40,7 @@ class _SchedulePageState extends State<SchedulePage> {
         ),
         ListView(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-          children: [
+          children: const [
             SizedBox(
               child: Column(
                 children: [

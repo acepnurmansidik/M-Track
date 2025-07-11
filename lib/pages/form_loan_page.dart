@@ -13,7 +13,7 @@ class FormLoanPage extends StatefulWidget {
   final LoanModel? dataLoan;
   final bool isEdit;
 
-  FormLoanPage({super.key, this.dataLoan, this.isEdit = false});
+  const FormLoanPage({super.key, this.dataLoan, this.isEdit = false});
 
   @override
   State<FormLoanPage> createState() => _FormLoanPageState();
@@ -71,7 +71,7 @@ class _FormLoanPageState extends State<FormLoanPage> {
               child: Container(
                 height: 35,
                 width: 35,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
@@ -98,9 +98,9 @@ class _FormLoanPageState extends State<FormLoanPage> {
       return Align(
         alignment: Alignment.center,
         child: AnimatedContainer(
-          duration: Duration(milliseconds: 300),
+          duration: const Duration(milliseconds: 300),
           width: MediaQuery.of(context).size.width,
-          padding: EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           margin: EdgeInsets.only(
             right: isTop ? 30 : 0,
             left: isTop ? 0 : 30,
@@ -178,7 +178,7 @@ class _FormLoanPageState extends State<FormLoanPage> {
     return Scaffold(
       backgroundColor: kWhiteColor,
       appBar: PreferredSize(
-        preferredSize: Size(double.infinity, 55),
+        preferredSize: const Size(double.infinity, 55),
         child: appBarSection(),
       ),
       body: Container(
@@ -188,7 +188,7 @@ class _FormLoanPageState extends State<FormLoanPage> {
         child: Form(
           key: _formKey,
           child: ListView(
-            padding: EdgeInsets.only(right: 20, left: 20, top: 40),
+            padding: const EdgeInsets.only(right: 20, left: 20, top: 40),
             children: [
               Stack(
                 alignment: Alignment.center,
@@ -212,7 +212,7 @@ class _FormLoanPageState extends State<FormLoanPage> {
                     ],
                   ),
                   Padding(
-                    padding: EdgeInsets.only(left: 40, right: 20),
+                    padding: const EdgeInsets.only(left: 40, right: 20),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -234,7 +234,7 @@ class _FormLoanPageState extends State<FormLoanPage> {
                             child: Container(
                               height: 45,
                               width: 45,
-                              padding: EdgeInsets.all(7),
+                              padding: const EdgeInsets.all(7),
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: kWhiteColor,
@@ -254,7 +254,8 @@ class _FormLoanPageState extends State<FormLoanPage> {
                                           : kRedColor,
                                       BlendMode.srcIn,
                                     ),
-                                    image: AssetImage('assets/exchange.png'),
+                                    image:
+                                        const AssetImage('assets/exchange.png'),
                                   ),
                                 ),
                               ),
@@ -266,7 +267,7 @@ class _FormLoanPageState extends State<FormLoanPage> {
                   ),
                 ],
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               CustomeTextFormFieldItem(
                 controller: amountController,
                 fontSize: 30,
