@@ -984,7 +984,7 @@ class _BankAccountPageState extends State<BankAccountPage> {
                   Container(
                     margin: const EdgeInsets.symmetric(vertical: 10),
                     child: Text(
-                      "Total In & Out",
+                      "Tota Cashflow",
                       style: blackTextStyle.copyWith(
                         fontSize: 16,
                         fontWeight: semibold,
@@ -1006,7 +1006,7 @@ class _BankAccountPageState extends State<BankAccountPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             totalSummaryItem(
-                              title: "In",
+                              title: "Cash In",
                               status: state.activityCategory.income["status"],
                               nominal:
                                   state.activityCategory.income["total_amount"],
@@ -1019,7 +1019,7 @@ class _BankAccountPageState extends State<BankAccountPage> {
                               decoration: BoxDecoration(color: kGreyColor),
                             ),
                             totalSummaryItem(
-                              title: "Out",
+                              title: "Cash Out",
                               status: state.activityCategory.outcome["status"],
                               nominal: state
                                   .activityCategory.outcome["total_amount"],
@@ -1092,7 +1092,7 @@ class _BankAccountPageState extends State<BankAccountPage> {
                                     const DataLabelSettings(isVisible: true),
                               ),
                               LineSeries<CashFlowData, String>(
-                                name: "Outcome",
+                                name: "Income",
                                 color: kGreenColor,
                                 markerSettings:
                                     const MarkerSettings(isVisible: true),
@@ -1137,7 +1137,7 @@ class _BankAccountPageState extends State<BankAccountPage> {
                 Container(
                   margin: const EdgeInsets.symmetric(vertical: 10),
                   child: Text(
-                    "Total In & Out",
+                    "Total Cashflow",
                     style: blackTextStyle.copyWith(
                       fontSize: 16,
                       fontWeight: semibold,
@@ -1159,7 +1159,7 @@ class _BankAccountPageState extends State<BankAccountPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           totalSummaryItem(
-                            title: "In",
+                            title: "Cash In",
                             status: "stable",
                             nominal: 0,
                             percent: ". . .",
@@ -1170,7 +1170,7 @@ class _BankAccountPageState extends State<BankAccountPage> {
                             decoration: BoxDecoration(color: kGreyColor),
                           ),
                           totalSummaryItem(
-                            title: "Out",
+                            title: "Cash Out",
                             status: "stable",
                             nominal: 0,
                             percent: ". . .",
