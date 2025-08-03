@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tracking/cubit/transaction_cubit.dart';
 import 'package:tracking/theme.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tracking/utils/others.dart';
 import 'package:tracking/widgets/transaction_item.dart';
 
 class HomePage extends StatefulWidget {
@@ -14,11 +15,18 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   bool isActive = false;
   double scrollOffset = 0.0; // Menyimpan offset scroll
+  String selectedMenu = "All";
 
   @override
   void initState() {
     context.read<TransactionCubit>().fetchTransaction();
     super.initState();
+  }
+
+  void handleChange(menu) {
+    setState(() {
+      selectedMenu = menu;
+    });
   }
 
   @override
@@ -280,37 +288,128 @@ class _HomePageState extends State<HomePage> {
 
     Widget categorySection() {
       Widget categoryItem(String title, double leftSpacing) {
-        return Container(
-          margin: EdgeInsets.only(right: 7, left: leftSpacing),
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-          decoration: BoxDecoration(
-            color: Colors.grey[100],
-            borderRadius: BorderRadius.circular(14),
+        return GestureDetector(
+          onTap: () {
+            handleChange(title);
+          },
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            margin: EdgeInsets.only(right: 7, left: leftSpacing),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            decoration: BoxDecoration(
+              color: selectedMenu == title ? kPrimaryV2Color : Colors.grey[100],
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: Text(
+              title,
+              style: blackTextStyle.copyWith(
+                fontWeight: selectedMenu == title ? semibold : medium,
+                color: selectedMenu == title ? kWhiteColor : kBlackColor,
+                fontSize: 13,
+              ),
+            ),
           ),
-          child: Text(
-            title,
-            style: blackTextStyle.copyWith(fontWeight: medium),
+        );
+      }
+
+      Widget categoryGridItem() {
+        return Container(
+          height: 150,
+          width: 165,
+          padding: const EdgeInsets.all(15),
+          decoration: BoxDecoration(
+            color: kBaseColors,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black
+                    .withOpacity(0.08), // Warna shadow dengan opacity
+                spreadRadius: .5, // Seberapa jauh shadow menyebar
+                blurRadius: 15, // Seberapa blur shadow
+                offset: const Offset(0, 0), // Posisi shadow (x, y)
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Expanded(
+                  child: Column(
+                children: [
+                  Icon(
+                    Icons.local_drink_outlined,
+                    size: 40,
+                  ),
+                ],
+              )),
+              Text(
+                'Food & Drink',
+                style: blackTextStyle.copyWith(
+                  fontSize: 16,
+                  fontWeight: semibold,
+                ),
+              ),
+              Text(
+                formatRupiah(3000),
+                style: greyTextStyle.copyWith(
+                  fontSize: 16,
+                ),
+              ),
+            ],
           ),
         );
       }
 
       return Container(
-        width: MediaQuery.of(context).size.width,
-        margin: const EdgeInsets.only(top: 10),
-        child: SingleChildScrollView(
-          scrollDirection:
-              Axis.horizontal, // Mengatur scroll ke arah horizontal
-          child: Row(
-            children: [
-              categoryItem('All', 10),
-              categoryItem('Investment', 0),
-              categoryItem('Savings', 0),
-              categoryItem('Expenses', 0),
-              categoryItem('Income', 0),
-              categoryItem('Loans', 0),
-              categoryItem('Insurance', 0),
-            ],
-          ),
+        margin: const EdgeInsets.only(bottom: 50),
+        child: Column(
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width,
+              margin: const EdgeInsets.only(top: 10),
+              child: SingleChildScrollView(
+                scrollDirection:
+                    Axis.horizontal, // Mengatur scroll ke arah horizontal
+                child: Row(
+                  children: [
+                    categoryItem('All', 10),
+                    categoryItem('Investment', 0),
+                    categoryItem('Savings', 0),
+                    categoryItem('Expenses', 0),
+                    categoryItem('Income', 0),
+                    categoryItem('Loans', 0),
+                    categoryItem('Insurance', 0),
+                  ],
+                ),
+              ),
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width,
+              margin: EdgeInsets.only(
+                top: defaultMargin,
+                left: defaultMargin,
+                right: defaultMargin,
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      categoryGridItem(),
+                      categoryGridItem(),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      categoryGridItem(),
+                      categoryGridItem(),
+                    ],
+                  ),
+                ],
+              ),
+            )
+          ],
         ),
       );
     }
@@ -354,7 +453,10 @@ class _HomePageState extends State<HomePage> {
               [
                 transactionHistorySection(),
                 Container(
-                  margin: EdgeInsets.symmetric(horizontal: defaultMargin),
+                  margin: EdgeInsets.symmetric(
+                    horizontal: defaultMargin,
+                    vertical: 10,
+                  ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -365,7 +467,7 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                 ),
-                categorySection()
+                categorySection(),
               ],
             ),
           ),
