@@ -18,7 +18,7 @@ Color kLineDarkColor = const Color(0xffEAEAEA);
 
 TextStyle blackTextStyle = GoogleFonts.poppins(color: kBlackColor);
 TextStyle secondaryTextStyle = GoogleFonts.poppins(color: kSecondaryColor);
-TextStyle greyTextStyle = GoogleFonts.poppins(color: kGreyColor);
+TextStyle greyTextStyle = GoogleFonts.poppins(color: kDoveGreyColor);
 TextStyle greenTextStyle = GoogleFonts.poppins(color: kGreenColor);
 TextStyle whiteTextStyle = GoogleFonts.poppins(color: kWhiteColor);
 TextStyle redTextStyle = GoogleFonts.poppins(color: kRedColor);
@@ -29,6 +29,11 @@ Color kSecondaryV2Color = const Color(0xfff5f5fc);
 Color kPrimaryV2Color = const Color(0xff1A56DB);
 TextStyle primaryTextStyle = GoogleFonts.poppins(color: kPrimaryV2Color);
 
+Color kBaseColors = const Color(0xffffffff);
+Color kThirdColor = const Color(0xf9f9f9ff);
+
+TextStyle newBlackTextStyle = GoogleFonts.roboto(color: kBlackColor);
+
 FontWeight light = FontWeight.w300;
 FontWeight regular = FontWeight.w400;
 FontWeight medium = FontWeight.w500;
@@ -38,3 +43,5 @@ FontWeight extraBold = FontWeight.w800;
 FontWeight black = FontWeight.w900;
 
 double defaultMargin = 20;
+
+double primarySizeFont = 40;

@@ -1,160 +1,76 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:intl/intl.dart';
-import 'package:tracking/models/transaction_model.dart';
-import 'package:tracking/pages/transaction_page.dart';
-import 'package:tracking/pages/detail_page.dart';
 import 'package:tracking/theme.dart';
+import 'package:tracking/utils/others.dart';
 
 class TransactionItem extends StatelessWidget {
-  final bool grafik;
-  final TrxItemModel transaction;
-  final Function(bool, String) cancelBtn;
+  final String title;
+  final bool isIncome;
+  final int nominal;
+  final String datetime;
 
   const TransactionItem({
     super.key,
-    required this.grafik,
-    required this.transaction,
-    required this.cancelBtn,
+    required this.nominal,
+    required this.datetime,
+    required this.title,
+    required this.isIncome,
   });
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => DetailPage(
-              transaction: transaction,
-            ),
-          ),
-        );
-      },
-      child: Dismissible(
-        key: Key(transaction.id),
-        background: slideEditBackground(),
-        secondaryBackground: slideDeleteBackground(),
-        confirmDismiss: (direction) async {
-          if (direction == DismissDirection.endToStart) {
-            // Dragged to the left
-            return cancelBtn(true, transaction.id);
-          } else {
-            // Dragged to the right
-            return Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => TransactionPage(
-                  transactions: transaction,
-                  isEdit: true,
-                ),
-              ),
-            );
-            // return cancelBtn(false);
-          }
-        },
-        child: Container(
-          height: 80,
-          width: double.infinity,
-          padding: EdgeInsets.symmetric(horizontal: defaultMargin),
-          decoration: BoxDecoration(
-            color: kWhiteColor,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Row(
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
-                width: 48,
-                height: 48,
-                padding: const EdgeInsets.all(8),
-                margin: const EdgeInsets.only(right: 10),
+                height: 35,
+                width: 35,
                 decoration: BoxDecoration(
-                  color: const Color.fromARGB(245, 245, 245, 245),
-                  borderRadius: BorderRadius.circular(50),
+                  color: kBaseColors,
+                  shape: BoxShape.circle,
+                  image: const DecorationImage(
+                    image: AssetImage('assets/debt.png'),
+                  ),
                 ),
-                child: Image.network(
-                    '${dotenv.env["PUBLIC_API_BASE_IMAGE"]}${transaction.categoryId["icon"]["name"]}'),
               ),
-              Expanded(
+              Container(
+                margin: const EdgeInsets.only(left: 10),
+                width: MediaQuery.of(context).size.width - 97,
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      transaction.typeId["value"],
-                      style: blackTextStyle.copyWith(
-                          fontSize: 18, fontWeight: medium),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(title),
+                        Text(
+                          '${isIncome ? "+" : "-"}${formatRupiah(nominal)}',
+                          style: blackTextStyle.copyWith(
+                            fontWeight: semibold,
+                            color: isIncome ? kGreenColor : kRedColor,
+                          ),
+                        ),
+                      ],
                     ),
-                    Text(
-                      transaction.categoryId["value"],
-                      style: greyTextStyle.copyWith(fontWeight: light),
+                    const SizedBox(height: 2),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Today, 10:30 AM',
+                          style: greyTextStyle.copyWith(fontSize: 12),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    NumberFormat.currency(symbol: "IDR ", decimalDigits: 0)
-                        .format(transaction.totalAmount),
-                    style: transaction.isIncome
-                        ? greenTextStyle.copyWith(
-                            fontSize: 16,
-                            fontWeight: semibold,
-                          )
-                        : redTextStyle.copyWith(
-                            fontSize: 16,
-                            fontWeight: semibold,
-                          ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    transaction.datetime,
-                    style: greyTextStyle.copyWith(
-                        fontSize: 12, fontWeight: medium),
-                  ),
-                ],
               )
             ],
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget slideEditBackground() {
-    return Container(
-      color: Colors.green,
-      height: 80,
-      child: const Align(
-        alignment: Alignment.centerLeft,
-        child: Padding(
-          padding: EdgeInsets.only(left: 20.0),
-          child: Icon(
-            Icons.edit,
-            color: Colors.white,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget slideDeleteBackground() {
-    return Container(
-      color: Colors.red,
-      height: 80,
-      child: const Align(
-        alignment: Alignment.centerRight,
-        child: Padding(
-          padding: EdgeInsets.only(right: 20.0),
-          child: Icon(
-            Icons.delete,
-            color: Colors.white,
-          ),
-        ),
+        ],
       ),
     );
   }
