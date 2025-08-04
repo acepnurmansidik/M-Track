@@ -45,11 +45,14 @@ class TransactionItem extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(title),
+                        Text(
+                          title,
+                          style: blackTextStyle.copyWith(fontWeight: medium),
+                        ),
                         Text(
                           '${isIncome ? "+" : "-"}${formatRupiah(nominal)}',
                           style: blackTextStyle.copyWith(
-                            fontWeight: semibold,
+                            fontWeight: light,
                             color: isIncome ? kGreenColor : kRedColor,
                           ),
                         ),

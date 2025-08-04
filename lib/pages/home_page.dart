@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tracking/cubit/transaction_cubit.dart';
+import 'package:tracking/pages/order_detail_category_page.dart';
 import 'package:tracking/theme.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tracking/utils/others.dart';
@@ -31,6 +32,26 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    Route createRoute(targetPage) {
+      return PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => targetPage,
+        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+          const begin = Offset(1.0, 0.0); // Mulai dari kanan
+          const end = Offset.zero; // Berhenti di posisi normal
+          const curve = Curves.easeInOut;
+
+          var tween =
+              Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+          var offsetAnimation = animation.drive(tween);
+
+          return SlideTransition(
+            position: offsetAnimation,
+            child: child,
+          );
+        },
+      );
+    }
+
     Widget collapseHeader() {
       Widget headerItem(String title, IconData icon) {
         return Container(
@@ -286,34 +307,13 @@ class _HomePageState extends State<HomePage> {
       );
     }
 
-    Widget categorySection() {
-      Widget categoryItem(String title, double leftSpacing) {
-        return GestureDetector(
-          onTap: () {
-            handleChange(title);
-          },
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            margin: EdgeInsets.only(right: 7, left: leftSpacing),
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            decoration: BoxDecoration(
-              color: selectedMenu == title ? kPrimaryV2Color : Colors.grey[100],
-              borderRadius: BorderRadius.circular(14),
-            ),
-            child: Text(
-              title,
-              style: blackTextStyle.copyWith(
-                fontWeight: selectedMenu == title ? semibold : medium,
-                color: selectedMenu == title ? kWhiteColor : kBlackColor,
-                fontSize: 13,
-              ),
-            ),
-          ),
-        );
-      }
-
-      Widget categoryGridItem() {
-        return Container(
+    Widget categoryGridItem() {
+      return GestureDetector(
+        onTap: () {
+          Navigator.of(context)
+              .push(createRoute(const OrderDetailCategoryPage()));
+        },
+        child: Container(
           height: 150,
           width: 165,
           padding: const EdgeInsets.all(15),
@@ -357,11 +357,38 @@ class _HomePageState extends State<HomePage> {
               ),
             ],
           ),
+        ),
+      );
+    }
+
+    Widget categorySection() {
+      Widget categoryItem(String title, double leftSpacing) {
+        return GestureDetector(
+          onTap: () {
+            handleChange(title);
+          },
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            margin: EdgeInsets.only(right: 7, left: leftSpacing),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            decoration: BoxDecoration(
+              color: selectedMenu == title ? kPrimaryV2Color : Colors.grey[100],
+              borderRadius: BorderRadius.circular(14),
+            ),
+            child: Text(
+              title,
+              style: blackTextStyle.copyWith(
+                fontWeight: selectedMenu == title ? semibold : medium,
+                color: selectedMenu == title ? kWhiteColor : kBlackColor,
+                fontSize: 13,
+              ),
+            ),
+          ),
         );
       }
 
       return Container(
-        margin: const EdgeInsets.only(bottom: 50),
+        margin: const EdgeInsets.only(bottom: 20),
         child: Column(
           children: [
             Container(
@@ -372,7 +399,7 @@ class _HomePageState extends State<HomePage> {
                     Axis.horizontal, // Mengatur scroll ke arah horizontal
                 child: Row(
                   children: [
-                    categoryItem('All', 10),
+                    categoryItem('All', 20),
                     categoryItem('Investment', 0),
                     categoryItem('Savings', 0),
                     categoryItem('Expenses', 0),
@@ -383,32 +410,6 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            Container(
-              width: MediaQuery.of(context).size.width,
-              margin: EdgeInsets.only(
-                top: defaultMargin,
-                left: defaultMargin,
-                right: defaultMargin,
-              ),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      categoryGridItem(),
-                      categoryGridItem(),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      categoryGridItem(),
-                      categoryGridItem(),
-                    ],
-                  ),
-                ],
-              ),
-            )
           ],
         ),
       );
@@ -471,6 +472,27 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
+          SliverPadding(
+            padding: EdgeInsets.only(
+              left: defaultMargin,
+              right: defaultMargin,
+              bottom: 30,
+            ),
+            sliver: SliverGrid(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2, // Jumlah kolom
+                mainAxisSpacing: 15, // Jarak antar baris
+                crossAxisSpacing: 15, // Jarak antar kolom
+                childAspectRatio: 1, // Rasio lebar dan tinggi item
+              ),
+              delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
+                  return categoryGridItem();
+                },
+                childCount: 4, // Jumlah item
+              ),
+            ),
+          )
         ],
       ),
     );
