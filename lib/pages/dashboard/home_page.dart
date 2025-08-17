@@ -307,11 +307,11 @@ class _HomePageState extends State<HomePage> {
       );
     }
 
-    Widget categoryGridItem() {
+    Widget categoryGridItem(String title) {
       return GestureDetector(
         onTap: () {
           Navigator.of(context)
-              .push(createRoute(const OrderDetailCategoryPage()));
+              .push(createRoute(OrderDetailCategoryPage(title: title)));
         },
         child: Container(
           height: 150,
@@ -343,7 +343,7 @@ class _HomePageState extends State<HomePage> {
                 ],
               )),
               Text(
-                'Food & Drink',
+                title,
                 style: blackTextStyle.copyWith(
                   fontSize: 16,
                   fontWeight: semibold,
@@ -487,7 +487,7 @@ class _HomePageState extends State<HomePage> {
               ),
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
-                  return categoryGridItem();
+                  return categoryGridItem('Food & Drink');
                 },
                 childCount: 4, // Jumlah item
               ),

@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 import "package:tracking/cubit/page_cubit.dart";
 import "package:tracking/pages/bank_account_page.dart";
-import "package:tracking/pages/home_page.dart";
+import "package:tracking/pages/dashboard/home_page.dart";
 import "package:tracking/pages/schedule_page.dart";
 import "package:tracking/pages/setting_page.dart";
 import "package:tracking/theme.dart";

@@ -11,7 +11,9 @@ class SalesData {
 }
 
 class OrderDetailCategoryPage extends StatefulWidget {
-  const OrderDetailCategoryPage({super.key});
+  final String title;
+
+  const OrderDetailCategoryPage({super.key, required this.title});
 
   @override
   State<OrderDetailCategoryPage> createState() =>
@@ -24,25 +26,25 @@ class _OrderDetailCategoryPageState extends State<OrderDetailCategoryPage> {
 
   List<SalesData> getChartData() {
     return [
-      SalesData('Jan 2025', 35),
-      SalesData('Feb 2025', 28),
-      SalesData('Mar 2025', 34),
-      SalesData('Apr 2025', 32),
-      SalesData('May 2025', 40),
-      SalesData('Jun 2025', 35),
-      SalesData('Jul 2025', 38),
-      SalesData('Aug 2025', 30),
-      SalesData('Sep 2025', 42),
-      SalesData('Oct 2025', 38),
-      SalesData('Nov 2025', 36),
       SalesData('Dec 2025', 40),
+      SalesData('Nov 2025', 36),
+      SalesData('Oct 2025', 38),
+      SalesData('Sep 2025', 42),
+      SalesData('Aug 2025', 30),
+      SalesData('Jul 2025', 38),
+      SalesData('Jun 2025', 35),
+      SalesData('May 2025', 40),
+      SalesData('Apr 2025', 32),
+      SalesData('Mar 2025', 34),
+      SalesData('Feb 2025', 28),
+      SalesData('Jan 2025', 35),
     ];
   }
 
   @override
   void initState() {
     super.initState();
-    selectedIndex = DateTime.now().month - 1;
+    selectedIndex = 11 - (DateTime.now().month - 1);
   }
 
   @override
@@ -74,7 +76,7 @@ class _OrderDetailCategoryPageState extends State<OrderDetailCategoryPage> {
               Expanded(
                 // <-- Biarkan teks mengambil sisa ruang
                 child: Text(
-                  'Order Details',
+                  widget.title,
                   textAlign: TextAlign.center, // <-- Pusatkan teks
                   style: blackTextStyle.copyWith(fontSize: 18),
                 ),
@@ -112,41 +114,41 @@ class _OrderDetailCategoryPageState extends State<OrderDetailCategoryPage> {
                   style: blackTextStyle.copyWith(
                       fontSize: 20, fontWeight: semibold),
                 ),
-                Container(
-                  margin: const EdgeInsets.only(right: 10), // Margin kanan 10
-                  padding: const EdgeInsets.only(
-                    left: 15,
-                    right: 5,
-                    top: 5,
-                    bottom: 5,
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(18),
-                    color: Colors.grey[100],
-                  ),
-                  child: DropdownButton<String>(
-                    isDense: true,
-                    icon: Transform.rotate(
-                      angle: -1.5708,
-                      child: const Icon(Icons.chevron_left_rounded),
-                    ),
-                    underline: const SizedBox(),
-                    dropdownColor: kBaseColors,
-                    value: selectedValue, // Nilai yang dipilih
-                    items: <String>['Income', 'Spending'] // Daftar pilihan
-                        .map((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        selectedValue = newValue; // Update nilai yang dipilih
-                      });
-                    },
-                  ),
-                )
+                // Container(
+                //   margin: const EdgeInsets.only(right: 10), // Margin kanan 10
+                //   padding: const EdgeInsets.only(
+                //     left: 15,
+                //     right: 5,
+                //     top: 5,
+                //     bottom: 5,
+                //   ),
+                //   decoration: BoxDecoration(
+                //     borderRadius: BorderRadius.circular(18),
+                //     color: Colors.grey[100],
+                //   ),
+                //   child: DropdownButton<String>(
+                //     isDense: true,
+                //     icon: Transform.rotate(
+                //       angle: -1.5708,
+                //       child: const Icon(Icons.chevron_left_rounded),
+                //     ),
+                //     underline: const SizedBox(),
+                //     dropdownColor: kBaseColors,
+                //     value: selectedValue, // Nilai yang dipilih
+                //     items: <String>['Income', 'Spending'] // Daftar pilihan
+                //         .map((String value) {
+                //       return DropdownMenuItem<String>(
+                //         value: value,
+                //         child: Text(value),
+                //       );
+                //     }).toList(),
+                //     onChanged: (String? newValue) {
+                //       setState(() {
+                //         selectedValue = newValue; // Update nilai yang dipilih
+                //       });
+                //     },
+                //   ),
+                // )
               ],
             )
           ],

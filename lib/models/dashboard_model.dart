@@ -73,3 +73,54 @@ class DataChartActivityCategoryModel {
     );
   }
 }
+
+class CategoryActivityResponse {
+  int code;
+  bool status;
+  String message;
+  List<CategoryActivityDataModel> data;
+
+  CategoryActivityResponse({
+    required this.code,
+    required this.status,
+    required this.message,
+    required this.data,
+  });
+
+  factory CategoryActivityResponse.fromJson(Map<String, dynamic> json) {
+    return CategoryActivityResponse(
+      code: json['_id'],
+      status: json['description'],
+      message: json['icon'],
+      data: (json['list_data'] as List<dynamic>)
+          .map((e) => CategoryActivityDataModel.fromJson(e))
+          .toList(),
+    );
+  }
+}
+
+class CategoryActivityDataModel {
+  final String id;
+  final String name;
+  final int totalCategory;
+  final int totalCount;
+  final String imageUrl;
+
+  CategoryActivityDataModel({
+    required this.id,
+    required this.name,
+    required this.totalCategory,
+    required this.totalCount,
+    required this.imageUrl,
+  });
+
+  factory CategoryActivityDataModel.fromJson(Map<String, dynamic> json) {
+    return CategoryActivityDataModel(
+      id: json['_id'],
+      name: json['name'],
+      totalCategory: json['total_category'],
+      totalCount: json['total_count'],
+      imageUrl: json['image_url'],
+    );
+  }
+}
