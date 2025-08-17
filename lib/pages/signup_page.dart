@@ -1,11 +1,6 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tracking/cubit/auth_cubit.dart';
 import 'package:tracking/theme.dart';
 import 'package:tracking/widgets/custom_button.dart';
-import 'package:tracking/widgets/custom_notif.dart';
 import 'package:tracking/widgets/custom_textform_field.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -16,9 +11,6 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  bool _showNotif = false;
-  String _notifMsg = "";
-
   @override
   Widget build(BuildContext context) {
     TextEditingController nameController = TextEditingController(text: "");
@@ -86,53 +78,10 @@ class _SignUpPageState extends State<SignUpPage> {
     }
 
     Widget buttonSubmit() {
-      return BlocConsumer<AuthCubit, AuthState>(
-        listener: (context, state) {
-          if (state is AuthFailed) {
-            setState(() {
-              _showNotif = true;
-              _notifMsg = state.error;
-            });
-            Timer(const Duration(seconds: 3), () {
-              setState(() {
-                _showNotif = false;
-              });
-            });
-          } else if (state is AuthRegisterSuccess) {
-            Navigator.pushNamedAndRemoveUntil(
-                context, '/sign-in', (route) => false);
-          }
-        },
-        builder: (context, state) {
-          if (state is AuthLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          return CustomButton(
-            title: 'Submit',
-            margin: const EdgeInsets.only(left: 20, right: 20, top: 60),
-            onPressed: () {
-              if (passwordController.text != confirmPasswordController.text) {
-                setState(() {
-                  _showNotif = true;
-                  _notifMsg = "Please check your password!";
-                });
-                Timer(const Duration(seconds: 3), () {
-                  setState(() {
-                    _showNotif = false;
-                  });
-                });
-              } else {
-                context.read<AuthCubit>().signup({
-                  "email": emailController.text,
-                  "password": passwordController.text,
-                  "username": nameController.text,
-                });
-              }
-            },
-          );
-        },
+      return CustomButton(
+        title: 'Submit',
+        margin: const EdgeInsets.only(left: 20, right: 20, top: 60),
+        onPressed: () {},
       );
     }
 
@@ -164,12 +113,6 @@ class _SignUpPageState extends State<SignUpPage> {
               tachButton(),
             ],
           ),
-          _showNotif
-              ? CustomNotif(
-                  errMsg: _notifMsg,
-                  isErr: true,
-                )
-              : const SizedBox(),
         ],
       ),
     );

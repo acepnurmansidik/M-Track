@@ -1,0 +1,35 @@
+class CategoriesModelProps {
+  bool status;
+  String message;
+  List<CategoryDaum> data;
+
+  CategoriesModelProps({
+    required this.status,
+    required this.message,
+    required this.data,
+  });
+
+  factory CategoriesModelProps.fromJson(Map<String, dynamic> json) {
+    return CategoriesModelProps(
+      status: json["status"],
+      message: json["message"],
+      data: (json["data"] as List<dynamic>)
+          .map((item) => CategoryDaum.fromJson(item))
+          .toList(),
+    );
+  }
+}
+
+class CategoryDaum {
+  int totalAmount;
+  String category;
+
+  CategoryDaum({required this.totalAmount, required this.category});
+
+  factory CategoryDaum.fromJson(Map<String, dynamic> json) {
+    return CategoryDaum(
+      totalAmount: json["total_amount"],
+      category: json["category"],
+    );
+  }
+}

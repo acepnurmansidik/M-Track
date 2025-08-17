@@ -1,12 +1,6 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tracking/cubit/auth_cubit.dart';
-import 'package:tracking/cubit/page_cubit.dart';
 import 'package:tracking/theme.dart';
 import 'package:tracking/widgets/custom_button.dart';
-import 'package:tracking/widgets/custom_notif.dart';
 import 'package:tracking/widgets/custom_textform_field.dart';
 
 class SignInPage extends StatefulWidget {
@@ -17,9 +11,6 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
-  bool _showNotif = false;
-  String _notifMsg = "";
-
   @override
   Widget build(BuildContext context) {
     TextEditingController emailController = TextEditingController(text: "");
@@ -65,54 +56,10 @@ class _SignInPageState extends State<SignInPage> {
     }
 
     Widget buttonSubmit() {
-      return BlocConsumer<AuthCubit, AuthState>(
-        listener: (context, state) {
-          if (state is AuthLoginSuccess) {
-            Navigator.pushNamedAndRemoveUntil(
-              context,
-              '/main',
-              (route) => false,
-            );
-            context.read<PageCubit>().setPage(0);
-          } else if (state is AuthFailed) {
-            setState(() {
-              _showNotif = true;
-              _notifMsg = state.error;
-            });
-            Timer(const Duration(seconds: 3), () {
-              _showNotif = false;
-              _notifMsg = "";
-            });
-          }
-        },
-        builder: (context, state) {
-          if (state is AuthLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          return CustomButton(
-            title: 'Submit',
-            margin: const EdgeInsets.only(left: 20, right: 20, top: 60),
-            onPressed: () {
-              if (emailController.text != "" || passwordController.text != "") {
-                context.read<AuthCubit>().signIn({
-                  "email": emailController.text,
-                  "password": passwordController.text,
-                });
-              } else {
-                setState(() {
-                  _showNotif = true;
-                  _notifMsg = "please enter field";
-                });
-                Timer(const Duration(seconds: 3), () {
-                  _showNotif = false;
-                  _notifMsg = "";
-                });
-              }
-            },
-          );
-        },
+      return CustomButton(
+        title: 'Submit',
+        margin: const EdgeInsets.only(left: 20, right: 20, top: 60),
+        onPressed: () {},
       );
     }
 
@@ -144,12 +91,6 @@ class _SignInPageState extends State<SignInPage> {
               tachButton(),
             ],
           ),
-          _showNotif
-              ? CustomNotif(
-                  errMsg: _notifMsg,
-                  isErr: true,
-                )
-              : const SizedBox()
         ],
       ),
     );

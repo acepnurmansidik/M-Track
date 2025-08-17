@@ -10,17 +10,16 @@ class SalesData {
   final double value;
 }
 
-class OrderDetailCategoryPage extends StatefulWidget {
+class DetailCategoryPage extends StatefulWidget {
   final String title;
 
-  const OrderDetailCategoryPage({super.key, required this.title});
+  const DetailCategoryPage({super.key, required this.title});
 
   @override
-  State<OrderDetailCategoryPage> createState() =>
-      _OrderDetailCategoryPageState();
+  State<DetailCategoryPage> createState() => _DetailCategoryPageState();
 }
 
-class _OrderDetailCategoryPageState extends State<OrderDetailCategoryPage> {
+class _DetailCategoryPageState extends State<DetailCategoryPage> {
   String? selectedValue = 'Income';
   int? selectedIndex;
 
