@@ -4,7 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:tracking/models/categories_model.dart';
 
-class CategoryService {
+class TransactionService {
   Future<CategoriesModelProps> getCategories() async {
     try {
       final response = await http.get(Uri.parse(

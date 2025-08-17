@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tracking/models/categories_model.dart';
-import 'package:tracking/pages/dashboard/cubit/category_cubit.dart';
+import 'package:tracking/pages/dashboard/cubit/transaction_cubit.dart';
 import 'package:tracking/pages/dashboard/detail_category_page.dart';
 import 'package:tracking/theme.dart';
 import 'package:tracking/utils/others.dart';
@@ -21,7 +21,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    context.read<CategoryCubit>().fetchGroupCategories();
+    context.read<TransactionCubit>().fetchGroupCategories();
     super.initState();
   }
 
@@ -481,15 +481,15 @@ class _HomePageState extends State<HomePage> {
           right: defaultMargin,
           bottom: 30,
         ),
-        sliver: BlocBuilder<CategoryCubit, CategoryState>(
+        sliver: BlocBuilder<TransactionCubit, TransactionState>(
           builder: (context, state) {
-            if (state is CategoryLoading) {
+            if (state is TransactionLoading) {
               return const SliverToBoxAdapter(
                 child: Center(
                   child: CircularProgressIndicator(),
                 ),
               );
-            } else if (state is CategorySuccess) {
+            } else if (state is TransactionSuccess) {
               return SliverGrid(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
@@ -505,7 +505,7 @@ class _HomePageState extends State<HomePage> {
                   childCount: (state.data as CategoriesModelProps).data.length,
                 ),
               );
-            } else if (state is CategoryFailed) {
+            } else if (state is TransactionFailed) {
               return SliverToBoxAdapter(
                 child: Center(
                   child: Text('Error: ${state.error}'),
