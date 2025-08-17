@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_cast
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tracking/models/categories_model.dart';
@@ -499,10 +501,14 @@ class _HomePageState extends State<HomePage> {
                 ),
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
-                    return categoryGridItem((state.data as CategoriesModelProps)
-                        .data[index]); // Pass the category object
+                    return categoryGridItem(
+                        (state.categoryTransaction as CategoriesModelProps)
+                            .data[index]); // Pass the category object
                   },
-                  childCount: (state.data as CategoriesModelProps).data.length,
+                  childCount:
+                      (state.categoryTransaction as CategoriesModelProps)
+                          .data
+                          .length,
                 ),
               );
             } else if (state is TransactionFailed) {

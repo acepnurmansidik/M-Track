@@ -1,80 +1,56 @@
-class TrxItemModel {
-  final String id;
-  final int amount;
-  final int totalAmount;
-  final int kursAmount;
-  final bool isIncome;
-  final String note;
-  final Map<String, dynamic> kursId;
-  final Map<String, dynamic>? bankId;
-  final Map<String, dynamic> typeId;
-  final Map<String, dynamic> categoryId;
-  final String datetime;
+class TransactionModelProps {
+  bool status;
+  String message;
+  List<TransactionDaum> data;
 
-  const TrxItemModel({
-    this.id = "",
-    required this.amount,
-    required this.totalAmount,
-    required this.kursAmount,
-    required this.isIncome,
-    required this.note,
-    required this.categoryId,
-    required this.kursId,
-    required this.bankId,
-    required this.typeId,
-    required this.datetime,
+  TransactionModelProps({
+    required this.status,
+    required this.message,
+    required this.data,
   });
 
-  factory TrxItemModel.fromJson(Map<String, dynamic> json) => TrxItemModel(
-        id: json['_id'],
-        amount: json['amount'],
-        totalAmount: json['total_amount'],
-        kursAmount: json['kurs_amount'],
-        note: json['note'],
-        datetime: json["datetime"],
-        isIncome: json["is_income"],
-        typeId: json["type_id"],
-        categoryId: json["category_id"],
-        kursId: json["kurs_id"],
-        bankId: json["bank_id"],
-      );
-}
-
-class ListDataTransactionModel {
-  final String id;
-  final int totalMonthly;
-  final List<TrxItemModel> items;
-
-  const ListDataTransactionModel(
-      {this.id = "", required this.totalMonthly, required this.items});
-
-  factory ListDataTransactionModel.fromJson(Map<String, dynamic> json) =>
-      ListDataTransactionModel(
-        id: json['_id'],
-        totalMonthly: json['total_monthly'],
-        items: (json['items'] as List<dynamic>)
-            .map((e) => TrxItemModel.fromJson(e))
-            .toList(),
-      );
-}
-
-class TransactionModel {
-  final int grandTotal;
-  final int currentMonthly;
-  final List<ListDataTransactionModel> listData;
-
-  TransactionModel(
-      {required this.grandTotal,
-      required this.currentMonthly,
-      required this.listData});
-
-  factory TransactionModel.fromJson(Map<String, dynamic> json) {
-    return TransactionModel(
-      grandTotal: json['grand_total'],
-      currentMonthly: json['current_monthly'],
-      listData: (json['list_data'] as List<dynamic>)
-          .map((e) => ListDataTransactionModel.fromJson(e))
+  factory TransactionModelProps.fromJson(Map<String, dynamic> json) {
+    return TransactionModelProps(
+      status: json["status"],
+      message: json["message"],
+      data: (json["data"] as List<dynamic>)
+          .map((item) => TransactionDaum.fromJson(item))
           .toList(),
+    );
+  }
+}
+
+class TransactionDaum {
+  String sId;
+  int totalAmount;
+  String note;
+  String categoryName;
+  String typeName;
+  String createdAt;
+  String date;
+  int month;
+
+  TransactionDaum({
+    required this.sId,
+    required this.totalAmount,
+    required this.note,
+    required this.categoryName,
+    required this.typeName,
+    required this.createdAt,
+    required this.date,
+    required this.month,
+  });
+
+  factory TransactionDaum.fromJson(Map<String, dynamic> json) {
+    return TransactionDaum(
+      sId: json['_id'],
+      totalAmount: json['total_amount'],
+      note: json['note'],
+      categoryName: json['category_name'],
+      typeName: json['type_name'],
+      createdAt: json['createdAt'],
+      date: json['date'],
+      month: json['month'],
     );
   }
 }

@@ -12,12 +12,14 @@ final class TransactionInitial extends TransactionState {}
 final class TransactionLoading extends TransactionState {}
 
 final class TransactionSuccess extends TransactionState {
-  final dynamic data;
+  final CategoriesModelProps categoryTransaction;
 
-  const TransactionSuccess(this.data);
+  const TransactionSuccess({
+    required this.categoryTransaction,
+  });
 
   @override
-  List<Object> get props => [data];
+  List<Object> get props => [categoryTransaction];
 }
 
 final class TransactionFailed extends TransactionState {
