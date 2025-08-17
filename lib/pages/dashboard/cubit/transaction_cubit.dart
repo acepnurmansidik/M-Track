@@ -12,7 +12,8 @@ class TransactionCubit extends Cubit<TransactionState> {
     try {
       emit(TransactionLoading());
       CategoriesModelProps data = await TransactionService().getCategories();
-      emit(TransactionSuccess(categoryTransaction: data));
+
+      emit(TransactionSuccess(data));
     } catch (e) {
       emit(TransactionFailed(e.toString()));
     }

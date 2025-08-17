@@ -274,25 +274,13 @@ class _DetailCategoryPageState extends State<DetailCategoryPage> {
             title: 'Food & Drink',
             datetime: "Today, 10:30 AM",
             nominal: 10000,
-            isIncome: false,
+            isIncome: "income",
           ),
           TransactionItem(
             title: 'Salary Monthly',
             datetime: "Today, 08:30 AM",
             nominal: 7000000,
-            isIncome: true,
-          ),
-          TransactionItem(
-            title: 'Salary Monthly',
-            datetime: "Today, 08:30 AM",
-            nominal: 7000000,
-            isIncome: true,
-          ),
-          TransactionItem(
-            title: 'Salary Monthly',
-            datetime: "Today, 08:30 AM",
-            nominal: 7000000,
-            isIncome: true,
+            isIncome: "expense",
           ),
         ],
       );

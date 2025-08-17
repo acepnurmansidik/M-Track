@@ -4,7 +4,7 @@ import 'package:tracking/utils/others.dart';
 
 class TransactionItem extends StatelessWidget {
   final String title;
-  final bool isIncome;
+  final String isIncome;
   final int nominal;
   final String datetime;
 
@@ -50,10 +50,11 @@ class TransactionItem extends StatelessWidget {
                           style: blackTextStyle.copyWith(fontWeight: medium),
                         ),
                         Text(
-                          '${isIncome ? "+" : "-"}${formatRupiah(nominal)}',
+                          '${isIncome == "income" ? "+" : "-"}${formatRupiah(nominal)}',
                           style: blackTextStyle.copyWith(
                             fontWeight: light,
-                            color: isIncome ? kGreenColor : kRedColor,
+                            color:
+                                isIncome == "income" ? kGreenColor : kRedColor,
                           ),
                         ),
                       ],

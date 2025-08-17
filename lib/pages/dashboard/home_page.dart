@@ -21,6 +21,11 @@ class _HomePageState extends State<HomePage> {
   double scrollOffset = 0.0; // Menyimpan offset scroll
   String selectedMenu = "All";
 
+  ScrollController controllerTransactionList =
+      ScrollController(); // Controller untuk filter section
+  ScrollController controllerMain = ScrollController();
+  ScrollController controllerFilterCategory = ScrollController();
+
   @override
   void initState() {
     context.read<TransactionCubit>().fetchGroupCategories();
@@ -317,21 +322,33 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
               // Contoh konten container
-              const Column(
-                children: [
-                  TransactionItem(
-                    title: 'Food & Drink',
-                    datetime: "Today, 10:30 AM",
-                    nominal: 10000,
-                    isIncome: false,
+              SizedBox(
+                height: 150,
+                child: SingleChildScrollView(
+                  controller: controllerTransactionList,
+                  child: const Column(
+                    children: [
+                      TransactionItem(
+                        title: 'Food & Drink',
+                        datetime: "Today, 10:30 AM",
+                        nominal: 10000,
+                        isIncome: "income",
+                      ),
+                      TransactionItem(
+                        title: 'Salary Monthly',
+                        datetime: "Today, 08:30 AM",
+                        nominal: 7000000,
+                        isIncome: "expense",
+                      ),
+                      TransactionItem(
+                        title: 'Salary Monthly',
+                        datetime: "Today, 08:30 AM",
+                        nominal: 7000000,
+                        isIncome: "expense",
+                      ),
+                    ],
                   ),
-                  TransactionItem(
-                    title: 'Salary Monthly',
-                    datetime: "Today, 08:30 AM",
-                    nominal: 7000000,
-                    isIncome: true,
-                  ),
-                ],
+                ),
               )
             ],
           ),
@@ -373,6 +390,7 @@ class _HomePageState extends State<HomePage> {
                 width: MediaQuery.of(context).size.width,
                 margin: const EdgeInsets.only(top: 10),
                 child: SingleChildScrollView(
+                  controller: controllerFilterCategory,
                   scrollDirection:
                       Axis.horizontal, // Mengatur scroll ke arah horizontal
                   child: Row(
@@ -530,14 +548,10 @@ class _HomePageState extends State<HomePage> {
 
     return NotificationListener<ScrollNotification>(
       onNotification: (ScrollNotification scrollInfo) {
-        setState(() {
-          if (scrollInfo.metrics.axis.name != "horizontal") {
-            scrollOffset = scrollInfo.metrics.pixels; // Update scroll offset
-          }
-        });
         return true;
       },
       child: CustomScrollView(
+        controller: controllerMain,
         slivers: [
           // NOTES: BALANCE & LAST TRANSACTION THIS MONTH
           headerSection(),

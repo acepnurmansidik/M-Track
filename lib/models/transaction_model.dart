@@ -22,6 +22,7 @@ class TransactionModelProps {
 
 class TransactionDaum {
   String sId;
+  bool isPaid;
   int totalAmount;
   String note;
   String categoryName;
@@ -32,6 +33,7 @@ class TransactionDaum {
 
   TransactionDaum({
     required this.sId,
+    required this.isPaid,
     required this.totalAmount,
     required this.note,
     required this.categoryName,
@@ -45,6 +47,7 @@ class TransactionDaum {
     return TransactionDaum(
       sId: json['_id'],
       totalAmount: json['total_amount'],
+      isPaid: json['is_paid'],
       note: json['note'],
       categoryName: json['category_name'],
       typeName: json['type_name'],

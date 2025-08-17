@@ -14,9 +14,7 @@ final class TransactionLoading extends TransactionState {}
 final class TransactionSuccess extends TransactionState {
   final CategoriesModelProps categoryTransaction;
 
-  const TransactionSuccess({
-    required this.categoryTransaction,
-  });
+  const TransactionSuccess(this.categoryTransaction);
 
   @override
   List<Object> get props => [categoryTransaction];
