@@ -28,7 +28,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    context.read<TransactionCubit>().fetchGroupCategories();
+    context.read<TransactionCubit>().fetchInitiate();
     super.initState();
   }
 
@@ -326,27 +326,45 @@ class _HomePageState extends State<HomePage> {
                 height: 150,
                 child: SingleChildScrollView(
                   controller: controllerTransactionList,
-                  child: const Column(
-                    children: [
-                      TransactionItem(
-                        title: 'Food & Drink',
-                        datetime: "Today, 10:30 AM",
-                        nominal: 10000,
-                        isIncome: "income",
-                      ),
-                      TransactionItem(
-                        title: 'Salary Monthly',
-                        datetime: "Today, 08:30 AM",
-                        nominal: 7000000,
-                        isIncome: "expense",
-                      ),
-                      TransactionItem(
-                        title: 'Salary Monthly',
-                        datetime: "Today, 08:30 AM",
-                        nominal: 7000000,
-                        isIncome: "expense",
-                      ),
-                    ],
+                  child: BlocBuilder<TransactionCubit, TransactionState>(
+                    builder: (context, state) {
+                      if (state is TransactionLoading) {
+                      } else if (state is TransactionSuccess) {
+                        return Column(
+                          children:
+                              state.listItemTransaction.data.map((everyItem) {
+                            return TransactionItem(
+                              title: toTitleCase(everyItem.categoryName),
+                              datetime: everyItem.date,
+                              nominal: everyItem.totalAmount,
+                              isIncome: everyItem.typeName,
+                            );
+                          }).toList(),
+                        );
+                      }
+                      return const Column(
+                        children: [
+                          TransactionItem(
+                            title: 'Food & Drink',
+                            datetime: "Today, 10:30 AM",
+                            nominal: 10000,
+                            isIncome: "income",
+                          ),
+                          TransactionItem(
+                            title: 'Salary Monthly',
+                            datetime: "Today, 08:30 AM",
+                            nominal: 7000000,
+                            isIncome: "expense",
+                          ),
+                          TransactionItem(
+                            title: 'Salary Monthly',
+                            datetime: "Today, 08:30 AM",
+                            nominal: 7000000,
+                            isIncome: "expense",
+                          ),
+                        ],
+                      );
+                    },
                   ),
                 ),
               )

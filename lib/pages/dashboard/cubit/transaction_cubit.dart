@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:tracking/models/categories_model.dart';
+import 'package:tracking/models/transaction_model.dart';
 import 'package:tracking/services/transaction_service.dart';
 
 part 'transaction_state.dart';
@@ -8,12 +9,17 @@ part 'transaction_state.dart';
 class TransactionCubit extends Cubit<TransactionState> {
   TransactionCubit() : super(TransactionInitial());
 
-  void fetchGroupCategories() async {
+  void fetchInitiate() async {
     try {
       emit(TransactionLoading());
-      CategoriesModelProps data = await TransactionService().getCategories();
+      final categoryTransaction = await TransactionService().getCategories();
+      final listItemTransaction =
+          await TransactionService().getTransactionList();
 
-      emit(TransactionSuccess(data));
+      emit(TransactionSuccess(
+        categoryTransaction: categoryTransaction,
+        listItemTransaction: listItemTransaction,
+      ));
     } catch (e) {
       emit(TransactionFailed(e.toString()));
     }

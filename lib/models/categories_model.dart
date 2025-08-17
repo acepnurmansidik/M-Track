@@ -1,17 +1,17 @@
 class CategoriesModelProps {
-  bool status;
+  bool success;
   String message;
   List<CategoryDaum> data;
 
   CategoriesModelProps({
-    required this.status,
+    required this.success,
     required this.message,
     required this.data,
   });
 
   factory CategoriesModelProps.fromJson(Map<String, dynamic> json) {
     return CategoriesModelProps(
-      status: json["status"],
+      success: json["success"],
       message: json["message"],
       data: (json["data"] as List<dynamic>)
           .map((item) => CategoryDaum.fromJson(item))

@@ -27,19 +27,30 @@ class TransactionItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
-                height: 35,
-                width: 35,
+                padding: const EdgeInsets.all(6),
                 decoration: BoxDecoration(
-                  color: kBaseColors,
                   shape: BoxShape.circle,
-                  image: const DecorationImage(
-                    image: AssetImage('assets/debt.png'),
+                  color: Colors.lightBlue[50],
+                ),
+                child: Container(
+                  height: 30,
+                  width: 30,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage(
+                          'assets/${title.replaceAll(" ", "").toLowerCase()}.png',
+                        ),
+                        colorFilter: ColorFilter.mode(
+                          kPrimaryV2Color, // Warna biru yang diinginkan
+                          BlendMode
+                              .srcATop, // Mode blending yang tepat untuk tint
+                        )),
                   ),
                 ),
               ),
               Container(
                 margin: const EdgeInsets.only(left: 10),
-                width: MediaQuery.of(context).size.width - 97,
+                width: MediaQuery.of(context).size.width - 104,
                 child: Column(
                   children: [
                     Row(
@@ -64,7 +75,7 @@ class TransactionItem extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Today, 10:30 AM',
+                          datetime,
                           style: greyTextStyle.copyWith(fontSize: 12),
                         ),
                       ],

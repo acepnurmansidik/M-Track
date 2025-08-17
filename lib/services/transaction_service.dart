@@ -10,6 +10,7 @@ class TransactionService {
     try {
       final response = await http.get(Uri.parse(
           '${dotenv.env["PUBLIC_API_BASE_V1"]}/transaction/category'));
+
       final result = CategoriesModelProps.fromJson(json.decode(response.body));
 
       return result;

@@ -1,17 +1,17 @@
 class TransactionModelProps {
-  bool status;
+  bool success;
   String message;
   List<TransactionDaum> data;
 
   TransactionModelProps({
-    required this.status,
+    required this.success,
     required this.message,
     required this.data,
   });
 
   factory TransactionModelProps.fromJson(Map<String, dynamic> json) {
     return TransactionModelProps(
-      status: json["status"],
+      success: json["success"],
       message: json["message"],
       data: (json["data"] as List<dynamic>)
           .map((item) => TransactionDaum.fromJson(item))

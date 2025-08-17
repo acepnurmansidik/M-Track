@@ -75,7 +75,7 @@ class _DetailCategoryPageState extends State<DetailCategoryPage> {
               Expanded(
                 // <-- Biarkan teks mengambil sisa ruang
                 child: Text(
-                  widget.title,
+                  toTitleCase(widget.title),
                   textAlign: TextAlign.center, // <-- Pusatkan teks
                   style: blackTextStyle.copyWith(fontSize: 18),
                 ),
