@@ -3,7 +3,7 @@ import "package:flutter_bloc/flutter_bloc.dart";
 import "package:tracking/cubit/page_cubit.dart";
 import "package:tracking/pages/dashboard/home_page.dart";
 import "package:tracking/theme.dart";
-import "package:tracking/widgets/lib/widgets/custom_buttom_navbar.dart";
+import "package:tracking/widgets/custom_buttom_navbar.dart";
 
 class MainPage extends StatelessWidget {
   const MainPage({super.key});

@@ -321,7 +321,7 @@ class _DetailCategoryPageState extends State<DetailCategoryPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'My Pocket',
+                        'Last transaction',
                         style: greyTextStyle.copyWith(fontSize: 16),
                       ),
                     ],

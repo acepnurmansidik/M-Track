@@ -7,6 +7,7 @@ import 'package:tracking/pages/dashboard/cubit/transaction_cubit.dart';
 import 'package:tracking/pages/dashboard/detail_category_page.dart';
 import 'package:tracking/theme.dart';
 import 'package:tracking/utils/others.dart';
+import 'package:tracking/widgets/errors_item/transaction_item_failed.dart';
 import 'package:tracking/widgets/transaction_item.dart';
 
 class HomePage extends StatefulWidget {
@@ -324,48 +325,59 @@ class _HomePageState extends State<HomePage> {
               // Contoh konten container
               SizedBox(
                 height: 150,
-                child: SingleChildScrollView(
-                  controller: controllerTransactionList,
-                  child: BlocBuilder<TransactionCubit, TransactionState>(
-                    builder: (context, state) {
-                      if (state is TransactionLoading) {
-                      } else if (state is TransactionSuccess) {
-                        return Column(
-                          children:
-                              state.listItemTransaction.data.map((everyItem) {
-                            return TransactionItem(
-                              title: toTitleCase(everyItem.categoryName),
-                              datetime: everyItem.date,
-                              nominal: everyItem.totalAmount,
-                              isIncome: everyItem.typeName,
-                            );
-                          }).toList(),
-                        );
-                      }
-                      return const Column(
-                        children: [
-                          TransactionItem(
-                            title: 'Food & Drink',
-                            datetime: "Today, 10:30 AM",
-                            nominal: 10000,
-                            isIncome: "income",
-                          ),
-                          TransactionItem(
-                            title: 'Salary Monthly',
-                            datetime: "Today, 08:30 AM",
-                            nominal: 7000000,
-                            isIncome: "expense",
-                          ),
-                          TransactionItem(
-                            title: 'Salary Monthly',
-                            datetime: "Today, 08:30 AM",
-                            nominal: 7000000,
-                            isIncome: "expense",
-                          ),
-                        ],
+                child: BlocBuilder<TransactionCubit, TransactionState>(
+                  builder: (context, state) {
+                    if (state is TransactionLoading) {
+                    } else if (state is TransactionSuccess) {
+                      return Column(
+                        children: state.listItemTransaction.data.isNotEmpty
+                            ? state.listItemTransaction.data
+                                .asMap()
+                                .entries
+                                .map((everyItem) {
+                                if (everyItem.key <= 1) {
+                                  return TransactionItem(
+                                    title: toTitleCase(
+                                        everyItem.value.categoryName),
+                                    datetime: everyItem.value.date,
+                                    nominal: everyItem.value.totalAmount,
+                                    isIncome: everyItem.value.typeName,
+                                  );
+                                }
+                                return const SizedBox();
+                              }).toList()
+                            : [
+                                SizedBox(
+                                  height: 150,
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        height: 115,
+                                        decoration: const BoxDecoration(
+                                          image: DecorationImage(
+                                            image: AssetImage(
+                                                'assets/empty-box.png'),
+                                          ),
+                                        ),
+                                      ),
+                                      Text(
+                                        "Aww... there's not transaction",
+                                        style: blackTextStyle.copyWith(
+                                            fontWeight: medium),
+                                      )
+                                    ],
+                                  ),
+                                )
+                              ],
                       );
-                    },
-                  ),
+                    }
+                    return Column(
+                      children: [
+                        TransactionItemFailed(isIncome: true),
+                        TransactionItemFailed(isIncome: false),
+                      ],
+                    );
+                  },
                 ),
               )
             ],
