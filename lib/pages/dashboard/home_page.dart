@@ -459,8 +459,14 @@ class _HomePageState extends State<HomePage> {
       Widget categoryGridItem(CategoryDaum data) {
         return GestureDetector(
           onTap: () {
-            Navigator.of(context)
-                .push(createRoute(DetailCategoryPage(title: data.category)));
+            Navigator.of(context).push(
+              createRoute(
+                DetailCategoryPage(
+                  title: data.category,
+                  typeName: data.typeName,
+                ),
+              ),
+            );
           },
           child: Container(
             height: 150,

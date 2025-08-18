@@ -23,13 +23,19 @@ class CategoriesModelProps {
 class CategoryDaum {
   int totalAmount;
   String category;
+  String typeName;
 
-  CategoryDaum({required this.totalAmount, required this.category});
+  CategoryDaum({
+    required this.totalAmount,
+    required this.category,
+    required this.typeName,
+  });
 
   factory CategoryDaum.fromJson(Map<String, dynamic> json) {
     return CategoryDaum(
       totalAmount: json["total_amount"],
       category: json["category"],
+      typeName: json["type_name"],
     );
   }
 }

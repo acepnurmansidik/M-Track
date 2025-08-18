@@ -6,10 +6,16 @@ import 'package:tracking/models/categories_model.dart';
 import 'package:tracking/models/transaction_model.dart';
 
 class TransactionService {
+  final headers = {
+    'Content-Type': 'application/json',
+    'Authorization':
+        "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFjZXBudXJtYW5AZ21haWwuY29tIiwibmFtZSI6ImFjZXAgbnVybWFuIHNpZGlrIiwiaWF0IjoxNzU1NDcxNzIxLCJleHAiOjE3NTYwNzY1MjEsImp0aSI6Ijg0MmIwNDM1ODdiNzQ3ZTU4N2Q0MWZjNDVlZDE4ZjgwIn0.NHxitpmANC1LgYI4UOdJ9NAo70xkKublkixjh0pzfvYHxfpOf-iXI_TEj5qE0pVRLVnYnQqyLnPw0IAAsYtuwg",
+  };
   Future<CategoriesModelProps> getCategories() async {
     try {
-      final response = await http.get(Uri.parse(
-          '${dotenv.env["PUBLIC_API_BASE_V1"]}/transaction/category'));
+      final response = await http.get(
+          Uri.parse('${dotenv.env["PUBLIC_API_BASE_V1"]}/transaction/category'),
+          headers: headers);
 
       final result = CategoriesModelProps.fromJson(json.decode(response.body));
 
@@ -22,8 +28,26 @@ class TransactionService {
   Future<TransactionModelProps> getTransactionList() async {
     try {
       final response = await http.get(
-          Uri.parse('${dotenv.env["PUBLIC_API_BASE_V1"]}/transaction/list'));
+        Uri.parse('${dotenv.env["PUBLIC_API_BASE_V1"]}/transaction/list'),
+        headers: headers,
+      );
       final result = TransactionModelProps.fromJson(json.decode(response.body));
+
+      return result;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<TransactionPeriodeModelProps> getPeriodeTransaction() async {
+    try {
+      final response = await http.get(
+        Uri.parse(
+            '${dotenv.env["PUBLIC_API_BASE_V1"]}/transaction/chart-category'),
+        headers: headers,
+      );
+      final result =
+          TransactionPeriodeModelProps.fromJson(json.decode(response.body));
 
       return result;
     } catch (e) {

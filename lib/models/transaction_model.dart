@@ -1,25 +1,3 @@
-class TransactionModelProps {
-  bool success;
-  String message;
-  List<TransactionDaum> data;
-
-  TransactionModelProps({
-    required this.success,
-    required this.message,
-    required this.data,
-  });
-
-  factory TransactionModelProps.fromJson(Map<String, dynamic> json) {
-    return TransactionModelProps(
-      success: json["success"],
-      message: json["message"],
-      data: (json["data"] as List<dynamic>)
-          .map((item) => TransactionDaum.fromJson(item))
-          .toList(),
-    );
-  }
-}
-
 class TransactionDaum {
   String sId;
   bool isPaid;
@@ -54,6 +32,75 @@ class TransactionDaum {
       createdAt: json['createdAt'],
       date: json['date'],
       month: json['month'],
+    );
+  }
+}
+
+class TransactionModelProps {
+  bool success;
+  String message;
+  List<TransactionDaum> data;
+
+  TransactionModelProps({
+    required this.success,
+    required this.message,
+    required this.data,
+  });
+
+  factory TransactionModelProps.fromJson(Map<String, dynamic> json) {
+    return TransactionModelProps(
+      success: json["success"],
+      message: json["message"],
+      data: (json["data"] as List<dynamic>)
+          .map((item) => TransactionDaum.fromJson(item))
+          .toList(),
+    );
+  }
+}
+
+class TransactionPeriodeModelProps {
+  bool success;
+  String message;
+  List<PeriodeProp> data;
+
+  TransactionPeriodeModelProps({
+    required this.success,
+    required this.message,
+    required this.data,
+  });
+
+  factory TransactionPeriodeModelProps.fromJson(Map<String, dynamic> json) {
+    return TransactionPeriodeModelProps(
+      success: json["success"],
+      message: json["message"],
+      data: (json["data"] as List<dynamic>)
+          .map((item) => PeriodeProp.fromJson(item))
+          .toList(),
+    );
+  }
+}
+
+class PeriodeProp {
+  String periode;
+  int income;
+  int expense;
+  List<TransactionDaum> listData;
+
+  PeriodeProp({
+    required this.periode,
+    required this.income,
+    required this.expense,
+    required this.listData,
+  });
+
+  factory PeriodeProp.fromJson(Map<String, dynamic> json) {
+    return PeriodeProp(
+      periode: json["periode"],
+      income: json["income"],
+      expense: json["expense"],
+      listData: (json["list_data"] as List<dynamic>)
+          .map((item) => TransactionDaum.fromJson(item))
+          .toList(),
     );
   }
 }

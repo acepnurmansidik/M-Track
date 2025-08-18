@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tracking/models/transaction_model.dart';
-import 'package:tracking/pages/dashboard/cubit/transaction_cubit.dart';
 import 'package:tracking/theme.dart';
 import 'package:tracking/utils/others.dart';
 import 'package:tracking/widgets/transaction_item.dart';
@@ -13,21 +10,14 @@ class SalesData {
   final double value;
 }
 
-class DetailCategoryPage extends StatefulWidget {
-  final String title;
-  final String typeName;
-
-  const DetailCategoryPage({
-    super.key,
-    required this.title,
-    required this.typeName,
-  });
+class ReportPage extends StatefulWidget {
+  const ReportPage({super.key});
 
   @override
-  State<DetailCategoryPage> createState() => _DetailCategoryPageState();
+  State<ReportPage> createState() => _ReportPageState();
 }
 
-class _DetailCategoryPageState extends State<DetailCategoryPage> {
+class _ReportPageState extends State<ReportPage> {
   String? selectedValue = 'Income';
   int? selectedIndex;
 
@@ -83,7 +73,7 @@ class _DetailCategoryPageState extends State<DetailCategoryPage> {
               Expanded(
                 // <-- Biarkan teks mengambil sisa ruang
                 child: Text(
-                  toTitleCase(widget.title),
+                  "Report",
                   textAlign: TextAlign.center, // <-- Pusatkan teks
                   style: blackTextStyle.copyWith(fontSize: 18),
                 ),
@@ -264,64 +254,30 @@ class _DetailCategoryPageState extends State<DetailCategoryPage> {
           preferredSize: const Size(double.infinity, 60),
           child: appBarSection()),
       backgroundColor: kBaseColors,
-      body: BlocBuilder<TransactionCubit, TransactionState>(
-        builder: (context, state) {
-          if (state is TransactionLoading) {
-          } else if (state is TransactionSuccess) {
-            PeriodeProp dataSelected = state.transactionPeriode.data[0];
-            return ListView(
-              padding: EdgeInsets.only(
-                left: defaultMargin,
-                right: defaultMargin,
-                bottom: 20,
-              ),
+      body: ListView(
+        padding: EdgeInsets.only(
+          left: defaultMargin,
+          right: defaultMargin,
+          bottom: 20,
+        ),
+        children: [
+          titleSection(),
+          barChartSection(),
+          cashflowSection(),
+          Container(
+            margin: const EdgeInsets.symmetric(vertical: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                titleSection(
-                    title: dataSelected.periode, nominal: dataSelected.expense),
-                barChartSection(),
-                cashflowSection(),
-                Container(
-                  margin: const EdgeInsets.symmetric(vertical: 15),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'My Pocket',
-                        style: greyTextStyle.copyWith(fontSize: 16),
-                      ),
-                    ],
-                  ),
+                Text(
+                  'My Pocket',
+                  style: greyTextStyle.copyWith(fontSize: 16),
                 ),
-                transactionListSection(),
               ],
-            );
-          }
-          return ListView(
-            padding: EdgeInsets.only(
-              left: defaultMargin,
-              right: defaultMargin,
-              bottom: 20,
             ),
-            children: [
-              titleSection(),
-              barChartSection(),
-              cashflowSection(),
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 15),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'My Pocket',
-                      style: greyTextStyle.copyWith(fontSize: 16),
-                    ),
-                  ],
-                ),
-              ),
-              transactionListSection(),
-            ],
-          );
-        },
+          ),
+          transactionListSection(),
+        ],
       ),
     );
   }

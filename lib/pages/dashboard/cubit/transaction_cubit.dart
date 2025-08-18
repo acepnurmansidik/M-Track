@@ -12,6 +12,8 @@ class TransactionCubit extends Cubit<TransactionState> {
   void fetchInitiate() async {
     try {
       emit(TransactionLoading());
+      final transactionPeriode =
+          await TransactionService().getPeriodeTransaction();
       final categoryTransaction = await TransactionService().getCategories();
       final listItemTransaction =
           await TransactionService().getTransactionList();
@@ -19,6 +21,7 @@ class TransactionCubit extends Cubit<TransactionState> {
       emit(TransactionSuccess(
         categoryTransaction: categoryTransaction,
         listItemTransaction: listItemTransaction,
+        transactionPeriode: transactionPeriode,
       ));
     } catch (e) {
       emit(TransactionFailed(e.toString()));
