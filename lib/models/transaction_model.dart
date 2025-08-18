@@ -84,6 +84,7 @@ class PeriodeProp {
   String periode;
   int income;
   int expense;
+  int totalCategory;
   List<TransactionDaum> listData;
 
   PeriodeProp({
@@ -91,6 +92,7 @@ class PeriodeProp {
     required this.income,
     required this.expense,
     required this.listData,
+    required this.totalCategory,
   });
 
   factory PeriodeProp.fromJson(Map<String, dynamic> json) {
@@ -98,6 +100,7 @@ class PeriodeProp {
       periode: json["periode"],
       income: json["income"],
       expense: json["expense"],
+      totalCategory: json["total_category"],
       listData: (json["list_data"] as List<dynamic>)
           .map((item) => TransactionDaum.fromJson(item))
           .toList(),

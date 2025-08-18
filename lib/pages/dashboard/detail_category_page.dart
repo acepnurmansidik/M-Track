@@ -7,10 +7,10 @@ import 'package:tracking/utils/others.dart';
 import 'package:tracking/widgets/transaction_item.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-class SalesData {
-  SalesData(this.month, this.value);
-  final String month;
-  final double value;
+class ChartData {
+  ChartData(this.periode, this.nominal);
+  final String periode;
+  final int nominal;
 }
 
 class DetailCategoryPage extends StatefulWidget {
@@ -28,23 +28,26 @@ class DetailCategoryPage extends StatefulWidget {
 }
 
 class _DetailCategoryPageState extends State<DetailCategoryPage> {
-  String? selectedValue = 'Income';
-  int? selectedIndex;
+  late int selectedIndex;
+  late PeriodeProp dataSelected;
+  late String labelSelected;
 
-  List<SalesData> getChartData() {
+  late List<ChartData> dBarChart;
+
+  List<ChartData> getChartData() {
     return [
-      SalesData('Dec 2025', 40),
-      SalesData('Nov 2025', 36),
-      SalesData('Oct 2025', 38),
-      SalesData('Sep 2025', 42),
-      SalesData('Aug 2025', 30),
-      SalesData('Jul 2025', 38),
-      SalesData('Jun 2025', 35),
-      SalesData('May 2025', 40),
-      SalesData('Apr 2025', 32),
-      SalesData('Mar 2025', 34),
-      SalesData('Feb 2025', 28),
-      SalesData('Jan 2025', 35),
+      ChartData('Dec 2025', 40),
+      ChartData('Nov 2025', 36),
+      ChartData('Oct 2025', 38),
+      ChartData('Sep 2025', 42),
+      ChartData('Aug 2025', 30),
+      ChartData('Jul 2025', 38),
+      ChartData('Jun 2025', 35),
+      ChartData('May 2025', 40),
+      ChartData('Apr 2025', 32),
+      ChartData('Mar 2025', 34),
+      ChartData('Feb 2025', 28),
+      ChartData('Jan 2025', 35),
     ];
   }
 
@@ -57,7 +60,7 @@ class _DetailCategoryPageState extends State<DetailCategoryPage> {
   @override
   Widget build(BuildContext context) {
     final chartData = getChartData();
-    final label = chartData[selectedIndex!].month;
+    labelSelected = chartData[selectedIndex].periode;
 
     Widget appBarSection() {
       return AppBar(
@@ -108,7 +111,7 @@ class _DetailCategoryPageState extends State<DetailCategoryPage> {
             Text.rich(
               TextSpan(children: [
                 const TextSpan(text: "Spending · "),
-                TextSpan(text: title != "" ? title : label),
+                TextSpan(text: labelSelected),
               ]),
               style: greyTextStyle.copyWith(fontSize: 14),
             ),
@@ -153,12 +156,12 @@ class _DetailCategoryPageState extends State<DetailCategoryPage> {
               majorTickLines: MajorTickLines(size: 0),
             ),
             series: <CartesianSeries>[
-              ColumnSeries<SalesData, String>(
+              ColumnSeries<ChartData, String>(
                 width: .65,
                 // spacing: .1,
                 dataSource: getChartData(),
-                xValueMapper: (SalesData sales, _) => sales.month,
-                yValueMapper: (SalesData sales, _) => sales.value,
+                xValueMapper: (ChartData chart, _) => chart.periode,
+                yValueMapper: (ChartData chart, _) => chart.nominal,
                 dataLabelSettings: const DataLabelSettings(
                   isVisible: false,
                   textStyle: TextStyle(color: Colors.black),
@@ -168,10 +171,10 @@ class _DetailCategoryPageState extends State<DetailCategoryPage> {
                 color: Colors.grey[200], // Warna default abu-abu
                 onPointTap: (pointInteractionDetails) {
                   setState(() {
-                    selectedIndex = pointInteractionDetails.pointIndex;
+                    selectedIndex = pointInteractionDetails.pointIndex!;
                   });
                 },
-                pointColorMapper: (SalesData data, int index) {
+                pointColorMapper: (ChartData data, int index) {
                   return index == selectedIndex
                       ? kPrimaryV2Color
                       : Colors.grey[200]; // Warna abu-abu default
@@ -200,10 +203,13 @@ class _DetailCategoryPageState extends State<DetailCategoryPage> {
                   shape: BoxShape.circle,
                   color: isIncome ? Colors.green[50] : Colors.red[50],
                 ),
-                child: Icon(
-                  Icons.arrow_back,
-                  size: 20,
-                  color: isIncome ? Colors.green[500] : Colors.red[500],
+                child: Transform.rotate(
+                  angle: isIncome ? 1.6 : -1.6,
+                  child: Icon(
+                    Icons.arrow_back,
+                    size: 20,
+                    color: isIncome ? Colors.green[500] : Colors.red[500],
+                  ),
                 ),
               ),
               Column(
@@ -233,29 +239,51 @@ class _DetailCategoryPageState extends State<DetailCategoryPage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            cashflowItem(true, "Income", 100000),
-            cashflowItem(false, "Spending", 20000),
+            cashflowItem(true, "Income", dataSelected.income),
+            cashflowItem(false, "Spending", dataSelected.expense),
           ],
         ),
       );
     }
 
     Widget transactionListSection() {
-      return const Column(
-        children: [
-          TransactionItem(
-            title: 'Food & Drink',
-            datetime: "Today, 10:30 AM",
-            nominal: 10000,
-            isIncome: "income",
+      return SizedBox(
+        height: dataSelected.listData.isNotEmpty ? 250 : 150,
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(
+            children: dataSelected.listData.isNotEmpty
+                ? dataSelected.listData.map((everyItem) {
+                    return TransactionItem(
+                      title: everyItem.categoryName,
+                      datetime: everyItem.date,
+                      nominal: everyItem.totalAmount,
+                      isIncome: everyItem.typeName,
+                    );
+                  }).toList()
+                : [
+                    SizedBox(
+                      height: 150,
+                      child: Column(
+                        children: [
+                          Container(
+                            height: 115,
+                            decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage('assets/empty-box.png'),
+                              ),
+                            ),
+                          ),
+                          Text(
+                            "Aww... there's not transaction",
+                            style: blackTextStyle.copyWith(fontWeight: medium),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
           ),
-          TransactionItem(
-            title: 'Salary Monthly',
-            datetime: "Today, 08:30 AM",
-            nominal: 7000000,
-            isIncome: "expense",
-          ),
-        ],
+        ),
       );
     }
 
@@ -268,7 +296,12 @@ class _DetailCategoryPageState extends State<DetailCategoryPage> {
         builder: (context, state) {
           if (state is TransactionLoading) {
           } else if (state is TransactionSuccess) {
-            PeriodeProp dataSelected = state.transactionPeriode.data[0];
+            dataSelected = state.transactionPeriode.data[0];
+            labelSelected = state.transactionPeriode.data[0].periode;
+            dBarChart =
+                state.transactionPeriode.data[0].listData.map((everyItem) {
+              return ChartData(everyItem.date, everyItem.totalAmount);
+            }).toList();
             return ListView(
               padding: EdgeInsets.only(
                 left: defaultMargin,
@@ -277,7 +310,9 @@ class _DetailCategoryPageState extends State<DetailCategoryPage> {
               ),
               children: [
                 titleSection(
-                    title: dataSelected.periode, nominal: dataSelected.expense),
+                  title: dataSelected.periode,
+                  nominal: dataSelected.totalCategory,
+                ),
                 barChartSection(),
                 cashflowSection(),
                 Container(

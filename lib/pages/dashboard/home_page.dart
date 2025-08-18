@@ -572,6 +572,12 @@ class _HomePageState extends State<HomePage> {
 
     return NotificationListener<ScrollNotification>(
       onNotification: (ScrollNotification scrollInfo) {
+        setState(() {
+          // Mendapatkan label dari GlobalKey
+          if (scrollInfo.metrics.axis.name != "horizontal") {
+            scrollOffset = scrollInfo.metrics.pixels; // Update scroll offset
+          }
+        });
         return true;
       },
       child: CustomScrollView(
