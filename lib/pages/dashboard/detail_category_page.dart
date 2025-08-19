@@ -34,24 +34,18 @@ class _DetailCategoryPageState extends State<DetailCategoryPage> {
   late PeriodeProp dataSelected;
   late String labelSelected;
 
-  late List<ChartData> dBarChart;
+  List<ChartData> dBarChart = [];
 
-  List<ChartData> getChartData() {
-    return [
-      ChartData('Dec 2025', 40),
-      ChartData('Nov 2025', 36),
-      ChartData('Oct 2025', 38),
-      ChartData('Sep 2025', 42),
-      ChartData('Aug 2025', 30),
-      ChartData('Jul 2025', 38),
-      ChartData('Jun 2025', 35),
-      ChartData('May 2025', 40),
-      ChartData('Apr 2025', 32),
-      ChartData('Mar 2025', 34),
-      ChartData('Feb 2025', 28),
-      ChartData('Jan 2025', 35),
-    ];
-  }
+  List<ChartData> getChartData = [
+    ChartData('Aug 2025', 30),
+    ChartData('Jul 2025', 38),
+    ChartData('Jun 2025', 35),
+    ChartData('May 2025', 40),
+    ChartData('Apr 2025', 32),
+    ChartData('Mar 2025', 34),
+    ChartData('Feb 2025', 28),
+    ChartData('Jan 2025', 35),
+  ];
 
   @override
   void initState() {
@@ -61,8 +55,7 @@ class _DetailCategoryPageState extends State<DetailCategoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    final chartData = getChartData();
-    labelSelected = chartData[selectedIndex].periode;
+    labelSelected = getChartData[selectedIndex].periode;
 
     return Scaffold(
       appBar: _buildAppBar(),
@@ -77,23 +70,19 @@ class _DetailCategoryPageState extends State<DetailCategoryPage> {
                 state.transactionPeriode.data[0].listData.map((everyItem) {
               return ChartData(everyItem.date, everyItem.totalAmount);
             }).toList();
-            return _buildContent();
+            return ListView(
+              padding: EdgeInsets.symmetric(horizontal: defaultMargin),
+              children: [
+                _buildTitleSection(),
+                _buildBarChartSection(),
+                _buildCashflowSection(),
+                _buildTransactionListSection(),
+              ],
+            );
           }
           return _buildEmptyState();
         },
       ),
-    );
-  }
-
-  Widget _buildContent() {
-    return ListView(
-      padding: EdgeInsets.symmetric(horizontal: defaultMargin),
-      children: [
-        _buildTitleSection(),
-        _buildBarChartSection(),
-        _buildCashflowSection(),
-        _buildTransactionListSection(),
-      ],
     );
   }
 
@@ -250,13 +239,12 @@ class _DetailCategoryPageState extends State<DetailCategoryPage> {
   }
 
   Widget _buildBarChartSection() {
-    final chartData = getChartData();
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Container(
         margin: const EdgeInsets.only(bottom: 20),
         height: 280,
-        width: (chartData.length * 65) + 100,
+        width: (dBarChart.length * 65) + 100,
         child: SfCartesianChart(
           margin: const EdgeInsets.all(0),
           plotAreaBorderWidth: 0,
@@ -275,7 +263,7 @@ class _DetailCategoryPageState extends State<DetailCategoryPage> {
           series: <CartesianSeries>[
             ColumnSeries<ChartData, String>(
               width: .65,
-              dataSource: chartData,
+              dataSource: getChartData,
               xValueMapper: (ChartData chart, _) => chart.periode,
               yValueMapper: (ChartData chart, _) => chart.nominal,
               dataLabelSettings: const DataLabelSettings(isVisible: false),
