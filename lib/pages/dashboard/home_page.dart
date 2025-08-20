@@ -453,12 +453,11 @@ class _HomePageState extends State<HomePage> {
                 child: Row(
                   children: [
                     categoryItem('All', 20),
-                    categoryItem('Investment', 0),
-                    categoryItem('Savings', 0),
-                    categoryItem('Expenses', 0),
+                    // categoryItem('Investment', 0),
+                    // categoryItem('Savings', 0),
+                    categoryItem('Expense', 0),
                     categoryItem('Income', 0),
-                    categoryItem('Loans', 0),
-                    categoryItem('Insurance', 0),
+                    // categoryItem('Loans', 0),
                   ],
                 ),
               ),
@@ -481,7 +480,7 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'My Pocket',
+                  'Category',
                   style: greyTextStyle.copyWith(fontSize: 16),
                 ),
               ],
@@ -573,6 +572,15 @@ class _HomePageState extends State<HomePage> {
               ),
             );
           } else if (state is TransactionSuccess) {
+            // Ambil data kategori
+            final categories = selectedMenu == "All"
+                ? (state.categoryTransaction as CategoriesModelProps).data
+                : (state.categoryTransaction as CategoriesModelProps)
+                    .data
+                    .where((itemSearch) =>
+                        itemSearch.typeName == selectedMenu.toLowerCase())
+                    .toList();
+
             return SliverGrid(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
@@ -582,13 +590,11 @@ class _HomePageState extends State<HomePage> {
               ),
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
+                  // Pastikan untuk mengakses elemen yang benar dari filteredCategories
                   return _categoryGridItem(
-                      (state.categoryTransaction as CategoriesModelProps)
-                          .data[index]); // Pass the category object
+                      categories[index]); // Pass the category object
                 },
-                childCount: (state.categoryTransaction as CategoriesModelProps)
-                    .data
-                    .length,
+                childCount: categories.length,
               ),
             );
           } else if (state is TransactionFailed) {
