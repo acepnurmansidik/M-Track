@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 import "package:tracking/cubit/page_cubit.dart";
 import "package:tracking/pages/dashboard/home_page.dart";
+import "package:tracking/pages/setting/profile_page.dart";
 import "package:tracking/theme.dart";
 import "package:tracking/widgets/custom_buttom_navbar.dart";
 
@@ -21,7 +22,7 @@ class MainPage extends StatelessWidget {
               0 => const HomePage(),
               1 => const HomePage(),
               2 => const HomePage(),
-              3 => const HomePage(),
+              3 => const ProfilePage(),
               int() => throw UnimplementedError(),
             },
           ),
