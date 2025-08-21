@@ -12,7 +12,17 @@ class WalletCubit extends Cubit<WalletState> {
     try {
       emit(WalletLoading());
       final result = await WalletService().getAllWalletUser();
-      emit(WalletSuccess(userWallets: result.data[0]));
+
+      // sementara disimpan di state, nextnya disimpan di localstorage
+      final walletIdSelected = result.data[0].id;
+
+      emit(WalletSuccess(
+        walletSelected: result.data
+            .where((everyItem) => everyItem.id == walletIdSelected)
+            .toList()[0],
+        userWallets: result.data,
+        walleIdSelected: walletIdSelected,
+      ));
     } catch (e) {
       emit(WalletFailed(e.toString()));
     }

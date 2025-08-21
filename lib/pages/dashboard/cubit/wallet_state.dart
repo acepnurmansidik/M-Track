@@ -12,12 +12,18 @@ final class WalletInitial extends WalletState {}
 final class WalletLoading extends WalletState {}
 
 final class WalletSuccess extends WalletState {
-  final WalletDaum userWallets;
+  final List<WalletDaum> userWallets;
+  final WalletDaum walletSelected;
+  final String walleIdSelected;
 
-  const WalletSuccess({required this.userWallets});
+  const WalletSuccess({
+    required this.userWallets,
+    required this.walletSelected,
+    required this.walleIdSelected,
+  });
 
   @override
-  List<Object> get props => [userWallets];
+  List<Object> get props => [userWallets, walletSelected, walleIdSelected];
 }
 
 final class WalletFailed extends WalletState {

@@ -155,7 +155,7 @@ class _HomePageState extends State<HomePage> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Text(
-                        state.userWallets.walletName,
+                        state.walletSelected.walletName,
                         style: greyTextStyle.copyWith(
                           fontSize: 10,
                           color: kGreenColor,
@@ -166,7 +166,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  formatCurrency(state.userWallets.amount),
+                  formatCurrency(state.walletSelected.amount),
                   style: blackTextStyle.copyWith(
                     fontSize: isCollapse ? 38 : 40,
                     fontWeight: semibold,
