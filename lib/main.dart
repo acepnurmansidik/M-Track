@@ -5,6 +5,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:tracking/cubit/page_cubit.dart';
 import 'package:tracking/firebase_options.dart';
 import 'package:tracking/pages/dashboard/cubit/transaction_cubit.dart';
+import 'package:tracking/pages/dashboard/cubit/wallet_cubit.dart';
 import 'package:tracking/pages/main_page.dart';
 import 'package:tracking/pages/signin_page.dart';
 import 'package:tracking/pages/signup_page.dart';
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (context) => PageCubit()),
         BlocProvider(create: (context) => TransactionCubit()),
+        BlocProvider(create: (context) => WalletCubit()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

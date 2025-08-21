@@ -230,6 +230,7 @@ class _DetailCategoryPageState extends State<DetailCategoryPage> {
       height: 60,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           _buildCashflowItem(true, "Income", dataSelected.income),
           _buildCashflowItem(false, "Spending", dataSelected.expense),

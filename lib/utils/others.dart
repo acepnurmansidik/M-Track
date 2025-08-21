@@ -5,6 +5,11 @@ formatRupiah(int nominal) {
       .format(nominal);
 }
 
+formatCurrency(int nominal) {
+  return NumberFormat.currency(decimalDigits: 0, symbol: '', locale: "ID")
+      .format(nominal);
+}
+
 toTitleCase(String input) {
   if (input.isEmpty) return input;
 

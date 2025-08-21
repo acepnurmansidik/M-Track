@@ -1,9 +1,10 @@
-// ignore_for_file: unnecessary_cast, no_leading_underscores_for_local_identifiers
+// ignore_for_file: unnecessary_cast, no_leading_underscores_for_local_identifiers, unused_element
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tracking/models/categories_model.dart';
 import 'package:tracking/pages/dashboard/cubit/transaction_cubit.dart';
+import 'package:tracking/pages/dashboard/cubit/wallet_cubit.dart';
 import 'package:tracking/pages/dashboard/detail_category_page.dart';
 import 'package:tracking/theme.dart';
 import 'package:tracking/utils/others.dart';
@@ -89,151 +90,16 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // NOTES: BALANCE & LAST TRANSACTION THIS MONTH
+  // NOTES: HEADER
   Widget _headerSection() {
-    Widget backgroundHeader() {
-      Widget balanceInfo(bool isActive) {
-        Widget headerItem(String title, IconData icon) {
-          return Container(
-            height: 35,
-            margin: const EdgeInsets.only(right: 8),
-            alignment: Alignment.center,
-            padding: EdgeInsets.symmetric(
-              horizontal: defaultMargin,
-              vertical: 2,
-            ),
-            decoration: BoxDecoration(
-              color: kPrimaryV2Color,
-              borderRadius: BorderRadius.circular(100),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  icon,
-                  size: 20,
-                  color: kBaseColors,
-                ),
-                const SizedBox(
-                  width: 5,
-                ),
-                Text(
-                  title,
-                  style: TextStyle(color: kBaseColors, fontWeight: medium),
-                ),
-              ],
-            ),
-          );
-        }
-
-        return Container(
-          margin: const EdgeInsets.only(top: 30, left: 20, right: 20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Your balance',
-                style: greyTextStyle.copyWith(fontSize: 16),
-              ),
-              Text(
-                '62.3233',
-                style: blackTextStyle.copyWith(
-                  fontSize: 38,
-                  fontWeight: semibold,
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(top: 10),
-                child: Row(
-                  children: [
-                    headerItem('Request', Icons.add_card),
-                    headerItem('Transfer', Icons.send),
-                    Container(
-                      height: 35,
-                      alignment: Alignment.center,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 2,
-                      ),
-                      decoration: BoxDecoration(
-                        color: kThirdColor,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        Icons.more_horiz,
-                        color: kBlackColor,
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
-        );
-      }
-
-      Widget headerTitle() {
-        return Container(
-          padding: const EdgeInsets.only(top: 35, left: 20, right: 20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                height: 40,
-                width: 40,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: kPrimaryV2Color,
-                ),
-              ),
-              Stack(
-                children: [
-                  Container(
-                    height: 40,
-                    width: 40,
-                    padding: const EdgeInsets.all(7),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.grey[100],
-                    ),
-                    child: Image.asset('assets/notif.png'),
-                  ),
-                  Container(
-                    height: 10,
-                    width: 10,
-                    margin: const EdgeInsets.only(top: 5, left: 20),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: kRedColor,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        );
-      }
-
-      return Container(
-        color: kBaseColors,
-        child: Column(
-          children: [
-            headerTitle(),
-            balanceInfo(false),
-          ],
-        ),
-      );
-    }
-
-    Widget collapseHeader() {
+    Widget _balanceInfoSection({bool isCollapse = false}) {
       Widget headerItem(String title, IconData icon) {
         return Container(
-          height: 32,
-          margin: const EdgeInsets.only(right: 5),
+          height: 35,
+          margin: const EdgeInsets.only(right: 8),
           alignment: Alignment.center,
-          padding: const EdgeInsets.symmetric(
-            horizontal: 16,
+          padding: EdgeInsets.symmetric(
+            horizontal: defaultMargin,
             vertical: 2,
           ),
           decoration: BoxDecoration(
@@ -245,7 +111,7 @@ class _HomePageState extends State<HomePage> {
             children: [
               Icon(
                 icon,
-                size: 16,
+                size: 20,
                 color: kBaseColors,
               ),
               const SizedBox(
@@ -256,7 +122,7 @@ class _HomePageState extends State<HomePage> {
                 style: TextStyle(
                   color: kBaseColors,
                   fontWeight: medium,
-                  fontSize: 14,
+                  fontSize: isCollapse ? 14 : 16,
                 ),
               ),
             ],
@@ -266,32 +132,165 @@ class _HomePageState extends State<HomePage> {
 
       return Container(
         color: kBaseColors,
-        padding: const EdgeInsets.only(top: 35, left: 20, right: 20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Your balance',
-              style: greyTextStyle.copyWith(fontSize: 14),
-            ),
-            const SizedBox(height: 2),
-            Text(
-              '62.3233',
-              style: blackTextStyle.copyWith(
-                fontSize: 38,
-                fontWeight: semibold,
-              ),
-            ),
-            Container(
-              margin: const EdgeInsets.only(top: 10),
-              child: Row(
+        padding: EdgeInsets.only(top: isCollapse ? 35 : 25, left: 20),
+        child: BlocBuilder<WalletCubit, WalletState>(builder: (context, state) {
+          if (state is WalletLoading) {
+          } else if (state is WalletSuccess) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Your balance',
+                      style: greyTextStyle.copyWith(fontSize: 15),
+                    ),
+                    const SizedBox(width: 10),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 1),
+                      decoration: BoxDecoration(
+                        color: Colors.green[50],
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Text(
+                        state.userWallets.walletName,
+                        style: greyTextStyle.copyWith(
+                          fontSize: 10,
+                          color: kGreenColor,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  formatCurrency(state.userWallets.amount),
+                  style: blackTextStyle.copyWith(
+                    fontSize: isCollapse ? 38 : 40,
+                    fontWeight: semibold,
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.only(top: 9),
+                  child: Row(
+                    children: [
+                      headerItem('Request', Icons.add_card),
+                      headerItem('Transfer', Icons.send),
+                      isCollapse
+                          ? const SizedBox()
+                          : Container(
+                              height: 35,
+                              alignment: Alignment.center,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                                vertical: 2,
+                              ),
+                              decoration: BoxDecoration(
+                                color: kThirdColor,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Icon(
+                                Icons.more_horiz,
+                                color: kBlackColor,
+                              ),
+                            ),
+                    ],
+                  ),
+                )
+              ],
+            );
+          }
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
                 children: [
-                  headerItem('Request', Icons.add_card),
-                  headerItem('Transfer', Icons.send),
+                  Text(
+                    'Your balance',
+                    style: greyTextStyle.copyWith(fontSize: 14),
+                  )
                 ],
               ),
-            )
+              const SizedBox(height: 2),
+              Text(
+                '62.3233',
+                style: blackTextStyle.copyWith(
+                  fontSize: isCollapse ? 38 : 40,
+                  fontWeight: semibold,
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(top: 10),
+                child: Row(
+                  children: [
+                    headerItem('Request', Icons.add_card),
+                    headerItem('Transfer', Icons.send),
+                    isCollapse
+                        ? const SizedBox()
+                        : Container(
+                            height: 35,
+                            alignment: Alignment.center,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 2,
+                            ),
+                            decoration: BoxDecoration(
+                              color: kThirdColor,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              Icons.more_horiz,
+                              color: kBlackColor,
+                            ),
+                          ),
+                  ],
+                ),
+              )
+            ],
+          );
+        }),
+      );
+    }
+
+    Widget _titleSection() {
+      return Container(
+        padding: const EdgeInsets.only(top: 35, left: 20, right: 20),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              height: 40,
+              width: 40,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: kPrimaryV2Color,
+              ),
+            ),
+            Stack(
+              children: [
+                Container(
+                  height: 40,
+                  width: 40,
+                  padding: const EdgeInsets.all(7),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.grey[100],
+                  ),
+                  child: Image.asset('assets/notif.png'),
+                ),
+                Container(
+                  height: 10,
+                  width: 10,
+                  margin: const EdgeInsets.only(top: 5, left: 20),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: kRedColor,
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       );
@@ -303,7 +302,15 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: kBaseColors,
       surfaceTintColor: kBaseColors,
       flexibleSpace: FlexibleSpaceBar(
-        background: backgroundHeader(),
+        background: Container(
+          color: kBaseColors,
+          child: Column(
+            children: [
+              _titleSection(),
+              _balanceInfoSection(),
+            ],
+          ),
+        ),
         collapseMode: CollapseMode.parallax,
         centerTitle: true,
         title: Opacity(
@@ -313,7 +320,7 @@ class _HomePageState extends State<HomePage> {
               0,
               100 * (1 - (scrollOffset / 100).clamp(0.0, 1)),
             ), // Mengatur posisi vertikal
-            child: collapseHeader(),
+            child: _balanceInfoSection(isCollapse: true),
           ),
         ),
       ),
