@@ -2,13 +2,18 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tracking/failed_item/balance_info_failed.dart';
+import 'package:tracking/failed_item/transaction_item_failed.dart';
 import 'package:tracking/models/categories_model.dart';
 import 'package:tracking/pages/dashboard/cubit/transaction_cubit.dart';
 import 'package:tracking/pages/dashboard/cubit/wallet_cubit.dart';
 import 'package:tracking/pages/dashboard/detail_category_page.dart';
+import 'package:tracking/skelaton/balance_info_loading.dart';
+import 'package:tracking/skelaton/category_box_loading.dart';
+import 'package:tracking/skelaton/transaction_square_loading.dart';
 import 'package:tracking/theme.dart';
 import 'package:tracking/utils/others.dart';
-import 'package:tracking/widgets/errors_item/transaction_item_failed.dart';
+import 'package:tracking/failed_item/category_item_failed.dart';
 import 'package:tracking/widgets/transaction_item.dart';
 
 class HomePage extends StatefulWidget {
@@ -135,6 +140,7 @@ class _HomePageState extends State<HomePage> {
         padding: EdgeInsets.only(top: isCollapse ? 35 : 25, left: 20),
         child: BlocBuilder<WalletCubit, WalletState>(builder: (context, state) {
           if (state is WalletLoading) {
+            return BalanceInfoLoading(isCollapse: false);
           } else if (state is WalletSuccess) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -202,54 +208,8 @@ class _HomePageState extends State<HomePage> {
               ],
             );
           }
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Text(
-                    'Your balance',
-                    style: greyTextStyle.copyWith(fontSize: 14),
-                  )
-                ],
-              ),
-              const SizedBox(height: 2),
-              Text(
-                '62.3233',
-                style: blackTextStyle.copyWith(
-                  fontSize: isCollapse ? 38 : 40,
-                  fontWeight: semibold,
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(top: 10),
-                child: Row(
-                  children: [
-                    headerItem('Request', Icons.add_card),
-                    headerItem('Transfer', Icons.send),
-                    isCollapse
-                        ? const SizedBox()
-                        : Container(
-                            height: 35,
-                            alignment: Alignment.center,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 20,
-                              vertical: 2,
-                            ),
-                            decoration: BoxDecoration(
-                              color: kThirdColor,
-                              shape: BoxShape.circle,
-                            ),
-                            child: Icon(
-                              Icons.more_horiz,
-                              color: kBlackColor,
-                            ),
-                          ),
-                  ],
-                ),
-              )
-            ],
-          );
+
+          return BalanceInfoFailed(isCollapse: false);
         }),
       );
     }
@@ -370,6 +330,12 @@ class _HomePageState extends State<HomePage> {
               child: BlocBuilder<TransactionCubit, TransactionState>(
                 builder: (context, state) {
                   if (state is TransactionLoading) {
+                    return const Column(
+                      children: [
+                        TransactionSquareLoading(),
+                        TransactionSquareLoading(),
+                      ],
+                    );
                   } else if (state is TransactionSuccess) {
                     return Column(
                       children: state.listItemTransaction.data.isNotEmpty
@@ -413,6 +379,7 @@ class _HomePageState extends State<HomePage> {
                             ],
                     );
                   }
+
                   return Column(
                     children: [
                       TransactionItemFailed(isIncome: true),
@@ -580,9 +547,18 @@ class _HomePageState extends State<HomePage> {
       sliver: BlocBuilder<TransactionCubit, TransactionState>(
         builder: (context, state) {
           if (state is TransactionLoading) {
-            return const SliverToBoxAdapter(
-              child: Center(
-                child: CircularProgressIndicator(),
+            return SliverGrid(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: 15,
+                crossAxisSpacing: 15,
+                childAspectRatio: 1,
+              ),
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  return const CategoryBoxLoading();
+                },
+                childCount: 4,
               ),
             );
           } else if (state is TransactionSuccess) {
@@ -611,16 +587,20 @@ class _HomePageState extends State<HomePage> {
                 childCount: categories.length,
               ),
             );
-          } else if (state is TransactionFailed) {
-            return SliverToBoxAdapter(
-              child: Center(
-                child: Text('Error: ${state.error}'),
-              ),
-            );
           }
-          return const SliverToBoxAdapter(
-            child: Center(
-              child: Text('No categories available'),
+
+          return SliverGrid(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 15,
+              crossAxisSpacing: 15,
+              childAspectRatio: 1,
+            ),
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                return const CategoryItemFailed();
+              },
+              childCount: 4,
             ),
           );
         },
