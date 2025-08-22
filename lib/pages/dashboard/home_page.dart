@@ -274,19 +274,26 @@ class _HomePageState extends State<HomePage> {
                   height: 40,
                   width: 40,
                   padding: const EdgeInsets.all(7),
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.grey[100],
+                    color: Colors.transparent,
                   ),
                   child: Image.asset('assets/notif.png'),
                 ),
                 Container(
-                  height: 10,
-                  width: 10,
+                  height: 11,
+                  width: 11,
                   margin: const EdgeInsets.only(top: 5, left: 20),
-                  decoration: BoxDecoration(
+                  padding: const EdgeInsets.all(2),
+                  decoration: const BoxDecoration(
                     shape: BoxShape.circle,
-                    color: kRedColor,
+                    color: Colors.white,
+                  ),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.red[400],
+                    ),
                   ),
                 ),
               ],

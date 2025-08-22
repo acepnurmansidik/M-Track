@@ -12,28 +12,116 @@ class ProfilePage extends StatelessWidget {
     return ListView(
       padding: EdgeInsets.symmetric(horizontal: defaultMargin),
       children: [
+        _titleSection(),
         _personalSection(),
-        _settingSection(),
+        _securitySection(),
         _helpSection(),
         _authSection(),
         Container(
           alignment: Alignment.center,
           margin: const EdgeInsets.only(top: 20, bottom: 30),
-          child: Text(
-            'v2.0.0',
-            style: greyTextStyle.copyWith(fontSize: 12),
+          child: Column(
+            children: [
+              Text(
+                'Version 2.0.0',
+                style: greyTextStyle.copyWith(fontSize: 12),
+              ),
+              Text(
+                '© 2025 Powered by @acepnurmansidik_',
+                style: greyTextStyle.copyWith(fontSize: 12),
+              ),
+            ],
           ),
         )
       ],
     );
   }
 
+  Widget _titleSection() {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 20, top: 40),
+      child: Column(
+        children: [
+          Container(
+            margin: const EdgeInsets.only(top: 20),
+            child: Stack(
+              children: [
+                Container(
+                  height: 100,
+                  width: 100,
+                  alignment: Alignment.center,
+                  margin: const EdgeInsets.only(bottom: 10),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.blue[100],
+                  ),
+                  child: Text(
+                    "AN",
+                    style: greyTextStyle.copyWith(
+                      fontSize: 45,
+                      fontWeight: semibold,
+                      color: kPrimaryV2Color.withOpacity(.9),
+                    ),
+                  ),
+                ),
+                Container(
+                  height: 100,
+                  width: 100,
+                  alignment: Alignment.topRight,
+                  margin: const EdgeInsets.only(bottom: 10),
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.transparent,
+                  ),
+                  child: Container(
+                    height: 30,
+                    width: 30,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: kWhiteColor,
+                      border: Border.all(
+                        width: .2,
+                        color: kGreyColor,
+                      ),
+                    ),
+                    child: Icon(
+                      Icons.edit,
+                      color: kBlackColor,
+                      size: 15,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.only(bottom: 5),
+            child: Text(
+              'Acep Nurman Sidik',
+              style: blackTextStyle.copyWith(
+                fontSize: 20,
+                color: kBlackColor,
+                fontWeight: bold,
+              ),
+            ),
+          ),
+          Text.rich(
+            const TextSpan(children: [
+              TextSpan(text: "Joined "),
+              TextSpan(text: "29 July 2025"),
+            ]),
+            style: blackTextStyle.copyWith(fontSize: 14, color: kGreyColor),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _itemNavigationMenu({
     String title = "",
     IconData icon = Icons.abc,
-    Color color = Colors.black,
     bool devide = true,
-    bool isLogOut = false,
+    bool isActive = true,
   }) {
     return GestureDetector(
       onTap: () {},
@@ -52,7 +140,7 @@ class ProfilePage extends StatelessWidget {
             Icon(
               icon,
               size: 25,
-              color: isLogOut ? color : kPrimaryV2Color,
+              color: kPrimaryV2Color,
             ),
             const SizedBox(width: 10),
             Expanded(
@@ -61,14 +149,13 @@ class ProfilePage extends StatelessWidget {
                 style: blackTextStyle.copyWith(
                   fontSize: 16,
                   fontWeight: medium,
-                  color: color,
+                  color: isActive ? kBlackColor : kGreyColor,
                 ),
               ),
             ),
-            Icon(
+            const Icon(
               Icons.chevron_right,
               size: 30,
-              color: color,
             ),
           ],
         ),
@@ -104,12 +191,8 @@ class ProfilePage extends StatelessWidget {
                 icon: Icons.account_circle_outlined,
               ),
               _itemNavigationMenu(
-                title: "login and security",
-                icon: Icons.security_outlined,
-              ),
-              _itemNavigationMenu(
-                title: "notification",
-                icon: Icons.notifications_outlined,
+                title: "wallet",
+                icon: Icons.wallet,
                 devide: false,
               ),
             ],
@@ -119,7 +202,7 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Widget _settingSection() {
+  Widget _securitySection() {
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
       padding: const EdgeInsets.only(left: 18, right: 18, top: 15, bottom: 5),
@@ -133,7 +216,7 @@ class ProfilePage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            toTitleCase("setting"),
+            toTitleCase("secuity"),
             style: blackTextStyle.copyWith(
               fontSize: 18,
               fontWeight: bold,
@@ -143,16 +226,16 @@ class ProfilePage extends StatelessWidget {
           Column(
             children: [
               _itemNavigationMenu(
-                title: "profile",
-                icon: Icons.account_circle_outlined,
-              ),
-              _itemNavigationMenu(
                 title: "login and security",
                 icon: Icons.security_outlined,
               ),
               _itemNavigationMenu(
-                title: "notification",
-                icon: Icons.notifications_outlined,
+                title: "change password",
+                icon: Icons.password,
+              ),
+              _itemNavigationMenu(
+                title: "fingerprint",
+                icon: Icons.fingerprint,
                 devide: false,
               ),
             ],
@@ -186,7 +269,7 @@ class ProfilePage extends StatelessWidget {
           Column(
             children: [
               _itemNavigationMenu(
-                title: "care",
+                title: "contact us",
                 icon: Icons.phone_outlined,
               ),
               _itemNavigationMenu(
@@ -202,25 +285,24 @@ class ProfilePage extends StatelessWidget {
   }
 
   Widget _authSection() {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 20),
-      padding: const EdgeInsets.symmetric(horizontal: 18),
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: kGreyColor.withOpacity(.3),
+    return GestureDetector(
+      onTap: () {},
+      child: Container(
+        height: 55,
+        margin: const EdgeInsets.only(top: 10, bottom: 25),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(50),
+          color: kGreyColor.withOpacity(.2),
         ),
-        borderRadius: BorderRadius.circular(18),
-      ),
-      child: Column(
-        children: [
-          _itemNavigationMenu(
-            title: "log out",
-            icon: Icons.logout,
+        child: Text(
+          "Log Out",
+          style: blackTextStyle.copyWith(
             color: Colors.red,
-            devide: false,
-            isLogOut: true,
+            fontWeight: bold,
+            fontSize: 16,
           ),
-        ],
+        ),
       ),
     );
   }
