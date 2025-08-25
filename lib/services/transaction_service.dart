@@ -9,7 +9,7 @@ class TransactionService {
   final headers = {
     'Content-Type': 'application/json',
     'Authorization':
-        "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFjZXBudXJtYW5AZ21haWwuY29tIiwibmFtZSI6ImFjZXAgbnVybWFuIHNpZGlrIiwiaWF0IjoxNzU1NDcxNzIxLCJleHAiOjE3NTYwNzY1MjEsImp0aSI6Ijg0MmIwNDM1ODdiNzQ3ZTU4N2Q0MWZjNDVlZDE4ZjgwIn0.NHxitpmANC1LgYI4UOdJ9NAo70xkKublkixjh0pzfvYHxfpOf-iXI_TEj5qE0pVRLVnYnQqyLnPw0IAAsYtuwg",
+        "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFjZXBudXJtYW5AZ21haWwuY29tIiwibmFtZSI6ImFjZXAgbnVybWFuIHNpZGlrIiwiaWF0IjoxNzU2MDMxMzk0LCJleHAiOjE3NTY2MzYxOTQsImp0aSI6Ijg0MmIwNDM1ODdiNzQ3ZTU4N2Q0MWZjNDVlZDE4ZjgwIn0.4cHBQmmq6Mdr3SGMQ_Q72cd48VbpxYW0mA6U99Fq4uPpW8sBbVKiHExtUQgEbiTKVWYkCvL3W1vL-Kk8zRuYwA",
   };
   Future<CategoriesModelProps> getCategories() async {
     try {

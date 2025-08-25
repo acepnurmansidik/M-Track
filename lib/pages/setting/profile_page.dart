@@ -56,7 +56,7 @@ class ProfilePage extends StatelessWidget {
                     color: Colors.blue[100],
                   ),
                   child: Text(
-                    "AN",
+                    formatEmptyProfile("john doe"),
                     style: greyTextStyle.copyWith(
                       fontSize: 45,
                       fontWeight: semibold,

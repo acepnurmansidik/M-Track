@@ -299,7 +299,7 @@ class _HomePageState extends State<HomePage> {
   Widget _categoriesFilterSection() {
     Widget transactionHistorySection() {
       return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+        // padding: const EdgeInsets.symmetric(vertical: 5),
         margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         decoration: BoxDecoration(
           color: Colors.grey[100],
@@ -308,25 +308,28 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Transactions',
-                  style: greyTextStyle,
-                ),
-                TextButton(
-                  onPressed: () {},
-                  child: Text(
-                    'See All',
-                    style: TextStyle(color: kPrimaryV2Color),
+            Container(
+              padding: const EdgeInsets.only(left: 14, right: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Transactions',
+                    style: greyTextStyle,
                   ),
-                ),
-              ],
+                  TextButton(
+                    onPressed: () {},
+                    child: Text(
+                      'See All',
+                      style: TextStyle(color: kPrimaryV2Color),
+                    ),
+                  ),
+                ],
+              ),
             ),
             // Contoh konten container
             SizedBox(
-              height: 150,
+              height: 170,
               child: BlocBuilder<TransactionCubit, TransactionState>(
                 builder: (context, state) {
                   if (state is TransactionLoading) {

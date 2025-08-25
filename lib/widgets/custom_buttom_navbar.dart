@@ -89,7 +89,7 @@ class _CustomButtomNavbarState extends State<CustomButtomNavbar> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               menuItems(iconName: 'home', index: 0),
-              menuItems(iconName: 'card', index: 1),
+              menuItems(iconName: 'wallet', index: 1),
               menuItems(iconName: 'statistic', index: 2, isMain: true),
               menuItems(iconName: 'profile', index: 3),
             ],
