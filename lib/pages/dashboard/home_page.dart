@@ -14,6 +14,7 @@ import 'package:tracking/skelaton/transaction_square_loading.dart';
 import 'package:tracking/theme.dart';
 import 'package:tracking/utils/others.dart';
 import 'package:tracking/failed_item/category_item_failed.dart';
+import 'package:tracking/widgets/notification_item.dart';
 import 'package:tracking/widgets/transaction_item.dart';
 
 class HomePage extends StatefulWidget {
@@ -228,36 +229,7 @@ class _HomePageState extends State<HomePage> {
                 color: kPrimaryV2Color,
               ),
             ),
-            Stack(
-              children: [
-                Container(
-                  height: 40,
-                  width: 40,
-                  padding: const EdgeInsets.all(7),
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.transparent,
-                  ),
-                  child: Image.asset('assets/notif.png'),
-                ),
-                Container(
-                  height: 11,
-                  width: 11,
-                  margin: const EdgeInsets.only(top: 5, left: 20),
-                  padding: const EdgeInsets.all(2),
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
-                  ),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.red[400],
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            NotificationItem(isShowNotif: false),
           ],
         ),
       );

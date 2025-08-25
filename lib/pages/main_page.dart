@@ -4,6 +4,7 @@ import "package:tracking/cubit/page_cubit.dart";
 import "package:tracking/pages/cards/wallet_page.dart";
 import "package:tracking/pages/dashboard/home_page.dart";
 import "package:tracking/pages/setting/profile_page.dart";
+import "package:tracking/pages/statistic/activity_page.dart";
 import "package:tracking/theme.dart";
 import "package:tracking/widgets/custom_buttom_navbar.dart";
 
@@ -22,7 +23,7 @@ class MainPage extends StatelessWidget {
             child: switch (context.watch<PageCubit>().state) {
               0 => const HomePage(),
               1 => const WalletPage(),
-              2 => const HomePage(),
+              2 => const ActivityPage(),
               3 => const ProfilePage(),
               int() => throw UnimplementedError(),
             },

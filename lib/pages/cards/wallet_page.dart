@@ -1,22 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tracking/theme.dart';
 import 'package:tracking/utils/others.dart';
+import 'package:tracking/widgets/notification_item.dart';
 import 'package:tracking/widgets/transaction_item.dart';
-
-class CategoryDataChart {
-  CategoryDataChart(
-    this.periode,
-    this.totalExpense,
-    this.totalIncome,
-    this.totalLoan,
-  );
-  final String periode;
-  final int totalIncome;
-  final int totalExpense;
-  final int totalLoan;
-}
 
 class TypeDataChart {
   TypeDataChart(
@@ -58,13 +45,74 @@ class _WalletPageState extends State<WalletPage> {
         bottom: 30,
       ),
       children: [
+        _titleSection(),
         _cardSection(),
         _listButtonSection(),
         _typeChartSection(),
         _typeSection(),
-        _chartCategorySection(),
         _categoryListSection(),
       ],
+    );
+  }
+
+  Widget _titleSection() {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 15),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text.rich(
+                  TextSpan(
+                    children: [
+                      const TextSpan(text: "Hi, "),
+                      TextSpan(text: toTitleCase("john doe")),
+                    ],
+                    style: blackTextStyle.copyWith(
+                      fontWeight: semibold,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+                Text(
+                  'How are you today',
+                  style: greyTextStyle.copyWith(
+                      color: kGreyColor.withOpacity(.9), fontSize: 12),
+                )
+              ],
+            ),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            margin: const EdgeInsets.only(right: 5),
+            decoration: BoxDecoration(
+              color: kGreenColor.withOpacity(.05),
+              borderRadius: BorderRadius.circular(40),
+              border: Border.all(color: kGreenColor.withOpacity(.3)),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.card_giftcard_rounded,
+                  size: 20,
+                  color: kGreenColor,
+                ),
+                const SizedBox(width: 5),
+                Text(
+                  "Reward",
+                  style: greenTextStyle,
+                )
+              ],
+            ),
+          ),
+          NotificationItem(isShowNotif: false),
+        ],
+      ),
     );
   }
 
@@ -363,79 +411,6 @@ class _WalletPageState extends State<WalletPage> {
               xValueMapper: (TypeDataChart sales, _) => sales.periode,
               yValueMapper: (TypeDataChart sales, _) => sales.totalExpense,
               dataLabelSettings: const DataLabelSettings(isVisible: true),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _chartCategorySection() {
-    List<CategoryDataChart> getCategoryDataChart = [
-      CategoryDataChart('Jan 2025', 35, 40, 76),
-      CategoryDataChart('Feb 2025', 60, 36, 43),
-      CategoryDataChart('Mar 2025', 98, 34, 56),
-      CategoryDataChart('Apr 2025', 34, 75, 65),
-      CategoryDataChart('Mei 2025', 56, 42, 62),
-      CategoryDataChart('Jun 2025', 77, 65, 56),
-      CategoryDataChart('Jul 2025', 24, 67, 23),
-    ];
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 20),
-        height: 280,
-        width: (getCategoryDataChart.length * 65) + 100,
-        child: SfCartesianChart(
-          tooltipBehavior: TooltipBehavior(enable: true),
-          margin: const EdgeInsets.all(0),
-          enableMultiSelection: true,
-          plotAreaBorderWidth: 0,
-          primaryXAxis: const CategoryAxis(
-            majorGridLines: MajorGridLines(width: 0),
-            axisLine: AxisLine(width: 0),
-            majorTickLines: MajorTickLines(size: 0),
-          ),
-          primaryYAxis: const NumericAxis(
-            isVisible: false,
-            interval: 10,
-            majorGridLines: MajorGridLines(width: 0),
-            axisLine: AxisLine(width: 0),
-            majorTickLines: MajorTickLines(size: 0),
-          ),
-          series: <CartesianSeries>[
-            ColumnSeries<CategoryDataChart, String>(
-              name: "Income",
-              width: .80,
-              dataSource: getCategoryDataChart,
-              xValueMapper: (CategoryDataChart chart, _) => chart.periode,
-              yValueMapper: (CategoryDataChart chart, _) => chart.totalIncome,
-              dataLabelSettings: const DataLabelSettings(isVisible: true),
-              onPointTap: (pointInteractionDetails) {
-                setState(() {});
-              },
-            ),
-            ColumnSeries<CategoryDataChart, String>(
-              name: "Expense",
-              width: .80,
-              dataSource: getCategoryDataChart,
-              xValueMapper: (CategoryDataChart chart, _) => chart.periode,
-              yValueMapper: (CategoryDataChart chart, _) => chart.totalExpense,
-              dataLabelSettings: const DataLabelSettings(isVisible: true),
-              onPointTap: (pointInteractionDetails) {
-                setState(() {});
-              },
-            ),
-            ColumnSeries<CategoryDataChart, String>(
-              name: "Loan",
-              width: .80,
-              dataSource: getCategoryDataChart,
-              xValueMapper: (CategoryDataChart chart, _) => chart.periode,
-              yValueMapper: (CategoryDataChart chart, _) => chart.totalLoan,
-              dataLabelSettings: const DataLabelSettings(isVisible: true),
-              onPointTap: (pointInteractionDetails) {
-                setState(() {});
-              },
             ),
           ],
         ),

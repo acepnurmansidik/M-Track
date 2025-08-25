@@ -14,7 +14,7 @@ class CustomButtomNavbar extends StatefulWidget {
 class _CustomButtomNavbarState extends State<CustomButtomNavbar> {
   @override
   Widget build(BuildContext context) {
-    Widget menuItems({iconName, onPressed, index, isMain = false}) {
+    Widget menuItems({iconName, onPressed, index}) {
       return Align(
         alignment: Alignment.bottomCenter,
         child: GestureDetector(
@@ -90,7 +90,7 @@ class _CustomButtomNavbarState extends State<CustomButtomNavbar> {
             children: [
               menuItems(iconName: 'home', index: 0),
               menuItems(iconName: 'wallet', index: 1),
-              menuItems(iconName: 'statistic', index: 2, isMain: true),
+              menuItems(iconName: 'activity', index: 2),
               menuItems(iconName: 'profile', index: 3),
             ],
           ),
