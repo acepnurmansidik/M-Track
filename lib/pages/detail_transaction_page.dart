@@ -28,26 +28,6 @@ class _DetailTransactionPageState extends State<DetailTransactionPage> {
         padding: const EdgeInsets.only(bottom: 40),
         children: [
           _informationSection(),
-          Container(
-            alignment: Alignment.center,
-            margin: EdgeInsets.symmetric(horizontal: defaultMargin),
-            padding: EdgeInsets.symmetric(
-              horizontal: defaultMargin,
-              vertical: 15,
-            ),
-            decoration: BoxDecoration(
-              color: kPrimaryV2Color,
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: Text(
-              "Back",
-              style: whiteTextStyle.copyWith(
-                fontWeight: semibold,
-                letterSpacing: 1,
-                fontSize: 18,
-              ),
-            ),
-          )
         ],
       ),
     );

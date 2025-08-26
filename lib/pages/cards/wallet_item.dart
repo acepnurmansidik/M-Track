@@ -1,7 +1,9 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:tracking/pages/cards/customize_wallet_page.dart';
 import 'package:tracking/theme.dart';
+import 'package:tracking/utils/custom_widget.dart';
 import 'package:tracking/utils/others.dart';
 
 class WalletItem extends StatelessWidget {
@@ -47,95 +49,104 @@ class WalletItem extends StatelessWidget {
       );
     }
 
-    return Container(
-      height: 200,
-      padding: EdgeInsets.symmetric(
-        horizontal: defaultMargin,
-        vertical: 15,
-      ),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(14),
-        color: kPrimaryV2Color,
-        image: DecorationImage(
-          image: const AssetImage('assets/img_background.png'),
-          colorFilter: ColorFilter.mode(
-            kWhiteColor.withOpacity(.15),
-            BlendMode.srcIn,
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(
+          createRoute(
+            const CustomizeWalletPage(),
           ),
+        );
+      },
+      child: Container(
+        height: 200,
+        padding: EdgeInsets.symmetric(
+          horizontal: defaultMargin,
+          vertical: 15,
         ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    formatCurrency(nominal),
-                    style: whiteTextStyle.copyWith(
-                      fontSize: 28,
-                      fontWeight: semibold,
-                    ),
-                  ),
-                  Text.rich(
-                    TextSpan(
-                      text: "$precentage%",
-                      children: [
-                        TextSpan(
-                          text: " from last month",
-                          style: whiteTextStyle.copyWith(
-                            fontWeight: light,
-                          ),
-                        ),
-                      ],
-                      style: whiteTextStyle.copyWith(fontWeight: semibold),
-                    ),
-                  ),
-
-                  // )
-                ],
-              ),
-              Container(
-                height: 30,
-                width: 30,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    colorFilter: ColorFilter.mode(
-                      kWhiteColor,
-                      BlendMode.srcIn,
-                    ),
-                    image: const AssetImage(
-                      'assets/contactless-payment.png',
-                    ),
-                  ),
-                ),
-              )
-            ],
-          ),
-          const SizedBox(height: 15),
-          Expanded(
-            child: Text(
-              vaNumber,
-              style: whiteTextStyle.copyWith(
-                fontSize: 20,
-                fontWeight: light,
-              ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(14),
+          color: kPrimaryV2Color,
+          image: DecorationImage(
+            image: const AssetImage('assets/img_background.png'),
+            colorFilter: ColorFilter.mode(
+              kWhiteColor.withOpacity(.15),
+              BlendMode.srcIn,
             ),
           ),
-          Row(
-            children: [
-              itemCard("Number", "**** ${number.split(" ")[1]}"),
-              const SizedBox(width: 12),
-              itemCard("Exp", exp),
-              const SizedBox(width: 12),
-              itemCard("Currency", currency),
-            ],
-          )
-        ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      formatCurrency(nominal),
+                      style: whiteTextStyle.copyWith(
+                        fontSize: 28,
+                        fontWeight: semibold,
+                      ),
+                    ),
+                    Text.rich(
+                      TextSpan(
+                        text: "$precentage%",
+                        children: [
+                          TextSpan(
+                            text: " from last month",
+                            style: whiteTextStyle.copyWith(
+                              fontWeight: light,
+                            ),
+                          ),
+                        ],
+                        style: whiteTextStyle.copyWith(fontWeight: semibold),
+                      ),
+                    ),
+
+                    // )
+                  ],
+                ),
+                Container(
+                  height: 30,
+                  width: 30,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      colorFilter: ColorFilter.mode(
+                        kWhiteColor,
+                        BlendMode.srcIn,
+                      ),
+                      image: const AssetImage(
+                        'assets/contactless-payment.png',
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+            const SizedBox(height: 15),
+            Expanded(
+              child: Text(
+                vaNumber,
+                style: whiteTextStyle.copyWith(
+                  fontSize: 20,
+                  fontWeight: light,
+                ),
+              ),
+            ),
+            Row(
+              children: [
+                itemCard("Number", "**** ${number.split(" ")[1]}"),
+                const SizedBox(width: 12),
+                itemCard("Exp", exp),
+                const SizedBox(width: 12),
+                itemCard("Currency", currency),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }

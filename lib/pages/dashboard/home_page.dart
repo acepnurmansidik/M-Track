@@ -12,6 +12,7 @@ import 'package:tracking/skelaton/balance_info_loading.dart';
 import 'package:tracking/skelaton/category_box_loading.dart';
 import 'package:tracking/skelaton/transaction_square_loading.dart';
 import 'package:tracking/theme.dart';
+import 'package:tracking/utils/custom_widget.dart';
 import 'package:tracking/utils/others.dart';
 import 'package:tracking/failed_item/category_item_failed.dart';
 import 'package:tracking/widgets/notification_item.dart';
@@ -73,26 +74,6 @@ class _HomePageState extends State<HomePage> {
         // NOTES: CATEGORY
         _categoriesItemSection()
       ],
-    );
-  }
-
-  Route createRoute(targetPage) {
-    return PageRouteBuilder(
-      pageBuilder: (context, animation, secondaryAnimation) => targetPage,
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        const begin = Offset(1.0, 0.0); // Mulai dari kanan
-        const end = Offset.zero; // Berhenti di posisi normal
-        const curve = Curves.easeInOut;
-
-        var tween =
-            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-        var offsetAnimation = animation.drive(tween);
-
-        return SlideTransition(
-          position: offsetAnimation,
-          child: child,
-        );
-      },
     );
   }
 

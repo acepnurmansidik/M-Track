@@ -26,6 +26,7 @@ TextStyle darkBlueTextStyle = GoogleFonts.poppins(color: kDarkBlueColor);
 
 // Versi 2
 Color kSecondaryV2Color = const Color(0xfff5f5fc);
+Color kThirdV2Color = const Color(0xff051237);
 Color kPrimaryV2Color = const Color(0xff1A56DB);
 TextStyle primaryTextStyle = GoogleFonts.poppins(color: kPrimaryV2Color);
 
