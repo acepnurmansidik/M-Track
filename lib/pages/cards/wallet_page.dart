@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:tracking/pages/cards/wallet_item.dart';
+import 'package:tracking/pages/dashboard/cubit/wallet_cubit.dart';
 import 'package:tracking/theme.dart';
 import 'package:tracking/utils/others.dart';
 import 'package:tracking/widgets/notification_item.dart';
 import 'package:tracking/widgets/transaction_item.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TypeDataChart {
   TypeDataChart(
@@ -117,125 +120,26 @@ class _WalletPageState extends State<WalletPage> {
   }
 
   Widget _cardSection() {
-    Widget itemCard(String title, String subtitle) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            style: whiteTextStyle.copyWith(
-              fontSize: 12,
-              color: kWhiteColor.withOpacity(.8),
-            ),
-          ),
-          Text(
-            subtitle,
-            style: whiteTextStyle.copyWith(
-              fontSize: 14,
-              color: kWhiteColor,
-              fontWeight: semibold,
-            ),
-          ),
-        ],
-      );
-    }
-
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
       height: 200,
       child: Stack(
         children: [
-          Container(
-            height: 200,
-            padding: EdgeInsets.symmetric(
-              horizontal: defaultMargin,
-              vertical: 15,
-            ),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(14),
-              color: kPrimaryV2Color,
-              image: DecorationImage(
-                image: const AssetImage('assets/img_background.png'),
-                colorFilter: ColorFilter.mode(
-                  kWhiteColor.withOpacity(.15),
-                  BlendMode.srcIn,
-                ),
-              ),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          formatCurrency(9127312300),
-                          style: whiteTextStyle.copyWith(
-                            fontSize: 28,
-                            fontWeight: semibold,
-                          ),
-                        ),
-                        Text.rich(
-                          TextSpan(
-                            text: "+2.5%",
-                            children: [
-                              TextSpan(
-                                text: " from last month",
-                                style: whiteTextStyle.copyWith(
-                                  fontWeight: light,
-                                ),
-                              ),
-                            ],
-                            style:
-                                whiteTextStyle.copyWith(fontWeight: semibold),
-                          ),
-                        ),
-
-                        // )
-                      ],
-                    ),
-                    Container(
-                      height: 30,
-                      width: 30,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          colorFilter: ColorFilter.mode(
-                            kWhiteColor,
-                            BlendMode.srcIn,
-                          ),
-                          image: const AssetImage(
-                            'assets/contactless-payment.png',
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-                const SizedBox(height: 15),
-                Expanded(
-                  child: Text(
-                    "4564 7236 0927 2153 8236",
-                    style: whiteTextStyle.copyWith(
-                      fontSize: 20,
-                      fontWeight: light,
-                    ),
-                  ),
-                ),
-                Row(
-                  children: [
-                    itemCard("Number", "**** 2374"),
-                    const SizedBox(width: 12),
-                    itemCard("Exp", "12/30"),
-                    const SizedBox(width: 12),
-                    itemCard("Currency", "IDR"),
-                  ],
-                )
-              ],
-            ),
+          BlocBuilder<WalletCubit, WalletState>(
+            builder: (context, state) {
+              if (state is WalletLoading) {
+              } else if (state is WalletSuccess) {
+                return WalletItem(
+                  nominal: state.walletSelected.amount,
+                  vaNumber: state.walletSelected.vaNumber,
+                  number: state.walletSelected.number,
+                  exp: state.walletSelected.exp,
+                  currency:
+                      state.walletSelected.currencyId.value!.toUpperCase(),
+                );
+              }
+              return WalletItem();
+            },
           ),
           GestureDetector(
             onHorizontalDragUpdate: _onHorizontalDragUpdate,

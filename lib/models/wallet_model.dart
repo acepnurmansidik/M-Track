@@ -23,6 +23,8 @@ class WalletModelProps {
 class WalletDaum {
   final String id;
   final String vaNumber;
+  final String number;
+  final String exp;
   final String walletName;
   final String ownerName;
   final CurrencyId currencyId;
@@ -31,6 +33,8 @@ class WalletDaum {
   WalletDaum({
     required this.id,
     required this.vaNumber,
+    required this.number,
+    required this.exp,
     required this.amount,
     required this.walletName,
     required this.ownerName,
@@ -41,6 +45,8 @@ class WalletDaum {
     return WalletDaum(
       id: json['_id'],
       vaNumber: json['va_number'],
+      number: json['number'],
+      exp: json['exp'],
       walletName: json['wallet_name'],
       amount: json['amount'],
       ownerName: json['owner_name'],
