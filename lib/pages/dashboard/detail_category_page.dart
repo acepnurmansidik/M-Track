@@ -68,6 +68,9 @@ class _DetailCategoryPageState extends State<DetailCategoryPage> {
             labelSelected = state.transactionPeriode.data[0].periode;
             dBarChart =
                 state.transactionPeriode.data[0].listData.map((everyItem) {
+              if (everyItem.categoryName == widget.title) {
+                return ChartData(everyItem.date, everyItem.totalAmount);
+              }
               return ChartData(everyItem.date, everyItem.totalAmount);
             }).toList();
             return ListView(
@@ -117,12 +120,15 @@ class _DetailCategoryPageState extends State<DetailCategoryPage> {
         child: Column(
           children: dataSelected.listData.isNotEmpty
               ? dataSelected.listData.map((everyItem) {
-                  return TransactionItem(
-                    title: everyItem.categoryName,
-                    datetime: everyItem.date,
-                    nominal: everyItem.totalAmount,
-                    isIncome: everyItem.typeName,
-                  );
+                  if (everyItem.categoryName == widget.title) {
+                    return TransactionItem(
+                      title: everyItem.categoryName,
+                      datetime: everyItem.date,
+                      nominal: everyItem.totalAmount,
+                      isIncome: everyItem.typeName,
+                    );
+                  }
+                  return const SizedBox();
                 }).toList()
               : _buildEmptyTransactionMessage(),
         ),
@@ -135,16 +141,13 @@ class _DetailCategoryPageState extends State<DetailCategoryPage> {
       automaticallyImplyLeading: false,
       elevation: 0,
       backgroundColor: kBaseColors,
+      surfaceTintColor: kBaseColors,
       title: Row(
         children: [
           GestureDetector(
             onTap: () => Navigator.pop(context),
             child: Container(
               padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Colors.grey[100],
-                borderRadius: BorderRadius.circular(8),
-              ),
               child: const Icon(Icons.chevron_left, color: Colors.black),
             ),
           ),

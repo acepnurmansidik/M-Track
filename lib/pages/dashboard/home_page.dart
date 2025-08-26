@@ -306,6 +306,7 @@ class _HomePageState extends State<HomePage> {
                                   datetime: everyItem.value.date,
                                   nominal: everyItem.value.totalAmount,
                                   isIncome: everyItem.value.typeName,
+                                  paddingHorizontal: 10,
                                 );
                               }
                               return const SizedBox();

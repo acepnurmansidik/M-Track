@@ -9,6 +9,7 @@ class TransactionItem extends StatelessWidget {
   final String isIncome;
   final int nominal;
   final String datetime;
+  final double paddingHorizontal;
 
   const TransactionItem({
     super.key,
@@ -16,6 +17,7 @@ class TransactionItem extends StatelessWidget {
     required this.datetime,
     required this.title,
     required this.isIncome,
+    this.paddingHorizontal = 0,
   });
 
   @override
@@ -31,11 +33,9 @@ class TransactionItem extends StatelessWidget {
         );
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 15),
-        margin: const EdgeInsets.only(bottom: 10),
-        decoration: BoxDecoration(
-          color: Colors.grey[100],
-          borderRadius: BorderRadius.circular(12),
+        padding: EdgeInsets.symmetric(
+          vertical: 16,
+          horizontal: paddingHorizontal,
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -68,7 +68,7 @@ class TransactionItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    title,
+                    toTitleCase(title),
                     style: blackTextStyle.copyWith(
                       fontWeight: semibold,
                       fontSize: 15,

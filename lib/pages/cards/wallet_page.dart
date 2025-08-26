@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tracking/pages/cards/wallet_item.dart';
+import 'package:tracking/pages/dashboard/cubit/transaction_cubit.dart';
 import 'package:tracking/pages/dashboard/cubit/wallet_cubit.dart';
 import 'package:tracking/theme.dart';
 import 'package:tracking/utils/others.dart';
@@ -328,27 +329,50 @@ class _WalletPageState extends State<WalletPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          margin: const EdgeInsets.only(bottom: 15),
+          margin: const EdgeInsets.only(bottom: 10),
           child: Text(
             "Last transaction",
             style: blackTextStyle.copyWith(fontSize: 15, fontWeight: semibold),
           ),
         ),
-        const Column(
-          children: [
-            TransactionItem(
-              nominal: 500,
-              datetime: "Aug 24, 2025, 8:10 AM",
-              title: "Freelance",
-              isIncome: "income",
+        SizedBox(
+          height: 500,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: BlocBuilder<TransactionCubit, TransactionState>(
+              builder: (context, state) {
+                if (state is TransactionLoading) {
+                } else if (state is TransactionSuccess) {
+                  return Column(
+                    children: state.listItemTransaction.data.map((everyItem) {
+                      return TransactionItem(
+                        nominal: everyItem.totalAmount,
+                        datetime: everyItem.date,
+                        title: everyItem.categoryName,
+                        isIncome: everyItem.typeName,
+                      );
+                    }).toList(),
+                  );
+                }
+                return const Column(
+                  children: [
+                    TransactionItem(
+                      nominal: 500,
+                      datetime: "Aug 24, 2025, 8:10 AM",
+                      title: "Freelance",
+                      isIncome: "income",
+                    ),
+                    TransactionItem(
+                      nominal: 500,
+                      datetime: "Aug 24, 2025, 9:10 AM",
+                      title: "Freelance",
+                      isIncome: "expense",
+                    ),
+                  ],
+                );
+              },
             ),
-            TransactionItem(
-              nominal: 500,
-              datetime: "Aug 24, 2025, 9:10 AM",
-              title: "Freelance",
-              isIncome: "expense",
-            ),
-          ],
+          ),
         ),
       ],
     );
