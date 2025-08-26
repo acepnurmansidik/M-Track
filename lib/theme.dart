@@ -30,6 +30,7 @@ Color kPrimaryV2Color = const Color(0xff1A56DB);
 TextStyle primaryTextStyle = GoogleFonts.poppins(color: kPrimaryV2Color);
 
 Color kBaseColors = const Color(0xffffffff);
+Color kSecondBaseColor = const Color(0xfff8f9fd);
 Color kThirdColor = const Color(0xf9f9f9ff);
 
 TextStyle newBlackTextStyle = GoogleFonts.roboto(color: kBlackColor);

@@ -325,6 +325,7 @@ class _WalletPageState extends State<WalletPage> {
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   formatRupiah(amount),
@@ -370,8 +371,8 @@ class _WalletPageState extends State<WalletPage> {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Container(
-        height: 220,
-        margin: const EdgeInsets.only(bottom: 20),
+        height: 230,
+        margin: const EdgeInsets.only(bottom: 20, top: 10),
         width: (dChart.length * 60) + 50,
         child: SfCartesianChart(
           tooltipBehavior: TooltipBehavior(enable: true),
@@ -392,7 +393,7 @@ class _WalletPageState extends State<WalletPage> {
           series: [
             LineSeries<TypeDataChart, String>(
               name: "Income",
-              color: kRedColor,
+              color: kGreenColor,
               markerSettings: const MarkerSettings(isVisible: true),
               onRendererCreated: (controller) {},
               onPointLongPress: (pointInteractionDetails) {},
@@ -403,7 +404,7 @@ class _WalletPageState extends State<WalletPage> {
             ),
             LineSeries<TypeDataChart, String>(
               name: "Expense",
-              color: kGreenColor,
+              color: kRedColor,
               markerSettings: const MarkerSettings(isVisible: true),
               onRendererCreated: (controller) {},
               onPointLongPress: (pointInteractionDetails) {},

@@ -52,6 +52,7 @@ dependencies:
   syncfusion_flutter_core: ^26.2.5
   carousel_slider: ^5.0.0
   flutter_staggered_animations: ^1.1.1
+  pretty_qr_code: ^3.5.0
 
 dev_dependencies:
   flutter_test:

@@ -109,7 +109,9 @@ class _ReportPageState extends State<ReportPage> {
                 Text(
                   formatRupiah(nominal),
                   style: blackTextStyle.copyWith(
-                      fontSize: 20, fontWeight: semibold),
+                    fontSize: 20,
+                    fontWeight: semibold,
+                  ),
                 ),
               ],
             )
