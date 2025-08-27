@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tracking/theme.dart';
+import 'package:tracking/utils/others.dart';
 
-class CustomeTextFormFieldItem extends StatefulWidget {
+class CustomTextFormFieldItem extends StatefulWidget {
   final TextEditingController controller;
   final double fontSize;
   final FontWeight fontWeight;
@@ -14,7 +15,7 @@ class CustomeTextFormFieldItem extends StatefulWidget {
   final String? Function(String?)
       validateFunc; // Ubah tipe menjadi fungsi yang menerima String? dan mengembalikan String?
 
-  const CustomeTextFormFieldItem({
+  const CustomTextFormFieldItem({
     super.key,
     required this.controller,
     required this.title,
@@ -29,11 +30,11 @@ class CustomeTextFormFieldItem extends StatefulWidget {
   });
 
   @override
-  State<CustomeTextFormFieldItem> createState() =>
-      _CustomeTextFormFieldItemState();
+  State<CustomTextFormFieldItem> createState() =>
+      _CustomTextFormFieldItemState();
 }
 
-class _CustomeTextFormFieldItemState extends State<CustomeTextFormFieldItem> {
+class _CustomTextFormFieldItemState extends State<CustomTextFormFieldItem> {
   late FocusNode _focusNode;
   Color focusColor = kGreyColor;
 
@@ -71,13 +72,14 @@ class _CustomeTextFormFieldItemState extends State<CustomeTextFormFieldItem> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            widget.title,
+            toTitleCase(widget.title),
             style: secondaryTextStyle.copyWith(
               fontWeight: semibold,
-              fontSize: 12,
+              fontSize: 14,
               color: focusColor,
             ),
           ),
+          const SizedBox(height: 7),
           TextFormField(
             focusNode: _focusNode,
             style: blackTextStyle.copyWith(
@@ -92,8 +94,15 @@ class _CustomeTextFormFieldItemState extends State<CustomeTextFormFieldItem> {
                 widget.isNumberOnly ? TextInputType.number : TextInputType.text,
             decoration: InputDecoration(
               hintText: widget.hintText,
-              border: InputBorder.none,
-              focusedBorder: UnderlineInputBorder(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(14),
+                borderSide: BorderSide(
+                  color: kPrimaryV2Color,
+                  width: 1,
+                ), // Ganti warna dan lebar sesuai kebutuhan
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(14),
                 borderSide: BorderSide(color: kPrimaryV2Color, width: 2),
               ),
               errorStyle: redTextStyle.copyWith(

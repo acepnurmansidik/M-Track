@@ -7,8 +7,8 @@ import 'package:tracking/firebase_options.dart';
 import 'package:tracking/pages/dashboard/cubit/transaction_cubit.dart';
 import 'package:tracking/pages/dashboard/cubit/wallet_cubit.dart';
 import 'package:tracking/pages/main_page.dart';
-import 'package:tracking/pages/signin_page.dart';
-import 'package:tracking/pages/signup_page.dart';
+import 'package:tracking/pages/sign_in_page.dart';
+import 'package:tracking/pages/sign_up_page.dart';
 import 'package:tracking/pages/splash_page.dart';
 import 'package:tracking/pages/success_page.dart';
 

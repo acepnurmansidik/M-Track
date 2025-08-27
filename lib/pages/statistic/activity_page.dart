@@ -182,9 +182,18 @@ class _ActivityPageState extends State<ActivityPage> {
           const SizedBox(height: 15),
           const Column(
             children: [
-              CategoryItem(nominal: 5000, title: "freelance"),
-              CategoryItem(nominal: 57100, title: "food & drink"),
-              CategoryItem(nominal: 8635000, title: "entertaiment"),
+              CategoryItem(
+                nominal: 5000,
+                title: "freelance",
+              ),
+              CategoryItem(
+                nominal: 57100,
+                title: "food & drink",
+              ),
+              CategoryItem(
+                nominal: 8635000,
+                title: "entertaiment",
+              ),
             ],
           )
         ],

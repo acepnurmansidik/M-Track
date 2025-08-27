@@ -4,9 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:tracking/theme.dart';
 import 'package:tracking/utils/others.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -124,7 +129,9 @@ class ProfilePage extends StatelessWidget {
     bool isActive = true,
   }) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Navigator.pushNamed(context, "/sign-in");
+      },
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
@@ -286,7 +293,10 @@ class ProfilePage extends StatelessWidget {
 
   Widget _authSection() {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Navigator.pushNamedAndRemoveUntil(
+            context, '/sign-in', (route) => false);
+      },
       child: Container(
         height: 55,
         margin: const EdgeInsets.only(top: 10, bottom: 25),
