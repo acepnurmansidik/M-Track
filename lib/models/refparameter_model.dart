@@ -1,80 +1,72 @@
-class ReffParameterModel {
-  final String id;
+class ReffParamModelProps {
+  bool success;
+  String message;
+  List<ReffParamDaum> data;
+
+  ReffParamModelProps({
+    required this.success,
+    required this.message,
+    required this.data,
+  });
+
+  factory ReffParamModelProps.fromJson(Map<String, dynamic> json) {
+    return ReffParamModelProps(
+      success: json["success"],
+      message: json["message"],
+      data: (json["data"] as List<dynamic>)
+          .map((item) => ReffParamDaum.fromJson(item))
+          .toList(),
+    );
+  }
+}
+
+class ReffParamDaum {
+  final String sId;
   final String value;
-  final String slug;
   final String type;
   final String description;
-  final Map<String, dynamic> icon;
+  final String createdAt;
+  final List<ChildrenDaum> children;
 
-  ReffParameterModel({
-    required this.id,
-    required this.description,
-    required this.icon,
+  ReffParamDaum({
+    required this.sId,
     required this.value,
-    required this.slug,
+    required this.type,
+    required this.description,
+    required this.createdAt,
+    required this.children,
+  });
+
+  factory ReffParamDaum.fromJson(Map<String, dynamic> json) {
+    return ReffParamDaum(
+      sId: json['_id'],
+      value: json['value'],
+      type: json['type'],
+      description: json['description'],
+      createdAt: json['createdAt'],
+      children: (json["children"] as List<dynamic>)
+          .map((item) => ChildrenDaum.fromJson(item))
+          .toList(),
+    );
+  }
+}
+
+class ChildrenDaum {
+  final String sId;
+  final String value;
+  final String type;
+
+  ChildrenDaum({
+    required this.sId,
+    required this.value,
     required this.type,
   });
 
-  factory ReffParameterModel.fromJson(Map<String, dynamic> json) {
-    return ReffParameterModel(
-      id: json['_id'],
-      description: json['description'],
-      icon: json['icon'],
+  factory ChildrenDaum.fromJson(Map<String, dynamic> json) {
+    return ChildrenDaum(
+      sId: json['_id'],
       value: json['value'],
-      slug: json['slug'],
       type: json['type'],
     );
   }
-}
-
-class ItemsReffParamCustomModel {
-  final String id;
-  final int key;
-  final String name;
-  final String? parentId;
-  final String description;
-  List? items;
-
-  ItemsReffParamCustomModel({
-    required this.id,
-    required this.key,
-    required this.name,
-    required this.parentId,
-    required this.description,
-    this.items,
-  });
-
-  factory ItemsReffParamCustomModel.fromJson(Map<String, dynamic> json) {
-    return ItemsReffParamCustomModel(
-      id: json['_id'],
-      key: json['key'],
-      name: json['name'],
-      parentId: json['parent_id'],
-      description: json['description'],
-    );
-  }
-}
-
-class ReffGroupParameterModel {
-  final String id;
-  final String type;
-  final String name;
-  final List<ItemsReffParamCustomModel> items;
-
-  const ReffGroupParameterModel({
-    this.id = "",
-    required this.name,
-    required this.type,
-    required this.items,
-  });
-
-  factory ReffGroupParameterModel.fromJson(Map<String, dynamic> json) =>
-      ReffGroupParameterModel(
-        id: json['parent_id'],
-        name: json['name'],
-        type: json['type'],
-        items: (json['items'] as List<dynamic>)
-            .map((item) => ItemsReffParamCustomModel.fromJson(item))
-            .toList(),
-      );
 }

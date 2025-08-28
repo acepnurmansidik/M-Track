@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tracking/theme.dart';
-import 'package:tracking/widgets/custom_textform_field.dart';
+import 'package:tracking/widgets/custom_textform_field_border.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -58,7 +58,7 @@ class _SignInPageState extends State<SignInPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CustomTextFormFieldItem(
+          CustomTextformFieldBorder(
             controller: emailController,
             title: 'email',
             isNumberOnly: false,
@@ -67,7 +67,7 @@ class _SignInPageState extends State<SignInPage> {
               return null;
             },
           ),
-          CustomTextFormFieldItem(
+          CustomTextformFieldBorder(
             controller: passwordController,
             title: 'password',
             isNumberOnly: false,

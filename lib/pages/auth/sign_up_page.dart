@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tracking/theme.dart';
-import 'package:tracking/widgets/custom_textform_field.dart';
+import 'package:tracking/widgets/custom_textform_field_border.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -102,7 +102,7 @@ class _SignUpPageState extends State<SignUpPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CustomTextFormFieldItem(
+          CustomTextformFieldBorder(
             controller: confirmPasswordController,
             title: 'wallet name',
             isNumberOnly: false,
@@ -111,7 +111,7 @@ class _SignUpPageState extends State<SignUpPage> {
               return null;
             },
           ),
-          CustomTextFormFieldItem(
+          CustomTextformFieldBorder(
             controller: confirmPasswordController,
             title: 'wallet name',
             isNumberOnly: false,
@@ -120,7 +120,7 @@ class _SignUpPageState extends State<SignUpPage> {
               return null;
             },
           ),
-          CustomTextFormFieldItem(
+          CustomTextformFieldBorder(
             controller: nameController,
             title: 'fullname',
             isNumberOnly: false,
@@ -129,7 +129,7 @@ class _SignUpPageState extends State<SignUpPage> {
               return null;
             },
           ),
-          CustomTextFormFieldItem(
+          CustomTextformFieldBorder(
             controller: emailController,
             title: 'email',
             isNumberOnly: false,
@@ -138,7 +138,7 @@ class _SignUpPageState extends State<SignUpPage> {
               return null;
             },
           ),
-          CustomTextFormFieldItem(
+          CustomTextformFieldBorder(
             controller: passwordController,
             title: 'password',
             isNumberOnly: false,
@@ -147,7 +147,7 @@ class _SignUpPageState extends State<SignUpPage> {
               return null;
             },
           ),
-          CustomTextFormFieldItem(
+          CustomTextformFieldBorder(
             controller: confirmPasswordController,
             title: 'confirm password',
             isNumberOnly: false,
