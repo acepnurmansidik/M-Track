@@ -301,6 +301,7 @@ class _HomePageState extends State<HomePage> {
                               .map((everyItem) {
                               if (everyItem.key <= 1) {
                                 return TransactionItem(
+                                  sId: everyItem.value.sId,
                                   title:
                                       toTitleCase(everyItem.value.categoryName),
                                   datetime: everyItem.value.date,

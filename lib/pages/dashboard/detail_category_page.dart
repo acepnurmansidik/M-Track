@@ -122,6 +122,7 @@ class _DetailCategoryPageState extends State<DetailCategoryPage> {
               ? dataSelected.listData.map((everyItem) {
                   if (everyItem.categoryName == widget.title) {
                     return TransactionItem(
+                      sId: everyItem.sId,
                       title: everyItem.categoryName,
                       datetime: everyItem.date,
                       nominal: everyItem.totalAmount,

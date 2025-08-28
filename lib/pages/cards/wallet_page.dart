@@ -346,6 +346,7 @@ class _WalletPageState extends State<WalletPage> {
                   return Column(
                     children: state.listItemTransaction.data.map((everyItem) {
                       return TransactionItem(
+                        sId: everyItem.sId,
                         nominal: everyItem.totalAmount,
                         datetime: everyItem.date,
                         title: everyItem.categoryName,
@@ -357,12 +358,14 @@ class _WalletPageState extends State<WalletPage> {
                 return const Column(
                   children: [
                     TransactionItem(
+                      sId: "1",
                       nominal: 500,
                       datetime: "Aug 24, 2025, 8:10 AM",
                       title: "Freelance",
                       isIncome: "income",
                     ),
                     TransactionItem(
+                      sId: "2",
                       nominal: 500,
                       datetime: "Aug 24, 2025, 9:10 AM",
                       title: "Freelance",

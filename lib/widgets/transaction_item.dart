@@ -1,3 +1,5 @@
+// ignore_for_file: body_might_complete_normally_nullable, avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:tracking/pages/detail_transaction_page.dart';
 import 'package:tracking/theme.dart';
@@ -5,6 +7,7 @@ import 'package:tracking/utils/custom_widget.dart';
 import 'package:tracking/utils/others.dart';
 
 class TransactionItem extends StatelessWidget {
+  final String sId;
   final String title;
   final String isIncome;
   final int nominal;
@@ -13,6 +16,7 @@ class TransactionItem extends StatelessWidget {
 
   const TransactionItem({
     super.key,
+    required this.sId,
     required this.nominal,
     required this.datetime,
     required this.title,
@@ -32,69 +36,128 @@ class TransactionItem extends StatelessWidget {
           ),
         );
       },
-      child: Container(
-        padding: EdgeInsets.symmetric(
-          vertical: 16,
-          horizontal: paddingHorizontal,
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(6),
-              margin: const EdgeInsets.only(right: 10),
-              decoration: BoxDecoration(
-                color: kWhiteColor,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Container(
-                height: 30,
-                width: 30,
+      child: Dismissible(
+        key: Key(sId),
+        background: slideEditBackground(),
+        secondaryBackground: slideDeleteBackground(),
+        confirmDismiss: (direction) async {
+          if (direction == DismissDirection.endToStart) {
+            // Dragged to the left
+            // return cancelBtn(true, sId);
+            print("object");
+            return;
+          } else {
+            // Dragged to the right
+            // return Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) => TransactionPage(
+            //       transactions: transaction,
+            //       isEdit: true,
+            //     ),
+            //   ),
+            // );
+            // return cancelBtn(false);
+          }
+        },
+        child: Container(
+          padding: EdgeInsets.symmetric(
+            vertical: 16,
+            horizontal: paddingHorizontal,
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(6),
+                margin: const EdgeInsets.only(right: 10),
                 decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage(
-                        'assets/${title.replaceAll(" ", "").toLowerCase()}.png',
-                      ),
-                      colorFilter: ColorFilter.mode(
-                        kPrimaryV2Color, // Warna biru yang diinginkan
-                        BlendMode
-                            .srcATop, // Mode blending yang tepat untuk tint
-                      )),
+                  color: kWhiteColor,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Container(
+                  height: 30,
+                  width: 30,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage(
+                          'assets/${title.replaceAll(" ", "").toLowerCase()}.png',
+                        ),
+                        colorFilter: ColorFilter.mode(
+                          kPrimaryV2Color, // Warna biru yang diinginkan
+                          BlendMode
+                              .srcATop, // Mode blending yang tepat untuk tint
+                        )),
+                  ),
                 ),
               ),
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      toTitleCase(title),
+                      style: blackTextStyle.copyWith(
+                        fontWeight: semibold,
+                        fontSize: 15,
+                      ),
+                    ),
+                    const SizedBox(height: 3),
+                    Text(
+                      datetime,
+                      style: greyTextStyle.copyWith(fontSize: 12),
+                    ),
+                  ],
+                ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    toTitleCase(title),
+                    '${isIncome == "income" ? "+" : "-"}${formatRupiah(nominal)}',
                     style: blackTextStyle.copyWith(
                       fontWeight: semibold,
-                      fontSize: 15,
+                      color: isIncome == "income" ? kGreenColor : kRedColor,
                     ),
-                  ),
-                  const SizedBox(height: 3),
-                  Text(
-                    datetime,
-                    style: greyTextStyle.copyWith(fontSize: 12),
                   ),
                 ],
               ),
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  '${isIncome == "income" ? "+" : "-"}${formatRupiah(nominal)}',
-                  style: blackTextStyle.copyWith(
-                    fontWeight: semibold,
-                    color: isIncome == "income" ? kGreenColor : kRedColor,
-                  ),
-                ),
-              ],
-            ),
-          ],
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget slideEditBackground() {
+    return Container(
+      color: Colors.green,
+      height: 80,
+      child: const Align(
+        alignment: Alignment.centerLeft,
+        child: Padding(
+          padding: EdgeInsets.only(left: 20.0),
+          child: Icon(
+            Icons.edit,
+            color: Colors.white,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget slideDeleteBackground() {
+    return Container(
+      color: Colors.red,
+      height: 80,
+      child: const Align(
+        alignment: Alignment.centerRight,
+        child: Padding(
+          padding: EdgeInsets.only(right: 20.0),
+          child: Icon(
+            Icons.delete,
+            color: Colors.white,
+          ),
         ),
       ),
     );
