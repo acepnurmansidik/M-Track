@@ -14,7 +14,7 @@ import 'package:tracking/skelaton/transaction_square_loading.dart';
 import 'package:tracking/theme.dart';
 import 'package:tracking/utils/custom_widget.dart';
 import 'package:tracking/utils/others.dart';
-import 'package:tracking/failed_item/category_item_failed.dart';
+import 'package:tracking/widgets/category_error_item.dart';
 import 'package:tracking/widgets/notification_item.dart';
 import 'package:tracking/widgets/transaction_item.dart';
 
@@ -556,7 +556,7 @@ class _HomePageState extends State<HomePage> {
             ),
             delegate: SliverChildBuilderDelegate(
               (context, index) {
-                return const CategoryItemFailed();
+                return const CategoryErrorItem();
               },
               childCount: 4,
             ),

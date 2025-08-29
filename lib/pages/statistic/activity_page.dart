@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:tracking/pages/dashboard/cubit/transaction_cubit.dart';
+import 'package:tracking/skelaton/category_list_loading.dart';
 import 'package:tracking/theme.dart';
+import 'package:tracking/widgets/category_error_item.dart';
 import 'package:tracking/widgets/category_item.dart';
 
 class ActivityPage extends StatefulWidget {
@@ -171,7 +175,7 @@ class _ActivityPageState extends State<ActivityPage> {
 
   Widget _categoryListSection() {
     return Container(
-      margin: const EdgeInsets.only(bottom: 20),
+      margin: const EdgeInsets.only(bottom: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -180,21 +184,34 @@ class _ActivityPageState extends State<ActivityPage> {
             style: greyTextStyle.copyWith(fontSize: 14),
           ),
           const SizedBox(height: 15),
-          const Column(
-            children: [
-              CategoryItem(
-                nominal: 5000,
-                title: "freelance",
-              ),
-              CategoryItem(
-                nominal: 57100,
-                title: "food & drink",
-              ),
-              CategoryItem(
-                nominal: 8635000,
-                title: "entertaiment",
-              ),
-            ],
+          BlocBuilder<TransactionCubit, TransactionState>(
+            builder: (context, state) {
+              if (state is TransactionLoading) {
+                return const Column(
+                  children: [
+                    CategoryListLoading(),
+                    CategoryListLoading(),
+                    CategoryListLoading(),
+                  ],
+                );
+              } else if (state is TransactionSuccess) {
+                return Column(
+                  children: state.categoryTransaction.data.map((everyCatItem) {
+                    return CategoryItem(
+                      nominal: everyCatItem.totalAmount,
+                      title: everyCatItem.category,
+                    );
+                  }).toList(),
+                );
+              }
+              return const Column(
+                children: [
+                  CategoryErrorItem(),
+                  CategoryErrorItem(),
+                  CategoryErrorItem(),
+                ],
+              );
+            },
           )
         ],
       ),
