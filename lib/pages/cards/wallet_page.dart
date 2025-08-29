@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:tracking/pages/cards/wallet_balance_details.dart';
 import 'package:tracking/pages/cards/wallet_item.dart';
 import 'package:tracking/pages/dashboard/cubit/transaction_cubit.dart';
 import 'package:tracking/pages/dashboard/cubit/wallet_cubit.dart';
 import 'package:tracking/theme.dart';
+import 'package:tracking/utils/custom_widget.dart';
 import 'package:tracking/utils/others.dart';
 import 'package:tracking/widgets/notification_item.dart';
 import 'package:tracking/widgets/transaction_item.dart';
@@ -167,20 +169,23 @@ class _WalletPageState extends State<WalletPage> {
   }
 
   Widget _listButtonSection() {
-    Widget itemButton(String title) {
-      return Container(
-        height: 50,
-        width: 50,
-        padding: const EdgeInsets.all(13),
-        margin: const EdgeInsets.only(bottom: 20),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: kGreyColor.withOpacity(.15),
-        ),
+    Widget itemButton(String title, Function onNavigation) {
+      return GestureDetector(
+        onTap: () => onNavigation(),
         child: Container(
+          height: 50,
+          width: 50,
+          padding: const EdgeInsets.all(13),
+          margin: const EdgeInsets.only(bottom: 20),
           decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/$title.png'),
+            borderRadius: BorderRadius.circular(10),
+            color: kGreyColor.withOpacity(.15),
+          ),
+          child: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/$title.png'),
+              ),
             ),
           ),
         ),
@@ -192,11 +197,13 @@ class _WalletPageState extends State<WalletPage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          itemButton("card"),
-          itemButton("send"),
-          itemButton("menu"),
-          itemButton("menu"),
-          itemButton("menu"),
+          itemButton("card", () {
+            Navigator.push(context, createRoute(const WalletBalanceDetails()));
+          }),
+          itemButton("send", () {}),
+          itemButton("menu", () {}),
+          itemButton("menu", () {}),
+          itemButton("menu", () {}),
         ],
       ),
     );
