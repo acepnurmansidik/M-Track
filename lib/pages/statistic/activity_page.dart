@@ -57,7 +57,7 @@ class _ActivityPageState extends State<ActivityPage> {
 
   @override
   void initState() {
-    context.read<ChartCategoriesCubit>().fetchInitate();
+    context.read<ChartCategoriesCubit>().fetchInitate("1Y");
     super.initState();
   }
 
@@ -84,6 +84,7 @@ class _ActivityPageState extends State<ActivityPage> {
         onTap: () {
           setState(() {
             selectedIndexFilter = index;
+            context.read<ChartCategoriesCubit>().fetchInitate(title);
           });
         },
         child: Container(

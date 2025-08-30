@@ -1,9 +1,7 @@
 // ignore_for_file: unused_element
 
 import 'package:flutter/material.dart';
-import 'package:tracking/pages/form/cashflow/form_cashflow_page.dart';
 import 'package:tracking/theme.dart';
-import 'package:tracking/utils/custom_widget.dart';
 import 'package:tracking/utils/others.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -63,7 +61,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     color: Colors.blue[100],
                   ),
                   child: Text(
-                    formatEmptyProfile("john doe"),
+                    formatEmptyProfile('Acep Nurman Sidik'),
                     style: greyTextStyle.copyWith(
                       fontSize: 45,
                       fontWeight: semibold,
@@ -129,11 +127,10 @@ class _ProfilePageState extends State<ProfilePage> {
     IconData icon = Icons.abc,
     bool devide = true,
     bool isActive = true,
+    VoidCallback? onChange,
   }) {
     return GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(context, "/sign-in");
-      },
+      onTap: onChange,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
@@ -144,7 +141,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start, // rata kiri
           children: [
             Icon(
               icon,
@@ -296,9 +293,8 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget _authSection() {
     return GestureDetector(
       onTap: () {
-        // Navigator.pushNamedAndRemoveUntil(
-        //     context, '/sign-in', (route) => false);
-        Navigator.push(context, createRoute(const FormCashflowPage()));
+        Navigator.pushNamedAndRemoveUntil(
+            context, '/sign-in', (route) => false);
       },
       child: Container(
         height: 55,

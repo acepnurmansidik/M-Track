@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tracking/pages/cards/wallet_balance_details.dart';
@@ -210,6 +212,8 @@ class _WalletPageState extends State<WalletPage> {
   }
 
   Widget _typeSection() {
+    int totalIncome = 0;
+    int totalExpense = 0;
     Widget buildCashflowItem(bool isIncome, String title, int amount) {
       return SizedBox(
         width: MediaQuery.of(context).size.width / 2.23,
@@ -253,20 +257,46 @@ class _WalletPageState extends State<WalletPage> {
       );
     }
 
-    return Container(
-      margin: const EdgeInsets.only(bottom: 20),
-      height: 60,
-      child: Row(
-        children: [
-          buildCashflowItem(true, "Income", 5000000),
-          Container(
-            height: 50,
-            width: .3,
-            color: kGreyColor,
+    return BlocBuilder<TransactionCubit, TransactionState>(
+      builder: (context, state) {
+        if (state is TransactionLoading) {
+        } else if (state is TransactionSuccess) {
+          for (var item in state.transactionPeriode.data) {
+            totalIncome += item.income;
+            totalExpense += item.expense;
+          }
+          return Container(
+            margin: const EdgeInsets.only(bottom: 20),
+            height: 60,
+            child: Row(
+              children: [
+                buildCashflowItem(true, "Income", totalIncome),
+                Container(
+                  height: 50,
+                  width: .3,
+                  color: kGreyColor,
+                ),
+                buildCashflowItem(false, "Expense", totalExpense),
+              ],
+            ),
+          );
+        }
+        return Container(
+          margin: const EdgeInsets.only(bottom: 20),
+          height: 60,
+          child: Row(
+            children: [
+              buildCashflowItem(true, "Income", 0),
+              Container(
+                height: 50,
+                width: .3,
+                color: kGreyColor,
+              ),
+              buildCashflowItem(false, "Expense", 0),
+            ],
           ),
-          buildCashflowItem(false, "Expense", 2000000),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -286,46 +316,103 @@ class _WalletPageState extends State<WalletPage> {
         height: 230,
         margin: const EdgeInsets.only(bottom: 20, top: 10),
         width: (dChart.length * 60) + 50,
-        child: SfCartesianChart(
-          tooltipBehavior: TooltipBehavior(enable: true),
-          margin: const EdgeInsets.all(0),
-          enableMultiSelection: true,
-          plotAreaBorderWidth: 0,
-          primaryXAxis: const CategoryAxis(
-            majorGridLines: MajorGridLines(width: 1),
-            axisLine: AxisLine(width: 1),
-            majorTickLines: MajorTickLines(size: 1),
-          ),
-          primaryYAxis: const NumericAxis(
-            // isVisible: false,
-            majorGridLines: MajorGridLines(width: 1),
-            axisLine: AxisLine(width: 1),
-            majorTickLines: MajorTickLines(size: 1),
-          ),
-          series: [
-            LineSeries<TypeDataChart, String>(
-              name: "Income",
-              color: kGreenColor,
-              markerSettings: const MarkerSettings(isVisible: true),
-              onRendererCreated: (controller) {},
-              onPointLongPress: (pointInteractionDetails) {},
-              dataSource: dChart,
-              xValueMapper: (TypeDataChart sales, _) => sales.periode,
-              yValueMapper: (TypeDataChart sales, _) => sales.totalIncome,
-              dataLabelSettings: const DataLabelSettings(isVisible: true),
-            ),
-            LineSeries<TypeDataChart, String>(
-              name: "Expense",
-              color: kRedColor,
-              markerSettings: const MarkerSettings(isVisible: true),
-              onRendererCreated: (controller) {},
-              onPointLongPress: (pointInteractionDetails) {},
-              dataSource: dChart,
-              xValueMapper: (TypeDataChart sales, _) => sales.periode,
-              yValueMapper: (TypeDataChart sales, _) => sales.totalExpense,
-              dataLabelSettings: const DataLabelSettings(isVisible: true),
-            ),
-          ],
+        child: BlocBuilder<TransactionCubit, TransactionState>(
+          builder: (context, state) {
+            if (state is TransactionLoading) {
+            } else if (state is TransactionSuccess) {
+              List<TypeDataChart> dChart =
+                  state.transactionPeriode.data.map((everyItem) {
+                return TypeDataChart(
+                  everyItem.periode,
+                  everyItem.income,
+                  everyItem.expense,
+                );
+              }).toList();
+              return SfCartesianChart(
+                tooltipBehavior: TooltipBehavior(enable: true),
+                margin: const EdgeInsets.all(0),
+                enableMultiSelection: true,
+                plotAreaBorderWidth: 0,
+                primaryXAxis: const CategoryAxis(
+                  majorGridLines: MajorGridLines(width: 1),
+                  axisLine: AxisLine(width: 1),
+                  majorTickLines: MajorTickLines(size: 1),
+                ),
+                primaryYAxis: const NumericAxis(
+                  // isVisible: false,
+                  majorGridLines: MajorGridLines(width: 1),
+                  axisLine: AxisLine(width: 1),
+                  majorTickLines: MajorTickLines(size: 1),
+                ),
+                series: [
+                  LineSeries<TypeDataChart, String>(
+                    name: "Income",
+                    color: kGreenColor,
+                    markerSettings: const MarkerSettings(isVisible: true),
+                    onRendererCreated: (controller) {},
+                    onPointLongPress: (pointInteractionDetails) {},
+                    dataSource: dChart,
+                    xValueMapper: (TypeDataChart sales, _) => sales.periode,
+                    yValueMapper: (TypeDataChart sales, _) => sales.totalIncome,
+                    dataLabelSettings: const DataLabelSettings(isVisible: true),
+                  ),
+                  LineSeries<TypeDataChart, String>(
+                    name: "Expense",
+                    color: kRedColor,
+                    markerSettings: const MarkerSettings(isVisible: true),
+                    onRendererCreated: (controller) {},
+                    onPointLongPress: (pointInteractionDetails) {},
+                    dataSource: dChart,
+                    xValueMapper: (TypeDataChart sales, _) => sales.periode,
+                    yValueMapper: (TypeDataChart sales, _) =>
+                        sales.totalExpense,
+                    dataLabelSettings: const DataLabelSettings(isVisible: true),
+                  ),
+                ],
+              );
+            }
+            return SfCartesianChart(
+              tooltipBehavior: TooltipBehavior(enable: true),
+              margin: const EdgeInsets.all(0),
+              enableMultiSelection: true,
+              plotAreaBorderWidth: 0,
+              primaryXAxis: const CategoryAxis(
+                majorGridLines: MajorGridLines(width: 1),
+                axisLine: AxisLine(width: 1),
+                majorTickLines: MajorTickLines(size: 1),
+              ),
+              primaryYAxis: const NumericAxis(
+                // isVisible: false,
+                majorGridLines: MajorGridLines(width: 1),
+                axisLine: AxisLine(width: 1),
+                majorTickLines: MajorTickLines(size: 1),
+              ),
+              series: [
+                LineSeries<TypeDataChart, String>(
+                  name: "Income",
+                  color: kGreenColor,
+                  markerSettings: const MarkerSettings(isVisible: true),
+                  onRendererCreated: (controller) {},
+                  onPointLongPress: (pointInteractionDetails) {},
+                  dataSource: dChart,
+                  xValueMapper: (TypeDataChart sales, _) => sales.periode,
+                  yValueMapper: (TypeDataChart sales, _) => sales.totalIncome,
+                  dataLabelSettings: const DataLabelSettings(isVisible: true),
+                ),
+                LineSeries<TypeDataChart, String>(
+                  name: "Expense",
+                  color: kRedColor,
+                  markerSettings: const MarkerSettings(isVisible: true),
+                  onRendererCreated: (controller) {},
+                  onPointLongPress: (pointInteractionDetails) {},
+                  dataSource: dChart,
+                  xValueMapper: (TypeDataChart sales, _) => sales.periode,
+                  yValueMapper: (TypeDataChart sales, _) => sales.totalExpense,
+                  dataLabelSettings: const DataLabelSettings(isVisible: true),
+                ),
+              ],
+            );
+          },
         ),
       ),
     );

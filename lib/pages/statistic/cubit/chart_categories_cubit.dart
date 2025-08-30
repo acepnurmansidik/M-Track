@@ -8,11 +8,11 @@ part 'chart_categories_state.dart';
 class ChartCategoriesCubit extends Cubit<ChartCategoriesState> {
   ChartCategoriesCubit() : super(ChartCategoriesInitial());
 
-  void fetchInitate() async {
+  void fetchInitate(String periodeFilter) async {
     try {
       emit(ChartCategoriesLoading());
       final categoryPeriode =
-          await ChartCategoryService().getChartCategoriesPeriode();
+          await ChartCategoryService().getChartCategoriesPeriode(periodeFilter);
       emit(ChartCategoriesSuccess(categoryPeriode: categoryPeriode));
     } catch (e) {
       emit(ChartCategoriesFailed(e.toString()));

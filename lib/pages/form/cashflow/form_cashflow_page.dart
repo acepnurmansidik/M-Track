@@ -157,7 +157,7 @@ class _FormCashflowPageState extends State<FormCashflowPage> {
           BlocBuilder<WalletCubit, WalletState>(
             builder: (context, state) {
               if (state is WalletLoading) {
-                return Text('Wallet Loading');
+                return const Text('Wallet Loading');
               } else if (state is WalletSuccess) {
                 return WalletItem(
                   nominal: state.walletSelected.amount,

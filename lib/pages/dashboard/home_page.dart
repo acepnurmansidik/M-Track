@@ -8,6 +8,7 @@ import 'package:tracking/models/categories_model.dart';
 import 'package:tracking/pages/dashboard/cubit/transaction_cubit.dart';
 import 'package:tracking/pages/dashboard/cubit/wallet_cubit.dart';
 import 'package:tracking/pages/dashboard/detail_category_page.dart';
+import 'package:tracking/pages/form/cashflow/form_cashflow_page.dart';
 import 'package:tracking/skelaton/balance_info_loading.dart';
 import 'package:tracking/skelaton/category_box_loading.dart';
 import 'package:tracking/skelaton/transaction_square_loading.dart';
@@ -80,39 +81,42 @@ class _HomePageState extends State<HomePage> {
   // NOTES: HEADER
   Widget _headerSection() {
     Widget _balanceInfoSection({bool isCollapse = false}) {
-      Widget headerItem(String title, IconData icon) {
-        return Container(
-          height: 35,
-          margin: const EdgeInsets.only(right: 8),
-          alignment: Alignment.center,
-          padding: EdgeInsets.symmetric(
-            horizontal: defaultMargin,
-            vertical: 2,
-          ),
-          decoration: BoxDecoration(
-            color: kPrimaryV2Color,
-            borderRadius: BorderRadius.circular(100),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                icon,
-                size: 20,
-                color: kBaseColors,
-              ),
-              const SizedBox(
-                width: 5,
-              ),
-              Text(
-                title,
-                style: TextStyle(
+      Widget headerItem(String title, IconData icon, Function navigation) {
+        return GestureDetector(
+          onTap: () => navigation(),
+          child: Container(
+            height: 35,
+            margin: const EdgeInsets.only(right: 8),
+            alignment: Alignment.center,
+            padding: EdgeInsets.symmetric(
+              horizontal: defaultMargin,
+              vertical: 2,
+            ),
+            decoration: BoxDecoration(
+              color: kPrimaryV2Color,
+              borderRadius: BorderRadius.circular(100),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  icon,
+                  size: 20,
                   color: kBaseColors,
-                  fontWeight: medium,
-                  fontSize: isCollapse ? 14 : 16,
                 ),
-              ),
-            ],
+                const SizedBox(
+                  width: 5,
+                ),
+                Text(
+                  title,
+                  style: TextStyle(
+                    color: kBaseColors,
+                    fontWeight: medium,
+                    fontSize: isCollapse ? 14 : 16,
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       }
@@ -164,8 +168,13 @@ class _HomePageState extends State<HomePage> {
                   margin: const EdgeInsets.only(top: 9),
                   child: Row(
                     children: [
-                      headerItem('Request', Icons.add_card),
-                      headerItem('Transfer', Icons.send),
+                      headerItem('Request', Icons.add_card, () {
+                        Navigator.push(
+                          context,
+                          createRoute(const FormCashflowPage()),
+                        );
+                      }),
+                      headerItem('Transfer', Icons.send, () {}),
                       isCollapse
                           ? const SizedBox()
                           : Container(
