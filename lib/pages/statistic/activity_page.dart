@@ -35,6 +35,26 @@ class CategoryDataChart {
 class _ActivityPageState extends State<ActivityPage> {
   int selectedIndexFilter = 3;
 
+  List<CategoryDataChart> newGetCategoryDataChart = [
+    CategoryDataChart('Jan 2025', 0, 0, 0, 0),
+    CategoryDataChart('Feb 2025', 0, 0, 0, 0),
+    CategoryDataChart('Mar 2025', 0, 0, 0, 0),
+    CategoryDataChart('Apr 2025', 0, 0, 0, 0),
+    CategoryDataChart('Mei 2025', 0, 0, 0, 0),
+    CategoryDataChart('Jun 2025', 0, 0, 0, 0),
+    CategoryDataChart('Jul 2025', 0, 0, 0, 0),
+  ];
+
+  List<CategoryDataChart> getCategoryDataChart = [
+    CategoryDataChart('Jan 2025', 35, 40, 76, 43),
+    CategoryDataChart('Feb 2025', 60, 36, 43, 20),
+    CategoryDataChart('Mar 2025', 98, 34, 56, 82),
+    CategoryDataChart('Apr 2025', 34, 75, 65, 13),
+    CategoryDataChart('Mei 2025', 56, 42, 62, 120),
+    CategoryDataChart('Jun 2025', 77, 65, 56, 56),
+    CategoryDataChart('Jul 2025', 24, 67, 23, 39),
+  ];
+
   @override
   void initState() {
     context.read<ChartCategoriesCubit>().fetchInitate();
@@ -52,7 +72,7 @@ class _ActivityPageState extends State<ActivityPage> {
       ),
       children: [
         _selectedFilterSection(),
-        _barChartCategorySection(),
+        _chartCategorySection(),
         _categoryListSection(),
       ],
     );
@@ -112,16 +132,7 @@ class _ActivityPageState extends State<ActivityPage> {
     );
   }
 
-  Widget _barChartCategorySection() {
-    List<CategoryDataChart> getCategoryDataChart = [
-      CategoryDataChart('Jan 2025', 0, 0, 0, 0),
-      CategoryDataChart('Feb 2025', 0, 0, 0, 0),
-      CategoryDataChart('Mar 2025', 0, 0, 0, 0),
-      CategoryDataChart('Apr 2025', 0, 0, 0, 0),
-      CategoryDataChart('Mei 2025', 0, 0, 0, 0),
-      CategoryDataChart('Jun 2025', 0, 0, 0, 0),
-      CategoryDataChart('Jul 2025', 0, 0, 0, 0),
-    ];
+  Widget _chartCategorySection() {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: BlocBuilder<ChartCategoriesCubit, ChartCategoriesState>(

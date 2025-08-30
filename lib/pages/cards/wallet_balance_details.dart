@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tracking/pages/dashboard/cubit/transaction_cubit.dart';
+import 'package:tracking/pages/dashboard/cubit/wallet_cubit.dart';
 import 'package:tracking/theme.dart';
+import 'package:tracking/utils/others.dart';
 import 'package:tracking/widgets/transaction_item.dart';
 
 class WalletBalanceDetails extends StatefulWidget {
@@ -54,23 +56,100 @@ class _WalletBalanceDetailsState extends State<WalletBalanceDetails> {
   }
 
   Widget _balanceInfoSection() {
+    Widget itemNavigation({EdgeInsets margin = EdgeInsets.zero}) {
+      return Container(
+        height: 55,
+        width: 55,
+        margin: margin,
+        decoration: BoxDecoration(
+          color: kWhiteColor,
+          borderRadius: BorderRadius.circular(14),
+        ),
+      );
+    }
+
     return Container(
       alignment: Alignment.topCenter,
       height: 400,
       decoration: BoxDecoration(
         color: kPrimaryV2Color,
       ),
-      child: Container(
-        height: 275,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            colorFilter: ColorFilter.mode(
-              kWhiteColor.withOpacity(.2),
-              BlendMode.srcIn,
+      child: Stack(
+        alignment: Alignment.topCenter,
+        children: [
+          Container(
+            height: 275,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                colorFilter: ColorFilter.mode(
+                  kWhiteColor.withOpacity(.2),
+                  BlendMode.srcIn,
+                ),
+                image: const AssetImage('assets/wave1.png'),
+              ),
             ),
-            image: const AssetImage('assets/wave1.png'),
           ),
-        ),
+          BlocBuilder<WalletCubit, WalletState>(
+            builder: (context, state) {
+              if (state is WalletLoading) {
+              } else if (state is WalletSuccess) {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      formatCurrency(state.walletSelected.amount),
+                      style: whiteTextStyle.copyWith(
+                        fontSize: 32,
+                        fontWeight: bold,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      state.walletSelected.vaNumber,
+                      style: whiteTextStyle.copyWith(
+                        fontSize: 16,
+                        fontWeight: light,
+                      ),
+                    ),
+                  ],
+                );
+              }
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    formatCurrency(634762342),
+                    style: whiteTextStyle.copyWith(
+                      fontSize: 32,
+                      fontWeight: bold,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    formatCurrency(634762342),
+                    style: whiteTextStyle.copyWith(
+                      fontSize: 16,
+                      fontWeight: light,
+                    ),
+                  ),
+                  const SizedBox(height: 40),
+                ],
+              );
+            },
+          ),
+          Container(
+            margin: const EdgeInsets.only(top: 120),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                itemNavigation(margin: const EdgeInsets.only(left: 0)),
+                itemNavigation(margin: const EdgeInsets.only(left: 20)),
+                itemNavigation(margin: const EdgeInsets.only(left: 20)),
+                itemNavigation(margin: const EdgeInsets.only(left: 20)),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
