@@ -1,7 +1,10 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tracking/pages/dashboard/cubit/transaction_cubit.dart';
+import 'package:tracking/pages/statistic/cubit/chart_categories_cubit.dart';
 import 'package:tracking/skelaton/category_list_loading.dart';
 import 'package:tracking/theme.dart';
 import 'package:tracking/widgets/category_error_item.dart';
@@ -17,18 +20,27 @@ class ActivityPage extends StatefulWidget {
 class CategoryDataChart {
   CategoryDataChart(
     this.periode,
-    this.totalExpense,
-    this.totalIncome,
-    this.totalLoan,
+    this.totalEntertaiment,
+    this.totalFoodDrink,
+    this.totalFreelance,
+    this.totalSalaryMonthly,
   );
   final String periode;
-  final int totalIncome;
-  final int totalExpense;
-  final int totalLoan;
+  final int totalEntertaiment;
+  final int totalFoodDrink;
+  final int totalFreelance;
+  final int totalSalaryMonthly;
 }
 
 class _ActivityPageState extends State<ActivityPage> {
   int selectedIndexFilter = 3;
+
+  @override
+  void initState() {
+    context.read<ChartCategoriesCubit>().fetchInitate();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -40,7 +52,7 @@ class _ActivityPageState extends State<ActivityPage> {
       ),
       children: [
         _selectedFilterSection(),
-        _chartCategorySection(),
+        _barChartCategorySection(),
         _categoryListSection(),
       ],
     );
@@ -100,75 +112,182 @@ class _ActivityPageState extends State<ActivityPage> {
     );
   }
 
-  Widget _chartCategorySection() {
+  Widget _barChartCategorySection() {
     List<CategoryDataChart> getCategoryDataChart = [
-      CategoryDataChart('Jan 2025', 35, 40, 76),
-      CategoryDataChart('Feb 2025', 60, 36, 43),
-      CategoryDataChart('Mar 2025', 98, 34, 56),
-      CategoryDataChart('Apr 2025', 34, 75, 65),
-      CategoryDataChart('Mei 2025', 56, 42, 62),
-      CategoryDataChart('Jun 2025', 77, 65, 56),
-      CategoryDataChart('Jul 2025', 24, 67, 23),
+      CategoryDataChart('Jan 2025', 0, 0, 0, 0),
+      CategoryDataChart('Feb 2025', 0, 0, 0, 0),
+      CategoryDataChart('Mar 2025', 0, 0, 0, 0),
+      CategoryDataChart('Apr 2025', 0, 0, 0, 0),
+      CategoryDataChart('Mei 2025', 0, 0, 0, 0),
+      CategoryDataChart('Jun 2025', 0, 0, 0, 0),
+      CategoryDataChart('Jul 2025', 0, 0, 0, 0),
     ];
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 20),
-        height: 280,
-        width: (getCategoryDataChart.length * 65) + 100,
-        child: SfCartesianChart(
-          tooltipBehavior: TooltipBehavior(enable: true),
-          margin: const EdgeInsets.all(0),
-          enableMultiSelection: true,
-          plotAreaBorderWidth: 0,
-          primaryXAxis: const CategoryAxis(
-            majorGridLines: MajorGridLines(width: 0),
-            axisLine: AxisLine(width: 0),
-            majorTickLines: MajorTickLines(size: 0),
-          ),
-          primaryYAxis: const NumericAxis(
-            isVisible: false,
-            interval: 10,
-            majorGridLines: MajorGridLines(width: 0),
-            axisLine: AxisLine(width: 0),
-            majorTickLines: MajorTickLines(size: 0),
-          ),
-          series: <CartesianSeries>[
-            ColumnSeries<CategoryDataChart, String>(
-              name: "Income",
-              width: .80,
-              dataSource: getCategoryDataChart,
-              xValueMapper: (CategoryDataChart chart, _) => chart.periode,
-              yValueMapper: (CategoryDataChart chart, _) => chart.totalIncome,
-              dataLabelSettings: const DataLabelSettings(isVisible: true),
-              onPointTap: (pointInteractionDetails) {
-                setState(() {});
-              },
+      child: BlocBuilder<ChartCategoriesCubit, ChartCategoriesState>(
+        builder: (context, state) {
+          if (state is ChartCategoriesLoading) {
+          } else if (state is ChartCategoriesSuccess) {
+            final List<CategoryDataChart> dChartCategoiresPeriode =
+                state.categoryPeriode.data.map((everyItem) {
+              return CategoryDataChart(
+                everyItem.periode,
+                everyItem.totalEntertaiment,
+                everyItem.totalFoodDrink,
+                everyItem.totalFreelance,
+                everyItem.totalSalaryMonthly,
+              );
+            }).toList();
+
+            return Container(
+              margin: const EdgeInsets.only(bottom: 20),
+              height: 280,
+              width: (dChartCategoiresPeriode.length * 65) + 100,
+              child: SfCartesianChart(
+                tooltipBehavior: TooltipBehavior(enable: true),
+                margin: const EdgeInsets.all(0),
+                enableMultiSelection: true,
+                plotAreaBorderWidth: 0,
+                primaryXAxis: const CategoryAxis(
+                  majorGridLines: MajorGridLines(width: 0),
+                  axisLine: AxisLine(width: 0),
+                  majorTickLines: MajorTickLines(size: 0),
+                ),
+                primaryYAxis: const NumericAxis(
+                  isVisible: false,
+                  interval: 100000,
+                  majorGridLines: MajorGridLines(width: 0),
+                  axisLine: AxisLine(width: 0),
+                  majorTickLines: MajorTickLines(size: 0),
+                ),
+                series: <CartesianSeries>[
+                  ColumnSeries<CategoryDataChart, String>(
+                    name: "Entertaiment",
+                    width: .80,
+                    dataSource: dChartCategoiresPeriode,
+                    xValueMapper: (CategoryDataChart chart, _) => chart.periode,
+                    yValueMapper: (CategoryDataChart chart, _) =>
+                        chart.totalEntertaiment,
+                    dataLabelSettings: const DataLabelSettings(isVisible: true),
+                    onPointTap: (pointInteractionDetails) {
+                      setState(() {});
+                    },
+                  ),
+                  ColumnSeries<CategoryDataChart, String>(
+                    name: "Food & Drink",
+                    width: .80,
+                    dataSource: dChartCategoiresPeriode,
+                    xValueMapper: (CategoryDataChart chart, _) => chart.periode,
+                    yValueMapper: (CategoryDataChart chart, _) =>
+                        chart.totalFoodDrink,
+                    dataLabelSettings: const DataLabelSettings(isVisible: true),
+                    onPointTap: (pointInteractionDetails) {
+                      setState(() {});
+                    },
+                  ),
+                  ColumnSeries<CategoryDataChart, String>(
+                    name: "Freelance",
+                    width: .80,
+                    dataSource: dChartCategoiresPeriode,
+                    xValueMapper: (CategoryDataChart chart, _) => chart.periode,
+                    yValueMapper: (CategoryDataChart chart, _) =>
+                        chart.totalFreelance,
+                    dataLabelSettings: const DataLabelSettings(isVisible: true),
+                    onPointTap: (pointInteractionDetails) {
+                      setState(() {});
+                    },
+                  ),
+                  ColumnSeries<CategoryDataChart, String>(
+                    name: "Salary Monthly",
+                    width: .80,
+                    dataSource: dChartCategoiresPeriode,
+                    xValueMapper: (CategoryDataChart chart, _) => chart.periode,
+                    yValueMapper: (CategoryDataChart chart, _) =>
+                        chart.totalSalaryMonthly,
+                    dataLabelSettings: const DataLabelSettings(isVisible: true),
+                    onPointTap: (pointInteractionDetails) {
+                      setState(() {});
+                    },
+                  ),
+                ],
+              ),
+            );
+          }
+
+          return Container(
+            margin: const EdgeInsets.only(bottom: 20),
+            height: 280,
+            width: (getCategoryDataChart.length * 65) + 100,
+            child: SfCartesianChart(
+              tooltipBehavior: TooltipBehavior(enable: true),
+              margin: const EdgeInsets.all(0),
+              enableMultiSelection: true,
+              plotAreaBorderWidth: 0,
+              primaryXAxis: const CategoryAxis(
+                majorGridLines: MajorGridLines(width: 0),
+                axisLine: AxisLine(width: 0),
+                majorTickLines: MajorTickLines(size: 0),
+              ),
+              primaryYAxis: const NumericAxis(
+                isVisible: false,
+                interval: 10,
+                majorGridLines: MajorGridLines(width: 0),
+                axisLine: AxisLine(width: 0),
+                majorTickLines: MajorTickLines(size: 0),
+              ),
+              series: <CartesianSeries>[
+                ColumnSeries<CategoryDataChart, String>(
+                  name: "Entertaiment",
+                  width: .80,
+                  dataSource: getCategoryDataChart,
+                  xValueMapper: (CategoryDataChart chart, _) => chart.periode,
+                  yValueMapper: (CategoryDataChart chart, _) =>
+                      chart.totalEntertaiment,
+                  dataLabelSettings: const DataLabelSettings(isVisible: true),
+                  onPointTap: (pointInteractionDetails) {
+                    setState(() {});
+                  },
+                ),
+                ColumnSeries<CategoryDataChart, String>(
+                  name: "Food & Drink",
+                  width: .80,
+                  dataSource: getCategoryDataChart,
+                  xValueMapper: (CategoryDataChart chart, _) => chart.periode,
+                  yValueMapper: (CategoryDataChart chart, _) =>
+                      chart.totalFoodDrink,
+                  dataLabelSettings: const DataLabelSettings(isVisible: true),
+                  onPointTap: (pointInteractionDetails) {
+                    setState(() {});
+                  },
+                ),
+                ColumnSeries<CategoryDataChart, String>(
+                  name: "Freelance",
+                  width: .80,
+                  dataSource: getCategoryDataChart,
+                  xValueMapper: (CategoryDataChart chart, _) => chart.periode,
+                  yValueMapper: (CategoryDataChart chart, _) =>
+                      chart.totalFreelance,
+                  dataLabelSettings: const DataLabelSettings(isVisible: true),
+                  onPointTap: (pointInteractionDetails) {
+                    setState(() {});
+                  },
+                ),
+                ColumnSeries<CategoryDataChart, String>(
+                  name: "Salary Monthly",
+                  width: .80,
+                  dataSource: getCategoryDataChart,
+                  xValueMapper: (CategoryDataChart chart, _) => chart.periode,
+                  yValueMapper: (CategoryDataChart chart, _) =>
+                      chart.totalSalaryMonthly,
+                  dataLabelSettings: const DataLabelSettings(isVisible: true),
+                  onPointTap: (pointInteractionDetails) {
+                    setState(() {});
+                  },
+                ),
+              ],
             ),
-            ColumnSeries<CategoryDataChart, String>(
-              name: "Expense",
-              width: .80,
-              dataSource: getCategoryDataChart,
-              xValueMapper: (CategoryDataChart chart, _) => chart.periode,
-              yValueMapper: (CategoryDataChart chart, _) => chart.totalExpense,
-              dataLabelSettings: const DataLabelSettings(isVisible: true),
-              onPointTap: (pointInteractionDetails) {
-                setState(() {});
-              },
-            ),
-            ColumnSeries<CategoryDataChart, String>(
-              name: "Loan",
-              width: .80,
-              dataSource: getCategoryDataChart,
-              xValueMapper: (CategoryDataChart chart, _) => chart.periode,
-              yValueMapper: (CategoryDataChart chart, _) => chart.totalLoan,
-              dataLabelSettings: const DataLabelSettings(isVisible: true),
-              onPointTap: (pointInteractionDetails) {
-                setState(() {});
-              },
-            ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

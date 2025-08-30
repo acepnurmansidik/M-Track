@@ -11,6 +11,7 @@ import 'package:tracking/pages/main_page.dart';
 import 'package:tracking/pages/auth/sign_in_page.dart';
 import 'package:tracking/pages/auth/sign_up_page.dart';
 import 'package:tracking/pages/splash_page.dart';
+import 'package:tracking/pages/statistic/cubit/chart_categories_cubit.dart';
 import 'package:tracking/pages/success_page.dart';
 
 Future main() async {
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => WalletCubit()),
         BlocProvider(create: (context) => ReffparamCubit()),
         BlocProvider(create: (context) => TransactionCubit()),
+        BlocProvider(create: (context) => ChartCategoriesCubit()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
