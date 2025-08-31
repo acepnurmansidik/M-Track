@@ -6,6 +6,7 @@ import 'package:tracking/cubit/page_cubit.dart';
 import 'package:tracking/cubit/reffparam/reffparam_cubit.dart';
 import 'package:tracking/cubit/user/user_cubit.dart';
 import 'package:tracking/firebase_options.dart';
+import 'package:tracking/pages/auth/cubit/auth_cubit.dart';
 import 'package:tracking/pages/dashboard/cubit/transaction_cubit.dart';
 import 'package:tracking/pages/dashboard/cubit/wallet_cubit.dart';
 import 'package:tracking/pages/main_page.dart';
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider(create: (context) => AuthCubit()),
         BlocProvider(create: (context) => PageCubit()),
         BlocProvider(create: (context) => UserCubit()),
         BlocProvider(create: (context) => WalletCubit()),

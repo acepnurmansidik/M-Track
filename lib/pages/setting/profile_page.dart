@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:tracking/cubit/user/user_cubit.dart';
+import 'package:tracking/pages/auth/cubit/auth_cubit.dart';
 import 'package:tracking/theme.dart';
 import 'package:tracking/utils/others.dart';
 
@@ -427,28 +428,40 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget _authSection() {
-    return GestureDetector(
-      onTap: () {
-        Navigator.pushNamedAndRemoveUntil(
-            context, '/sign-in', (route) => false);
+    return BlocConsumer<AuthCubit, AuthState>(
+      listener: (context, state) {
+        if (state is AuthSignOutToken) {
+          Navigator.pushNamedAndRemoveUntil(
+              context, '/sign-in', (route) => false);
+        }
       },
-      child: Container(
-        height: 55,
-        margin: const EdgeInsets.only(top: 10, bottom: 25),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(50),
-          color: kGreyColor.withOpacity(.2),
-        ),
-        child: Text(
-          "Log Out",
-          style: blackTextStyle.copyWith(
-            color: Colors.red,
-            fontWeight: bold,
-            fontSize: 16,
+      builder: (context, state) {
+        return Container(
+          height: 55,
+          margin: const EdgeInsets.only(top: 10, bottom: 25),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(50),
+            color: kGreyColor.withOpacity(.2),
           ),
-        ),
-      ),
+          child: InkWell(
+            borderRadius: BorderRadius.circular(50),
+            onTap: () {
+              context.read<AuthCubit>().signOut();
+            },
+            child: Center(
+              child: Text(
+                "Log Out",
+                style: blackTextStyle.copyWith(
+                  color: Colors.red,
+                  fontWeight: bold,
+                  fontSize: 16,
+                ),
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

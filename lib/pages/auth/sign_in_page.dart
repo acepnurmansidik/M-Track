@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:tracking/cubit/page_cubit.dart';
+import 'package:tracking/pages/auth/cubit/auth_cubit.dart';
 import 'package:tracking/theme.dart';
 import 'package:tracking/widgets/custom_textform_field_border.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -13,18 +16,23 @@ class _SignInPageState extends State<SignInPage> {
   TextEditingController emailController = TextEditingController(text: "");
   TextEditingController passwordController = TextEditingController(text: "");
 
+  final GlobalKey<FormState> _formKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kBaseColors,
-      body: ListView(
-        padding: EdgeInsets.symmetric(horizontal: defaultMargin),
-        children: [
-          _headerSection(),
-          _formSection(),
-          _buttonSubmit(),
-          _tachButton()
-        ],
+      body: Form(
+        key: _formKey,
+        child: ListView(
+          padding: EdgeInsets.symmetric(horizontal: defaultMargin),
+          children: [
+            _headerSection(),
+            _formSection(),
+            _buttonSubmit(),
+            _tachButton()
+          ],
+        ),
       ),
     );
   }
@@ -64,6 +72,9 @@ class _SignInPageState extends State<SignInPage> {
             isNumberOnly: false,
             hintText: 'Ex: johndoe@gmail.com',
             validateFunc: (value) {
+              if (value == null || value.isEmpty) {
+                return "email must not be empty";
+              }
               return null;
             },
           ),
@@ -74,6 +85,9 @@ class _SignInPageState extends State<SignInPage> {
             hintText: 'Enter your password',
             secureType: true,
             validateFunc: (value) {
+              if (value == null || value.isEmpty) {
+                return "password must not be empty.";
+              }
               return null;
             },
           ),
@@ -83,22 +97,50 @@ class _SignInPageState extends State<SignInPage> {
   }
 
   Widget _buttonSubmit() {
-    return Container(
-      alignment: Alignment.center,
-      margin: const EdgeInsets.only(bottom: 50),
-      padding: EdgeInsets.symmetric(
-        horizontal: defaultMargin,
-        vertical: 20,
-      ),
-      decoration: BoxDecoration(
-        color: kPrimaryV2Color,
-        borderRadius: BorderRadius.circular(18),
-      ),
-      child: Text(
-        "Sign In",
-        style: whiteTextStyle.copyWith(
-            fontSize: 14, fontWeight: bold, letterSpacing: 1),
-      ),
+    return BlocConsumer<AuthCubit, AuthState>(
+      listener: (context, state) {
+        if (state is AuthLoginSuccess) {
+          context.read<PageCubit>().setPage(0);
+          Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false);
+        }
+      },
+      builder: (context, state) {
+        if (state is AuthLoading) {
+          return const SizedBox(
+            height: 110,
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
+        return GestureDetector(
+          onTap: () {
+            if (_formKey.currentState!.validate()) {
+              context.read<AuthCubit>().signIn({
+                "email": emailController.text,
+                "password": passwordController.text,
+              });
+            }
+          },
+          child: Container(
+            alignment: Alignment.center,
+            margin: const EdgeInsets.only(bottom: 50),
+            padding: EdgeInsets.symmetric(
+              horizontal: defaultMargin,
+              vertical: 20,
+            ),
+            decoration: BoxDecoration(
+              color: kPrimaryV2Color,
+              borderRadius: BorderRadius.circular(18),
+            ),
+            child: Text(
+              "Sign In",
+              style: whiteTextStyle.copyWith(
+                  fontSize: 14, fontWeight: bold, letterSpacing: 1),
+            ),
+          ),
+        );
+      },
     );
   }
 

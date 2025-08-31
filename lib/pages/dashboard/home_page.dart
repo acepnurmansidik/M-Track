@@ -509,7 +509,7 @@ class _HomePageState extends State<HomePage> {
       padding: EdgeInsets.only(
         left: defaultMargin,
         right: defaultMargin,
-        bottom: 30,
+        bottom: 60,
       ),
       sliver: BlocBuilder<TransactionCubit, TransactionState>(
         builder: (context, state) {

@@ -5,18 +5,16 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:tracking/models/categories_model.dart';
 import 'package:tracking/models/transaction_model.dart';
+import 'package:tracking/services/auth_service.dart';
 
 class TransactionService {
-  final headers = {
-    'Content-Type': 'application/json',
-    'Authorization':
-        "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFjZXBudXJtYW5AZ21haWwuY29tIiwibmFtZSI6ImFjZXAgbnVybWFuIHNpZGlrIiwiaWF0IjoxNzU2MzQ5MDgyLCJleHAiOjE3NTY5NTM4ODIsImp0aSI6Ijg0MmIwNDM1ODdiNzQ3ZTU4N2Q0MWZjNDVlZDE4ZjgwIn0.UGlYvGqITyHN7n9hZvoV5Bd3IvsAc7bUFmx3WxHWpTz2aKEckUAwXvGgKHBCT_FL69Irwq7ASRH27W6DflLd_A",
-  };
   Future<CategoriesModelProps> getCategories() async {
     try {
+      final headers = await AuthService().authTokenHeaders('json');
       final response = await http.get(
-          Uri.parse('${dotenv.env["PUBLIC_API_BASE_V1"]}/transaction/category'),
-          headers: headers);
+        Uri.parse('${dotenv.env["PUBLIC_API_BASE_V1"]}/transaction/category'),
+        headers: headers,
+      );
 
       final result = CategoriesModelProps.fromJson(json.decode(response.body));
 
@@ -28,6 +26,7 @@ class TransactionService {
 
   Future<TransactionModelProps> getTransactionList() async {
     try {
+      final headers = await AuthService().authTokenHeaders('json');
       final response = await http.get(
         Uri.parse('${dotenv.env["PUBLIC_API_BASE_V1"]}/transaction/list'),
         headers: headers,
@@ -42,6 +41,7 @@ class TransactionService {
 
   Future<TransactionPeriodeModelProps> getPeriodeTransaction() async {
     try {
+      final headers = await AuthService().authTokenHeaders('json');
       final response = await http.get(
         Uri.parse(
             '${dotenv.env["PUBLIC_API_BASE_V1"]}/transaction/chart-category'),
@@ -58,6 +58,7 @@ class TransactionService {
 
   Future<void> postTransaction(body) async {
     try {
+      final headers = await AuthService().authTokenHeaders('json');
       final response = await http.post(
         Uri.parse('${dotenv.env["PUBLIC_API_BASE_V1"]}/transaction'),
         headers: headers,
@@ -76,6 +77,7 @@ class TransactionService {
 
   Future<void> putTransaction(id, body) async {
     try {
+      final headers = await AuthService().authTokenHeaders('json');
       final response = await http.put(
         Uri.parse('${dotenv.env["PUBLIC_API_BASE_V1"]}/transaction/$id'),
         body: body,
