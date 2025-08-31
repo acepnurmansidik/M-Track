@@ -1,6 +1,9 @@
 // ignore_for_file: unused_element
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:tracking/cubit/user/user_cubit.dart';
 import 'package:tracking/theme.dart';
 import 'package:tracking/utils/others.dart';
 
@@ -12,6 +15,11 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -45,79 +53,207 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget _titleSection() {
     return Container(
       margin: const EdgeInsets.only(bottom: 20, top: 40),
-      child: Column(
-        children: [
-          Container(
-            margin: const EdgeInsets.only(top: 20),
-            child: Stack(
+      child: BlocBuilder<UserCubit, UserState>(
+        builder: (context, state) {
+          if (state is UserLoading) {
+            return Column(
               children: [
-                Container(
-                  height: 100,
-                  width: 100,
-                  alignment: Alignment.center,
-                  margin: const EdgeInsets.only(bottom: 10),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.blue[100],
-                  ),
-                  child: Text(
-                    formatEmptyProfile('Acep Nurman Sidik'),
-                    style: greyTextStyle.copyWith(
-                      fontSize: 45,
-                      fontWeight: semibold,
-                      color: kPrimaryV2Color.withOpacity(.9),
+                Shimmer.fromColors(
+                  baseColor: Colors.grey[300]!,
+                  highlightColor: Colors.grey[100]!,
+                  child: Container(
+                    height: 100,
+                    width: 100,
+                    alignment: Alignment.center,
+                    margin: const EdgeInsets.only(bottom: 15, top: 20),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.blue[100],
                     ),
                   ),
                 ),
-                Container(
-                  height: 100,
-                  width: 100,
-                  alignment: Alignment.topRight,
-                  margin: const EdgeInsets.only(bottom: 10),
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.transparent,
-                  ),
+                Shimmer.fromColors(
+                  baseColor: Colors.grey[300]!,
+                  highlightColor: Colors.grey[100]!,
                   child: Container(
-                    height: 30,
-                    width: 30,
+                    height: 25,
+                    width: 200,
+                    alignment: Alignment.center,
+                    margin: const EdgeInsets.only(bottom: 10),
                     decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: kWhiteColor,
-                      border: Border.all(
-                        width: .2,
-                        color: kGreyColor,
-                      ),
+                      color: Colors.blue[100],
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                    child: Icon(
-                      Icons.edit,
-                      color: kBlackColor,
-                      size: 15,
+                  ),
+                ),
+                Shimmer.fromColors(
+                  baseColor: Colors.grey[300]!,
+                  highlightColor: Colors.grey[100]!,
+                  child: Container(
+                    height: 15,
+                    width: 100,
+                    alignment: Alignment.center,
+                    margin: const EdgeInsets.only(bottom: 5),
+                    decoration: BoxDecoration(
+                      color: Colors.blue[100],
+                      borderRadius: BorderRadius.circular(5),
                     ),
                   ),
                 ),
               ],
-            ),
-          ),
-          Container(
-            margin: const EdgeInsets.only(bottom: 5),
-            child: Text(
-              'Acep Nurman Sidik',
-              style: blackTextStyle.copyWith(
-                fontSize: 20,
-                color: kBlackColor,
-                fontWeight: bold,
+            );
+          } else if (state is UserSuccess) {
+            return Column(
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(top: 20),
+                  child: Stack(
+                    children: [
+                      Container(
+                        height: 100,
+                        width: 100,
+                        alignment: Alignment.center,
+                        margin: const EdgeInsets.only(bottom: 10),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.blue[100],
+                        ),
+                        child: Text(
+                          formatEmptyProfile(state.userProfile.data.name),
+                          style: greyTextStyle.copyWith(
+                            fontSize: 45,
+                            fontWeight: semibold,
+                            color: kPrimaryV2Color.withOpacity(.9),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        height: 100,
+                        width: 100,
+                        alignment: Alignment.topRight,
+                        margin: const EdgeInsets.only(bottom: 10),
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.transparent,
+                        ),
+                        child: Container(
+                          height: 30,
+                          width: 30,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: kWhiteColor,
+                            border: Border.all(
+                              width: .2,
+                              color: kGreyColor,
+                            ),
+                          ),
+                          child: Icon(
+                            Icons.edit,
+                            color: kBlackColor,
+                            size: 15,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.only(bottom: 5),
+                  child: Text(
+                    state.userProfile.data.name,
+                    style: blackTextStyle.copyWith(
+                      fontSize: 20,
+                      color: kBlackColor,
+                      fontWeight: bold,
+                    ),
+                  ),
+                ),
+                Text.rich(
+                  TextSpan(children: [
+                    const TextSpan(text: "Joined "),
+                    TextSpan(text: state.userProfile.data.joinedAt),
+                  ]),
+                  style:
+                      blackTextStyle.copyWith(fontSize: 14, color: kGreyColor),
+                ),
+              ],
+            );
+          }
+          return Column(
+            children: [
+              Container(
+                margin: const EdgeInsets.only(top: 20),
+                child: Stack(
+                  children: [
+                    Container(
+                      height: 100,
+                      width: 100,
+                      alignment: Alignment.center,
+                      margin: const EdgeInsets.only(bottom: 10),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.blue[100],
+                      ),
+                      child: Text(
+                        formatEmptyProfile('Acep Nurman Sidik'),
+                        style: greyTextStyle.copyWith(
+                          fontSize: 45,
+                          fontWeight: semibold,
+                          color: kPrimaryV2Color.withOpacity(.9),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: 100,
+                      width: 100,
+                      alignment: Alignment.topRight,
+                      margin: const EdgeInsets.only(bottom: 10),
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.transparent,
+                      ),
+                      child: Container(
+                        height: 30,
+                        width: 30,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: kWhiteColor,
+                          border: Border.all(
+                            width: .2,
+                            color: kGreyColor,
+                          ),
+                        ),
+                        child: Icon(
+                          Icons.edit,
+                          color: kBlackColor,
+                          size: 15,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ),
-          Text.rich(
-            const TextSpan(children: [
-              TextSpan(text: "Joined "),
-              TextSpan(text: "29 July 2025"),
-            ]),
-            style: blackTextStyle.copyWith(fontSize: 14, color: kGreyColor),
-          ),
-        ],
+              Container(
+                margin: const EdgeInsets.only(bottom: 5),
+                child: Text(
+                  'Acep Nurman Sidik',
+                  style: blackTextStyle.copyWith(
+                    fontSize: 20,
+                    color: kBlackColor,
+                    fontWeight: bold,
+                  ),
+                ),
+              ),
+              Text.rich(
+                const TextSpan(children: [
+                  TextSpan(text: "Joined "),
+                  TextSpan(text: "29 July 2025"),
+                ]),
+                style: blackTextStyle.copyWith(fontSize: 14, color: kGreyColor),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
