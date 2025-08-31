@@ -39,7 +39,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    context.read<TransactionCubit>().fetchInitiate();
     super.initState();
   }
 
@@ -81,132 +80,129 @@ class _HomePageState extends State<HomePage> {
 
   // NOTES: HEADER
   Widget _headerSection() {
-    Widget _balanceInfoSection({bool isCollapse = false}) {
-      Widget headerItem(String title, IconData icon, Function navigation) {
-        return GestureDetector(
-          onTap: () => navigation(),
-          child: Container(
-            height: 35,
-            margin: const EdgeInsets.only(right: 8),
-            alignment: Alignment.center,
-            padding: EdgeInsets.symmetric(
-              horizontal: defaultMargin,
-              vertical: 2,
-            ),
-            decoration: BoxDecoration(
-              color: kPrimaryV2Color,
-              borderRadius: BorderRadius.circular(100),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  icon,
-                  size: 20,
-                  color: kBaseColors,
-                ),
-                const SizedBox(
-                  width: 5,
-                ),
-                Text(
-                  title,
-                  style: TextStyle(
-                    color: kBaseColors,
-                    fontWeight: medium,
-                    fontSize: isCollapse ? 14 : 16,
-                  ),
-                ),
-              ],
-            ),
+    Widget headerItem(String title, IconData icon, VoidCallback onTap,
+        {bool isCollapse = false}) {
+      return InkWell(
+        onTap: onTap,
+        child: Container(
+          height: 35,
+          margin: const EdgeInsets.only(right: 8),
+          alignment: Alignment.center,
+          padding: EdgeInsets.symmetric(
+            horizontal: defaultMargin,
+            vertical: 2,
           ),
-        );
-      }
-
-      return Container(
-        color: kBaseColors,
-        padding: EdgeInsets.only(top: isCollapse ? 35 : 25, left: 20),
-        child: BlocBuilder<WalletCubit, WalletState>(builder: (context, state) {
-          if (state is WalletLoading) {
-            return BalanceInfoLoading(isCollapse: false);
-          } else if (state is WalletSuccess) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Your balance',
-                      style: greyTextStyle.copyWith(fontSize: 15),
-                    ),
-                    const SizedBox(width: 10),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 1),
-                      decoration: BoxDecoration(
-                        color: Colors.green[50],
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Text(
-                        state.walletSelected.walletName,
-                        style: greyTextStyle.copyWith(
-                          fontSize: 10,
-                          color: kGreenColor,
-                        ),
-                      ),
-                    ),
-                  ],
+          decoration: BoxDecoration(
+            color: kPrimaryV2Color,
+            borderRadius: BorderRadius.circular(100),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                icon,
+                size: 20,
+                color: kBaseColors,
+              ),
+              const SizedBox(width: 5),
+              Text(
+                title,
+                style: TextStyle(
+                  color: kBaseColors,
+                  fontWeight: medium,
+                  fontSize: isCollapse ? 14 : 16,
                 ),
-                const SizedBox(height: 2),
-                Text(
-                  formatCurrency(state.walletSelected.amount),
-                  style: blackTextStyle.copyWith(
-                    fontSize: isCollapse ? 38 : 40,
-                    fontWeight: semibold,
-                  ),
-                ),
-                Container(
-                  margin: const EdgeInsets.only(top: 9),
-                  child: Row(
-                    children: [
-                      headerItem('Request', Icons.add_card, () {
-                        Navigator.push(
-                          context,
-                          createRoute(const FormCashflowPage()),
-                        );
-                      }),
-                      headerItem('Transfer', Icons.send, () {}),
-                      isCollapse
-                          ? const SizedBox()
-                          : Container(
-                              height: 35,
-                              alignment: Alignment.center,
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 20,
-                                vertical: 2,
-                              ),
-                              decoration: BoxDecoration(
-                                color: kThirdColor,
-                                shape: BoxShape.circle,
-                              ),
-                              child: Icon(
-                                Icons.more_horiz,
-                                color: kBlackColor,
-                              ),
-                            ),
-                    ],
-                  ),
-                )
-              ],
-            );
-          }
-
-          return BalanceInfoFailed(isCollapse: false);
-        }),
+              ),
+            ],
+          ),
+        ),
       );
     }
 
-    Widget _titleSection() {
+    Widget balanceInfoSection({bool isCollapse = false}) {
+      return Container(
+        color: kBaseColors,
+        padding: EdgeInsets.only(top: isCollapse ? 35 : 25, left: 20),
+        child: BlocBuilder<WalletCubit, WalletState>(
+          builder: (context, state) {
+            if (state is WalletLoading) {
+              return BalanceInfoLoading(isCollapse: isCollapse);
+            } else if (state is WalletSuccess) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Your balance',
+                        style: greyTextStyle.copyWith(fontSize: 15),
+                      ),
+                      const SizedBox(width: 10),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 1),
+                        decoration: BoxDecoration(
+                          color: Colors.green[50],
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Text(
+                          state.walletSelected.walletName,
+                          style: greyTextStyle.copyWith(
+                            fontSize: 10,
+                            color: kGreenColor,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    formatCurrency(state.walletSelected.amount),
+                    style: blackTextStyle.copyWith(
+                      fontSize: isCollapse ? 38 : 40,
+                      fontWeight: semibold,
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(top: 9),
+                    child: Row(
+                      children: [
+                        headerItem('Request', Icons.add_card, () {
+                          Navigator.push(
+                            context,
+                            createRoute(const FormCashflowPage()),
+                          );
+                        }),
+                        headerItem('Transfer', Icons.send, () {}),
+                        if (!isCollapse)
+                          Container(
+                            height: 35,
+                            alignment: Alignment.center,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: kThirdColor,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              Icons.more_horiz,
+                              color: kBlackColor,
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            }
+            return BalanceInfoFailed(isCollapse: isCollapse);
+          },
+        ),
+      );
+    }
+
+    Widget titleSection() {
       return Container(
         padding: const EdgeInsets.only(top: 35, left: 20, right: 20),
         child: Row(
@@ -215,6 +211,7 @@ class _HomePageState extends State<HomePage> {
             BlocBuilder<UserCubit, UserState>(
               builder: (context, state) {
                 if (state is UserLoading) {
+                  return const SizedBox.shrink();
                 } else if (state is UserSuccess) {
                   return Stack(
                     children: [
@@ -235,6 +232,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                       ),
+                      // Uncomment and customize if you want to use an image instead
                       // Container(
                       //   height: 40,
                       //   width: 40,
@@ -271,30 +269,30 @@ class _HomePageState extends State<HomePage> {
       expandedHeight: 210,
       backgroundColor: kBaseColors,
       surfaceTintColor: kBaseColors,
+      pinned: true,
       flexibleSpace: FlexibleSpaceBar(
         background: Container(
           color: kBaseColors,
           child: Column(
             children: [
-              _titleSection(),
-              _balanceInfoSection(),
+              titleSection(),
+              balanceInfoSection(),
             ],
           ),
         ),
         collapseMode: CollapseMode.parallax,
         centerTitle: true,
         title: Opacity(
-          opacity: (scrollOffset / 100).clamp(0.0, 1.0), // Mengatur opacity
+          opacity: (scrollOffset / 100).clamp(0.0, 1.0),
           child: Transform.translate(
             offset: Offset(
               0,
               100 * (1 - (scrollOffset / 100).clamp(0.0, 1)),
-            ), // Mengatur posisi vertikal
-            child: _balanceInfoSection(isCollapse: true),
+            ),
+            child: balanceInfoSection(isCollapse: true),
           ),
         ),
       ),
-      pinned: true,
     );
   }
 
@@ -588,7 +586,6 @@ class _HomePageState extends State<HomePage> {
               ),
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
-                  print(categories[index]);
                   // Pastikan untuk mengakses elemen yang benar dari filteredCategories
                   return _categoryGridItem(
                       categories[index]); // Pass the category object

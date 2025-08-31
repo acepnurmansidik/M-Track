@@ -67,7 +67,7 @@ class TransactionService {
 
       final data = json.decode(response.body);
 
-      if (data["code"] >= 400) {
+      if (!data["success"]) {
         throw HttpException(data["message"]);
       }
     } catch (e) {
@@ -85,7 +85,7 @@ class TransactionService {
       );
       final data = json.decode(response.body);
 
-      if (data["code"] >= 400) {
+      if (!data["success"]) {
         throw HttpException(data["message"]);
       }
     } catch (e) {

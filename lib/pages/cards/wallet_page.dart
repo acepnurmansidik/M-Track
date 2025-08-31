@@ -347,8 +347,8 @@ class _WalletPageState extends State<WalletPage> {
                   state.transactionPeriode.data.map((everyItem) {
                 return TypeDataChart(
                   everyItem.periode,
-                  everyItem.income,
                   everyItem.expense,
+                  everyItem.income,
                 );
               }).toList();
               return SfCartesianChart(

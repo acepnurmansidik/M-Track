@@ -3,6 +3,8 @@ import "package:flutter_bloc/flutter_bloc.dart";
 import "package:tracking/cubit/page_cubit.dart";
 import "package:tracking/pages/auth/cubit/auth_cubit.dart";
 import "package:tracking/pages/cards/wallet_page.dart";
+import "package:tracking/pages/dashboard/cubit/transaction_cubit.dart";
+import "package:tracking/pages/dashboard/cubit/wallet_cubit.dart";
 import "package:tracking/pages/dashboard/home_page.dart";
 import "package:tracking/pages/setting/profile_page.dart";
 import "package:tracking/pages/statistic/activity_page.dart";
@@ -20,6 +22,15 @@ class _MainPageState extends State<MainPage> {
   @override
   void initState() {
     context.read<AuthCubit>().checkToken(context);
+    context.read<WalletCubit>().fetchUserWallet();
+    context.read<TransactionCubit>().fetchInitiate();
+
+    // Optional: listen transaction success to refresh data
+    context.read<TransactionCubit>().stream.listen((state) {
+      if (state is TransactionActionSuccess) {
+        context.read<TransactionCubit>().fetchInitiate();
+      }
+    });
     super.initState();
   }
 

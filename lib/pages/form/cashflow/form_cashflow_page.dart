@@ -49,6 +49,7 @@ class _FormCashflowPageState extends State<FormCashflowPage> {
   @override
   void initState() {
     context.read<ReffparamCubit>().fetchReffParam();
+
     setState(() {
       walletIdController.text =
           context.read<WalletCubit>().state.props[2].toString();
@@ -56,9 +57,10 @@ class _FormCashflowPageState extends State<FormCashflowPage> {
     super.initState();
   }
 
-  void _changeTypeCategory(int index) {
+  void _changeTypeCategory(int index, String sId) {
     setState(() {
       selectedCategoryIndex = index;
+      typeIdController.text = sId;
     });
   }
 
@@ -258,7 +260,8 @@ class _FormCashflowPageState extends State<FormCashflowPage> {
                         children:
                             state.data.data.asMap().entries.map((everyItem) {
                           return GestureDetector(
-                            onTap: () => _changeTypeCategory(everyItem.key),
+                            onTap: () => _changeTypeCategory(
+                                everyItem.key, everyItem.value.sId),
                             child: Container(
                               height: 70,
                               width: MediaQuery.of(context).size.width / 2.5,
@@ -390,49 +393,71 @@ class _FormCashflowPageState extends State<FormCashflowPage> {
   }
 
   Widget _authSection() {
-    return GestureDetector(
-      onTap: () {
-        final body = {
-          "total_amount": amountController.intValue.toString(),
-          "type_id": typeIdController.text,
-          "wallet_id": walletIdController.text,
-          "category_id": categoryIdController.text,
-          "note": notesIdController.text,
-        };
-        if (_formKey.currentState!.validate()) {
-          // Jika validasi berhasil, lakukan sesuatu
-          if (typeIdController.text.isNotEmpty && !widget.isEdit) {
-            context.read<TransactionCubit>().createTransaction(body);
-          } else if (typeIdController.text.isNotEmpty &&
-              widget.isEdit == true) {
-            context
-                .read<TransactionCubit>()
-                .updateTransaction(widget.transaction!.sId, body);
-          }
+    return BlocConsumer<TransactionCubit, TransactionState>(
+      listener: (context, state) {
+        if (state is TransactionActionSuccess) {
+          Navigator.pushNamedAndRemoveUntil(
+              context, '/success-page', (route) => false);
+        } else if (state is TransactionFailed) {
+          // Tampilkan error jika perlu
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.error)),
+          );
         }
       },
-      child: Container(
-        height: 55,
-        margin: EdgeInsets.only(
-          bottom: 30,
-          left: defaultMargin,
-          right: defaultMargin,
-        ),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(50),
-          color: kPrimaryV2Color,
-        ),
-        child: Text(
-          "Submit",
-          style: blackTextStyle.copyWith(
-            color: kWhiteColor,
-            fontWeight: bold,
-            fontSize: 16,
-            letterSpacing: 1,
+      builder: (context, state) {
+        bool isLoading = state is TransactionLoading;
+        return GestureDetector(
+          onTap: isLoading
+              ? null
+              : () async {
+                  if (_formKey.currentState!.validate()) {
+                    final body = {
+                      "total_amount": amountController.intValue.toString(),
+                      "type_id": typeIdController.text,
+                      "wallet_id": walletIdController.text,
+                      "category_id": categoryIdController.text,
+                      "note": notesIdController.text,
+                    };
+
+                    if (typeIdController.text.isNotEmpty && !widget.isEdit) {
+                      context.read<TransactionCubit>().createTransaction(body);
+                    } else if (typeIdController.text.isNotEmpty &&
+                        widget.isEdit) {
+                      context
+                          .read<TransactionCubit>()
+                          .updateTransaction(widget.transaction!.sId, body);
+                    }
+                  }
+                },
+          child: Container(
+            height: 55,
+            margin: EdgeInsets.only(
+              bottom: 30,
+              left: defaultMargin,
+              right: defaultMargin,
+            ),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(50),
+              color: isLoading
+                  ? kPrimaryV2Color.withOpacity(0.5)
+                  : kPrimaryV2Color,
+            ),
+            child: isLoading
+                ? const CircularProgressIndicator(color: Colors.white)
+                : Text(
+                    "Submit",
+                    style: blackTextStyle.copyWith(
+                      color: kWhiteColor,
+                      fontWeight: bold,
+                      fontSize: 16,
+                      letterSpacing: 1,
+                    ),
+                  ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
