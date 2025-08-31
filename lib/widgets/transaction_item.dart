@@ -1,6 +1,8 @@
 // ignore_for_file: body_might_complete_normally_nullable, avoid_print
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tracking/cubit/action_delete/action_delete_cubit.dart';
 import 'package:tracking/pages/detail_transaction_page.dart';
 import 'package:tracking/theme.dart';
 import 'package:tracking/utils/custom_widget.dart';
@@ -48,7 +50,7 @@ class TransactionItem extends StatelessWidget {
           if (direction == DismissDirection.endToStart) {
             // Dragged to the left
             // return cancelBtn(true, sId);
-            print("object");
+            context.read<ActionDeleteCubit>().activate('/transaction/$sId');
             return;
           } else {
             // Dragged to the right
