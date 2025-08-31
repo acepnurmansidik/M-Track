@@ -11,6 +11,7 @@ import "package:tracking/pages/dashboard/cubit/wallet_cubit.dart";
 import "package:tracking/pages/dashboard/home_page.dart";
 import "package:tracking/pages/setting/profile_page.dart";
 import "package:tracking/pages/statistic/activity_page.dart";
+import "package:tracking/pages/statistic/cubit/chart_categories_cubit.dart";
 import "package:tracking/theme.dart";
 import "package:tracking/widgets/custom_buttom_navbar.dart";
 
@@ -75,6 +76,8 @@ class _MainPageState extends State<MainPage> {
         context.read<ActionDeleteCubit>().deleteData();
         context.read<ActionDeleteCubit>().deactivate();
         context.read<TransactionCubit>().fetchInitiate();
+        context.read<WalletCubit>().fetchUserWallet();
+        context.read<ChartCategoriesCubit>().fetchInitate("1Y");
       } else {
         if (!mounted) return;
         setState(() {

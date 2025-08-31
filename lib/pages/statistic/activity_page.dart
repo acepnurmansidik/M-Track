@@ -57,7 +57,6 @@ class _ActivityPageState extends State<ActivityPage> {
 
   @override
   void initState() {
-    context.read<ChartCategoriesCubit>().fetchInitate("1Y");
     super.initState();
   }
 

@@ -235,8 +235,6 @@ class _WalletPageState extends State<WalletPage> {
   }
 
   Widget _typeSection() {
-    int totalIncome = 0;
-    int totalExpense = 0;
     Widget buildCashflowItem(bool isIncome, String title, int amount) {
       return SizedBox(
         width: MediaQuery.of(context).size.width / 2.23,
@@ -284,6 +282,8 @@ class _WalletPageState extends State<WalletPage> {
       builder: (context, state) {
         if (state is TransactionLoading) {
         } else if (state is TransactionSuccess) {
+          int totalIncome = 0;
+          int totalExpense = 0;
           for (var item in state.transactionPeriode.data) {
             totalIncome += item.income;
             totalExpense += item.expense;
