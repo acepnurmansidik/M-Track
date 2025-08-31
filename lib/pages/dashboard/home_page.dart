@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tracking/cubit/user/user_cubit.dart';
 import 'package:tracking/failed_item/balance_info_failed.dart';
 import 'package:tracking/failed_item/transaction_item_failed.dart';
 import 'package:tracking/models/categories_model.dart';
@@ -211,13 +212,53 @@ class _HomePageState extends State<HomePage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Container(
-              height: 40,
-              width: 40,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: kPrimaryV2Color,
-              ),
+            BlocBuilder<UserCubit, UserState>(
+              builder: (context, state) {
+                if (state is UserLoading) {
+                } else if (state is UserSuccess) {
+                  return Stack(
+                    children: [
+                      Container(
+                        height: 40,
+                        width: 40,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.blue[100],
+                        ),
+                        child: Text(
+                          formatEmptyProfile(state.userProfile.data.name),
+                          style: greyTextStyle.copyWith(
+                            fontSize: 16,
+                            fontWeight: semibold,
+                            color: kPrimaryV2Color.withOpacity(.9),
+                          ),
+                        ),
+                      ),
+                      // Container(
+                      //   height: 40,
+                      //   width: 40,
+                      //   alignment: Alignment.center,
+                      //   decoration: BoxDecoration(
+                      //     shape: BoxShape.circle,
+                      //     color: Colors.blue[100],
+                      //     image: const DecorationImage(
+                      //       image: AssetImage('assets/transportation.png'),
+                      //     ),
+                      //   ),
+                      // ),
+                    ],
+                  );
+                }
+                return Container(
+                  height: 40,
+                  width: 40,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: kPrimaryV2Color,
+                  ),
+                );
+              },
             ),
             NotificationItem(isShowNotif: false),
           ],
@@ -547,6 +588,7 @@ class _HomePageState extends State<HomePage> {
               ),
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
+                  print(categories[index]);
                   // Pastikan untuk mengakses elemen yang benar dari filteredCategories
                   return _categoryGridItem(
                       categories[index]); // Pass the category object

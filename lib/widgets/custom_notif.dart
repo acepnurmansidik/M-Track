@@ -18,24 +18,27 @@ class CustomNotif extends StatelessWidget {
       alignment: Alignment.topCenter,
       child: Container(
         width: double.infinity,
-        margin:
-            EdgeInsets.only(left: defaultMargin, right: defaultMargin, top: 50),
+        margin: EdgeInsets.only(
+          left: defaultMargin,
+          right: defaultMargin,
+          top: 50,
+        ),
         padding: EdgeInsets.only(
-            left: defaultMargin,
-            right: defaultMargin - 10,
-            top: 10,
-            bottom: 10),
+          left: defaultMargin,
+          right: defaultMargin - 10,
+          top: 10,
+          bottom: 10,
+        ),
         decoration: BoxDecoration(
-            color: isErr ? kRedColor : kGreenColor,
-            borderRadius: BorderRadius.circular(10)),
+          color: isErr ? kRedColor : kGreenColor,
+          borderRadius: BorderRadius.circular(10),
+        ),
         child: Flexible(
           child: SizedBox(
             width: 250,
             child: Text(
               errMsg,
-              style: whiteTextStyle.copyWith(
-                fontSize: 14,
-              ),
+              style: whiteTextStyle.copyWith(fontSize: 14),
               softWrap: true,
             ),
           ),

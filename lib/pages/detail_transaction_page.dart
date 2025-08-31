@@ -6,8 +6,21 @@ import 'package:tracking/theme.dart';
 import 'package:tracking/utils/others.dart';
 
 class DetailTransactionPage extends StatefulWidget {
-  String title;
-  DetailTransactionPage({super.key, required this.title});
+  String title = '';
+  String transactionId = '';
+  String type = '';
+  String date = '';
+  String currency = '';
+  int totalAmount = 0;
+  DetailTransactionPage({
+    super.key,
+    this.title = '',
+    this.transactionId = '',
+    this.type = '',
+    this.date = '',
+    this.totalAmount = 0,
+    this.currency = 'idr',
+  });
 
   @override
   State<DetailTransactionPage> createState() => _DetailTransactionPageState();
@@ -113,12 +126,13 @@ class _DetailTransactionPageState extends State<DetailTransactionPage> {
             child: Column(
               children: [
                 Container(
-                  height: 50,
-                  width: 50,
+                  height: 60,
+                  width: 60,
                   margin: const EdgeInsets.only(bottom: 10),
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage('assets/${widget.title}.png'),
+                      image: AssetImage(
+                          'assets/${widget.title.replaceAll(" ", "").toLowerCase()}.png'),
                       colorFilter: ColorFilter.mode(
                         kPrimaryV2Color,
                         BlendMode.srcIn,
@@ -127,10 +141,13 @@ class _DetailTransactionPageState extends State<DetailTransactionPage> {
                   ),
                 ),
                 Text(
-                  formatCurrency(400000),
+                  formatCurrency(widget.totalAmount),
                   style: blackTextStyle.copyWith(
                     fontWeight: semibold,
                     fontSize: 18,
+                    color: widget.type.toLowerCase() == "income"
+                        ? kGreenColor
+                        : kRedColor,
                   ),
                 ),
                 const SizedBox(height: 3),
@@ -141,14 +158,18 @@ class _DetailTransactionPageState extends State<DetailTransactionPage> {
               ],
             ),
           ),
-          _detailItem("Transaction ID", "DBS5675SD", false),
-          _detailItem("Type", "Income", false),
-          _detailItem("Date", "25 Aug, 2025, 10:24 AM", false),
-          _detailItem("Total", formatCurrency(400000), true),
+          _detailItem(
+              "Transaction ID",
+              truncateWithEllipsis(text: widget.transactionId, cutoff: 17),
+              false),
+          _detailItem("Type", toTitleCase(widget.type), false),
+          _detailItem("Date", widget.date, false),
+          _detailItem("Currency", widget.currency.toUpperCase(), false),
+          _detailItem("Total", formatCurrency(widget.totalAmount), true),
           Container(
             padding: const EdgeInsets.all(20),
             child: PrettyQr(
-              data: 'ad8asy9dasd',
+              data: widget.transactionId,
               size: 150,
               roundEdges: true,
               elementColor: kPrimaryV2Color,

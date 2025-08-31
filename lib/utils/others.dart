@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_interpolation_to_compose_strings
+
 import 'package:intl/intl.dart';
 
 formatRupiah(int nominal) {
@@ -17,6 +19,14 @@ toTitleCase(String input) {
     if (word.isEmpty) return word; // Menghindari kata kosong
     return word[0].toUpperCase() + word.substring(1).toLowerCase();
   }).join(' ');
+}
+
+String truncateWithEllipsis({String text = '', int cutoff = 10}) {
+  if (text.length <= cutoff) {
+    return text;
+  } else {
+    return text.substring(0, cutoff) + '...';
+  }
 }
 
 String formatEmptyProfile(String title) {

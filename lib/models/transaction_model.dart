@@ -36,6 +36,24 @@ class TransactionDaum {
   }
 }
 
+// class WalletId {
+//   String sId;
+//   String walletName;
+//   // String currency_id;
+
+//   WalletId({
+//     required this.sId,
+//     required this.walletName,
+//   });
+
+//   factory WalletId.fromJson(Map<String, dynamic> json) {
+//     return WalletId(
+//       sId: json['_id'],
+//       walletName: json['wallet_name'],
+//     );
+//   }
+// }
+
 class TransactionModelProps {
   bool success;
   String message;

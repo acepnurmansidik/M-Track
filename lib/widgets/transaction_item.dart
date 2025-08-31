@@ -31,7 +31,11 @@ class TransactionItem extends StatelessWidget {
         Navigator.of(context).push(
           createRoute(
             DetailTransactionPage(
-              title: "transportation",
+              title: title,
+              type: isIncome,
+              date: datetime,
+              totalAmount: nominal,
+              transactionId: sId,
             ),
           ),
         );

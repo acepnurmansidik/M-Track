@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:tracking/cubit/user/user_cubit.dart';
 import 'package:tracking/pages/cards/wallet_balance_details.dart';
 import 'package:tracking/pages/cards/wallet_item.dart';
 import 'package:tracking/pages/dashboard/cubit/transaction_cubit.dart';
@@ -73,17 +74,39 @@ class _WalletPageState extends State<WalletPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text.rich(
-                  TextSpan(
-                    children: [
-                      const TextSpan(text: "Hi, "),
-                      TextSpan(text: toTitleCase("john doe")),
-                    ],
-                    style: blackTextStyle.copyWith(
-                      fontWeight: semibold,
-                      fontSize: 16,
-                    ),
-                  ),
+                BlocBuilder<UserCubit, UserState>(
+                  builder: (context, state) {
+                    if (state is UserLoading) {
+                    } else if (state is UserSuccess) {
+                      return Text.rich(
+                        TextSpan(
+                          children: [
+                            const TextSpan(text: "Hi, "),
+                            TextSpan(
+                              text: toTitleCase(
+                                  state.userProfile.data.name.split(' ')[0]),
+                            ),
+                          ],
+                          style: blackTextStyle.copyWith(
+                            fontWeight: semibold,
+                            fontSize: 16,
+                          ),
+                        ),
+                      );
+                    }
+                    return Text.rich(
+                      TextSpan(
+                        children: [
+                          const TextSpan(text: "Hi, "),
+                          TextSpan(text: toTitleCase("john doe")),
+                        ],
+                        style: blackTextStyle.copyWith(
+                          fontWeight: semibold,
+                          fontSize: 16,
+                        ),
+                      ),
+                    );
+                  },
                 ),
                 Text(
                   'How are you today',
