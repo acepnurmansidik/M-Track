@@ -377,7 +377,11 @@ class _ProfilePageState extends State<ProfilePage> {
                 icon: Icons.password,
               ),
               _itemNavigationMenu(
-                title: "fingerprint",
+                title: "pin",
+                icon: Icons.lock_outline_rounded,
+              ),
+              _itemNavigationMenu(
+                title: "biometrics",
                 icon: Icons.fingerprint,
                 devide: false,
               ),
@@ -429,12 +433,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget _authSection() {
     return BlocConsumer<AuthCubit, AuthState>(
-      listener: (context, state) {
-        if (state is AuthSignOutToken) {
-          Navigator.pushNamedAndRemoveUntil(
-              context, '/sign-in', (route) => false);
-        }
-      },
+      listener: (context, state) {},
       builder: (context, state) {
         return Container(
           height: 55,
@@ -447,7 +446,7 @@ class _ProfilePageState extends State<ProfilePage> {
           child: InkWell(
             borderRadius: BorderRadius.circular(50),
             onTap: () {
-              context.read<AuthCubit>().signOut();
+              context.read<AuthCubit>().signOut(context);
             },
             child: Center(
               child: Text(

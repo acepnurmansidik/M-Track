@@ -48,13 +48,18 @@ class AuthService {
     }
   }
 
-  Future<void> authLogOut() async {
+  Future<void> authLogOut(BuildContext context) async {
     try {
       AndroidOptions getAndroidOptions() => const AndroidOptions(
             encryptedSharedPreferences: true,
           );
       final storage = FlutterSecureStorage(aOptions: getAndroidOptions());
       await storage.delete(key: 'token');
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        '/sign-in',
+        (route) => false,
+      );
     } catch (e) {
       rethrow;
     }

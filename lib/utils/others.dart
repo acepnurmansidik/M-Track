@@ -7,7 +7,7 @@ formatRupiah(int nominal) {
       .format(nominal);
 }
 
-formatCurrency(int nominal) {
+formatCurrency(dynamic nominal) {
   return NumberFormat.currency(decimalDigits: 0, symbol: '', locale: "ID")
       .format(nominal);
 }
@@ -49,4 +49,18 @@ String formatEmptyProfile(String title) {
 
   // Mengembalikan inisial dalam huruf kapital
   return initials.toUpperCase();
+}
+
+String formatCurrencyIDRNumberShort(num value) {
+  if (value >= 1000000000000) {
+    return '${(value / 1000000000000).toStringAsFixed(1).replaceAll(RegExp(r"\.0$"), '')}T'; // T untuk triliun
+  } else if (value >= 1000000000) {
+    return '${(value / 1000000000).toStringAsFixed(1).replaceAll(RegExp(r"\.0$"), '')}M'; // M untuk milyar
+  } else if (value >= 1000000) {
+    return '${(value / 1000000).toStringAsFixed(1).replaceAll(RegExp(r"\.0$"), '')}jt'; // jt untuk juta
+  } else if (value >= 1000) {
+    return '${(value / 1000).toStringAsFixed(1).replaceAll(RegExp(r"\.0$"), '')}rb'; // rb untuk ribu
+  } else {
+    return value.toStringAsFixed(0);
+  }
 }

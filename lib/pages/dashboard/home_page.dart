@@ -159,6 +159,7 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(height: 2),
                   Text(
                     formatCurrency(state.walletSelected.amount),
+                    overflow: TextOverflow.ellipsis,
                     style: blackTextStyle.copyWith(
                       fontSize: isCollapse ? 38 : 40,
                       fontWeight: semibold,
@@ -537,6 +538,7 @@ class _HomePageState extends State<HomePage> {
                 style: greyTextStyle.copyWith(
                   fontSize: 16,
                 ),
+                overflow: TextOverflow.ellipsis,
               ),
             ],
           ),

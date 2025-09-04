@@ -260,18 +260,22 @@ class _WalletPageState extends State<WalletPage> {
                 ),
               ),
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  formatRupiah(amount),
-                  style: greenTextStyle.copyWith(
-                    color: isIncome ? Colors.green[300] : Colors.red[300],
+            SizedBox(
+              width: MediaQuery.of(context).size.width / 3.5,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    formatRupiah(amount),
+                    style: greenTextStyle.copyWith(
+                      color: isIncome ? Colors.green[300] : Colors.red[300],
+                    ),
+                    overflow: TextOverflow.ellipsis,
                   ),
-                ),
-                Text(title, style: greyTextStyle),
-              ],
+                  Text(title, style: greyTextStyle),
+                ],
+              ),
             ),
           ],
         ),
@@ -353,6 +357,18 @@ class _WalletPageState extends State<WalletPage> {
               }).toList();
               return SfCartesianChart(
                 tooltipBehavior: TooltipBehavior(enable: true),
+                onTooltipRender: (TooltipArgs args) {
+                  // args.text biasanya: "Income : 12345"
+                  if (args.text != null) {
+                    final parts = args.text!.split(':');
+                    if (parts.length == 2) {
+                      final label = parts[0].trim();
+                      final valueStr = parts[1].trim();
+                      final value = double.tryParse(valueStr) ?? 0;
+                      args.text = '$label : ${formatCurrency(value)}';
+                    }
+                  }
+                },
                 margin: const EdgeInsets.all(0),
                 enableMultiSelection: true,
                 plotAreaBorderWidth: 0,
@@ -361,11 +377,14 @@ class _WalletPageState extends State<WalletPage> {
                   axisLine: AxisLine(width: 1),
                   majorTickLines: MajorTickLines(size: 1),
                 ),
-                primaryYAxis: const NumericAxis(
-                  // isVisible: false,
-                  majorGridLines: MajorGridLines(width: 1),
-                  axisLine: AxisLine(width: 1),
-                  majorTickLines: MajorTickLines(size: 1),
+                primaryYAxis: NumericAxis(
+                  axisLabelFormatter: (AxisLabelRenderDetails args) {
+                    final label = formatCurrencyIDRNumberShort(args.value);
+                    return ChartAxisLabel(label, null);
+                  },
+                  majorGridLines: const MajorGridLines(width: 1),
+                  axisLine: const AxisLine(width: 1),
+                  majorTickLines: const MajorTickLines(size: 1),
                 ),
                 series: [
                   LineSeries<TypeDataChart, String>(
@@ -377,7 +396,14 @@ class _WalletPageState extends State<WalletPage> {
                     dataSource: dChart,
                     xValueMapper: (TypeDataChart sales, _) => sales.periode,
                     yValueMapper: (TypeDataChart sales, _) => sales.totalIncome,
-                    dataLabelSettings: const DataLabelSettings(isVisible: true),
+                    dataLabelSettings: DataLabelSettings(
+                      isVisible: true,
+                      // Custom formatter untuk label data
+                      builder: (data, point, series, pointIndex, seriesIndex) {
+                        final value = data.totalIncome;
+                        return Text(formatCurrency(value));
+                      },
+                    ),
                   ),
                   LineSeries<TypeDataChart, String>(
                     name: "Expense",
@@ -389,7 +415,14 @@ class _WalletPageState extends State<WalletPage> {
                     xValueMapper: (TypeDataChart sales, _) => sales.periode,
                     yValueMapper: (TypeDataChart sales, _) =>
                         sales.totalExpense,
-                    dataLabelSettings: const DataLabelSettings(isVisible: true),
+                    dataLabelSettings: DataLabelSettings(
+                      isVisible: true,
+                      // Custom formatter untuk label data
+                      builder: (data, point, series, pointIndex, seriesIndex) {
+                        final value = data.totalIncome;
+                        return Text(formatCurrency(value));
+                      },
+                    ),
                   ),
                 ],
               );
@@ -420,7 +453,14 @@ class _WalletPageState extends State<WalletPage> {
                   dataSource: dChart,
                   xValueMapper: (TypeDataChart sales, _) => sales.periode,
                   yValueMapper: (TypeDataChart sales, _) => sales.totalIncome,
-                  dataLabelSettings: const DataLabelSettings(isVisible: true),
+                  dataLabelSettings: DataLabelSettings(
+                    isVisible: true,
+                    // Custom formatter untuk label data
+                    builder: (data, point, series, pointIndex, seriesIndex) {
+                      final value = data.totalIncome;
+                      return Text(formatCurrency(value));
+                    },
+                  ),
                 ),
                 LineSeries<TypeDataChart, String>(
                   name: "Expense",
@@ -431,7 +471,14 @@ class _WalletPageState extends State<WalletPage> {
                   dataSource: dChart,
                   xValueMapper: (TypeDataChart sales, _) => sales.periode,
                   yValueMapper: (TypeDataChart sales, _) => sales.totalExpense,
-                  dataLabelSettings: const DataLabelSettings(isVisible: true),
+                  dataLabelSettings: DataLabelSettings(
+                    isVisible: true,
+                    // Custom formatter untuk label data
+                    builder: (data, point, series, pointIndex, seriesIndex) {
+                      final value = data.totalIncome;
+                      return Text(formatCurrency(value));
+                    },
+                  ),
                 ),
               ],
             );
