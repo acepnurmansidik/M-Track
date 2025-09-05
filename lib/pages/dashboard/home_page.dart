@@ -82,7 +82,7 @@ class _HomePageState extends State<HomePage> {
   Widget _headerSection() {
     Widget headerItem(String title, IconData icon, VoidCallback onTap,
         {bool isCollapse = false}) {
-      return InkWell(
+      return GestureDetector(
         onTap: onTap,
         child: Container(
           height: 35,

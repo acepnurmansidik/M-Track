@@ -26,6 +26,11 @@ class ChartCategoriesPeriodeDaum {
   int totalFoodDrink;
   int totalFreelance;
   int totalSalaryMonthly;
+  int totalOther;
+  int totalInvestment;
+  int totalTransportation;
+  int totalBonuses;
+  int totalShopping;
 
   ChartCategoriesPeriodeDaum({
     required this.periode,
@@ -33,6 +38,11 @@ class ChartCategoriesPeriodeDaum {
     required this.totalFoodDrink,
     required this.totalFreelance,
     required this.totalSalaryMonthly,
+    required this.totalOther,
+    required this.totalInvestment,
+    required this.totalTransportation,
+    required this.totalBonuses,
+    required this.totalShopping,
   });
 
   factory ChartCategoriesPeriodeDaum.fromJson(Map<String, dynamic> json) {
@@ -42,6 +52,11 @@ class ChartCategoriesPeriodeDaum {
       totalFoodDrink: json["total_food&drink"],
       totalFreelance: json["total_freelance"],
       totalSalaryMonthly: json["total_salarymonthly"],
+      totalOther: json["total_other"],
+      totalInvestment: json["total_investment"],
+      totalTransportation: json["total_transportation"],
+      totalBonuses: json["total_bonuses"],
+      totalShopping: json["total_shopping"],
     );
   }
 }

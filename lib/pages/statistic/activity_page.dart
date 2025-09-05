@@ -7,6 +7,7 @@ import 'package:tracking/pages/dashboard/cubit/transaction_cubit.dart';
 import 'package:tracking/pages/statistic/cubit/chart_categories_cubit.dart';
 import 'package:tracking/skelaton/category_list_loading.dart';
 import 'package:tracking/theme.dart';
+import 'package:tracking/utils/others.dart';
 import 'package:tracking/widgets/category_error_item.dart';
 import 'package:tracking/widgets/category_item.dart';
 
@@ -24,40 +25,51 @@ class CategoryDataChart {
     this.totalFoodDrink,
     this.totalFreelance,
     this.totalSalaryMonthly,
+    this.totalOther,
+    this.totalInvestment,
+    this.totalTransportation,
+    this.totalBonuses,
+    this.totalShopping,
   );
   final String periode;
   final int totalEntertaiment;
   final int totalFoodDrink;
   final int totalFreelance;
   final int totalSalaryMonthly;
+  final int totalOther;
+  final int totalInvestment;
+  final int totalTransportation;
+  final int totalBonuses;
+  final int totalShopping;
 }
 
 class _ActivityPageState extends State<ActivityPage> {
   int selectedIndexFilter = 3;
 
   List<CategoryDataChart> newGetCategoryDataChart = [
-    CategoryDataChart('Jan 2025', 0, 0, 0, 0),
-    CategoryDataChart('Feb 2025', 0, 0, 0, 0),
-    CategoryDataChart('Mar 2025', 0, 0, 0, 0),
-    CategoryDataChart('Apr 2025', 0, 0, 0, 0),
-    CategoryDataChart('Mei 2025', 0, 0, 0, 0),
-    CategoryDataChart('Jun 2025', 0, 0, 0, 0),
-    CategoryDataChart('Jul 2025', 0, 0, 0, 0),
+    CategoryDataChart('Jan 2025', 0, 0, 0, 0, 0, 0, 0, 0, 0),
+    CategoryDataChart('Feb 2025', 0, 0, 0, 0, 0, 0, 0, 0, 0),
+    CategoryDataChart('Mar 2025', 0, 0, 0, 0, 0, 0, 0, 0, 0),
+    CategoryDataChart('Apr 2025', 0, 0, 0, 0, 0, 0, 0, 0, 0),
+    CategoryDataChart('Mei 2025', 0, 0, 0, 0, 0, 0, 0, 0, 0),
+    CategoryDataChart('Jun 2025', 0, 0, 0, 0, 0, 0, 0, 0, 0),
+    CategoryDataChart('Jul 2025', 0, 0, 0, 0, 0, 0, 0, 0, 0),
   ];
 
   List<CategoryDataChart> getCategoryDataChart = [
-    CategoryDataChart('Jan 2025', 35, 40, 76, 43),
-    CategoryDataChart('Feb 2025', 60, 36, 43, 20),
-    CategoryDataChart('Mar 2025', 98, 34, 56, 82),
-    CategoryDataChart('Apr 2025', 34, 75, 65, 13),
-    CategoryDataChart('Mei 2025', 56, 42, 62, 120),
-    CategoryDataChart('Jun 2025', 77, 65, 56, 56),
-    CategoryDataChart('Jul 2025', 24, 67, 23, 39),
+    CategoryDataChart('Jan 2025', 35, 40, 76, 43, 0, 0, 0, 0, 0),
+    CategoryDataChart('Feb 2025', 60, 36, 43, 20, 0, 0, 0, 0, 0),
+    CategoryDataChart('Mar 2025', 98, 34, 56, 82, 0, 0, 0, 0, 0),
+    CategoryDataChart('Apr 2025', 34, 75, 65, 13, 0, 0, 0, 0, 0),
+    CategoryDataChart('Mei 2025', 56, 42, 62, 120, 0, 0, 0, 0, 0),
+    CategoryDataChart('Jun 2025', 77, 65, 56, 56, 0, 0, 0, 0, 0),
+    CategoryDataChart('Jul 2025', 24, 67, 23, 39, 0, 0, 0, 0, 0),
   ];
 
   @override
   void initState() {
     super.initState();
+    context.read<ChartCategoriesCubit>().fetchInitate("1Y");
   }
 
   @override
@@ -147,6 +159,11 @@ class _ActivityPageState extends State<ActivityPage> {
                 everyItem.totalFoodDrink,
                 everyItem.totalFreelance,
                 everyItem.totalSalaryMonthly,
+                everyItem.totalOther,
+                everyItem.totalInvestment,
+                everyItem.totalTransportation,
+                everyItem.totalBonuses,
+                everyItem.totalShopping,
               );
             }).toList();
 
@@ -155,7 +172,7 @@ class _ActivityPageState extends State<ActivityPage> {
               height: 280,
               width: (dChartCategoiresPeriode.length * 65) + 100,
               child: SfCartesianChart(
-                tooltipBehavior: TooltipBehavior(enable: true),
+                tooltipBehavior: TooltipBehavior(enable: true, shared: true),
                 margin: const EdgeInsets.all(0),
                 enableMultiSelection: true,
                 plotAreaBorderWidth: 0,
@@ -179,7 +196,9 @@ class _ActivityPageState extends State<ActivityPage> {
                     xValueMapper: (CategoryDataChart chart, _) => chart.periode,
                     yValueMapper: (CategoryDataChart chart, _) =>
                         chart.totalEntertaiment,
-                    dataLabelSettings: const DataLabelSettings(isVisible: true),
+                    dataLabelMapper: (CategoryDataChart chart, index) {
+                      return formatCurrency(chart.totalEntertaiment);
+                    },
                     onPointTap: (pointInteractionDetails) {
                       setState(() {});
                     },
@@ -191,7 +210,9 @@ class _ActivityPageState extends State<ActivityPage> {
                     xValueMapper: (CategoryDataChart chart, _) => chart.periode,
                     yValueMapper: (CategoryDataChart chart, _) =>
                         chart.totalFoodDrink,
-                    dataLabelSettings: const DataLabelSettings(isVisible: true),
+                    dataLabelMapper: (CategoryDataChart chart, index) {
+                      return formatCurrency(chart.totalFoodDrink);
+                    },
                     onPointTap: (pointInteractionDetails) {
                       setState(() {});
                     },
@@ -203,7 +224,9 @@ class _ActivityPageState extends State<ActivityPage> {
                     xValueMapper: (CategoryDataChart chart, _) => chart.periode,
                     yValueMapper: (CategoryDataChart chart, _) =>
                         chart.totalFreelance,
-                    dataLabelSettings: const DataLabelSettings(isVisible: true),
+                    dataLabelMapper: (CategoryDataChart chart, index) {
+                      return formatCurrency(chart.totalSalaryMonthly);
+                    },
                     onPointTap: (pointInteractionDetails) {
                       setState(() {});
                     },
@@ -216,6 +239,84 @@ class _ActivityPageState extends State<ActivityPage> {
                     yValueMapper: (CategoryDataChart chart, _) =>
                         chart.totalSalaryMonthly,
                     dataLabelSettings: const DataLabelSettings(isVisible: true),
+                    dataLabelMapper: (CategoryDataChart chart, index) {
+                      return formatCurrency(chart.totalSalaryMonthly);
+                    },
+                    onPointTap: (pointInteractionDetails) {
+                      setState(() {});
+                    },
+                  ),
+                  ColumnSeries<CategoryDataChart, String>(
+                    name: "Other",
+                    width: .80,
+                    dataSource: dChartCategoiresPeriode,
+                    xValueMapper: (CategoryDataChart chart, _) => chart.periode,
+                    yValueMapper: (CategoryDataChart chart, _) =>
+                        chart.totalOther,
+                    dataLabelSettings: const DataLabelSettings(isVisible: true),
+                    dataLabelMapper: (CategoryDataChart chart, index) {
+                      return formatCurrency(chart.totalOther);
+                    },
+                    onPointTap: (pointInteractionDetails) {
+                      setState(() {});
+                    },
+                  ),
+                  ColumnSeries<CategoryDataChart, String>(
+                    name: "Investment",
+                    width: .80,
+                    dataSource: dChartCategoiresPeriode,
+                    xValueMapper: (CategoryDataChart chart, _) => chart.periode,
+                    yValueMapper: (CategoryDataChart chart, _) =>
+                        chart.totalInvestment,
+                    dataLabelSettings: const DataLabelSettings(isVisible: true),
+                    dataLabelMapper: (CategoryDataChart chart, index) {
+                      return formatCurrency(chart.totalInvestment);
+                    },
+                    onPointTap: (pointInteractionDetails) {
+                      setState(() {});
+                    },
+                  ),
+                  ColumnSeries<CategoryDataChart, String>(
+                    name: "Transportation",
+                    width: .80,
+                    dataSource: dChartCategoiresPeriode,
+                    xValueMapper: (CategoryDataChart chart, _) => chart.periode,
+                    yValueMapper: (CategoryDataChart chart, _) =>
+                        chart.totalTransportation,
+                    dataLabelSettings: const DataLabelSettings(isVisible: true),
+                    dataLabelMapper: (CategoryDataChart chart, index) {
+                      return formatCurrency(chart.totalTransportation);
+                    },
+                    onPointTap: (pointInteractionDetails) {
+                      setState(() {});
+                    },
+                  ),
+                  ColumnSeries<CategoryDataChart, String>(
+                    name: "Bonuses",
+                    width: .80,
+                    dataSource: dChartCategoiresPeriode,
+                    xValueMapper: (CategoryDataChart chart, _) => chart.periode,
+                    yValueMapper: (CategoryDataChart chart, _) =>
+                        chart.totalBonuses,
+                    dataLabelSettings: const DataLabelSettings(isVisible: true),
+                    dataLabelMapper: (CategoryDataChart chart, index) {
+                      return formatCurrency(chart.totalBonuses);
+                    },
+                    onPointTap: (pointInteractionDetails) {
+                      setState(() {});
+                    },
+                  ),
+                  ColumnSeries<CategoryDataChart, String>(
+                    name: "Shopping",
+                    width: .80,
+                    dataSource: dChartCategoiresPeriode,
+                    xValueMapper: (CategoryDataChart chart, _) => chart.periode,
+                    yValueMapper: (CategoryDataChart chart, _) =>
+                        chart.totalShopping,
+                    dataLabelSettings: const DataLabelSettings(isVisible: true),
+                    dataLabelMapper: (CategoryDataChart chart, index) {
+                      return formatCurrency(chart.totalShopping);
+                    },
                     onPointTap: (pointInteractionDetails) {
                       setState(() {});
                     },
