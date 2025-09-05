@@ -14,6 +14,7 @@ class TransactionItem extends StatelessWidget {
   final String isIncome;
   final int nominal;
   final String datetime;
+  final String notes;
   final double paddingHorizontal;
   final Color color;
 
@@ -23,6 +24,7 @@ class TransactionItem extends StatelessWidget {
     required this.nominal,
     required this.datetime,
     required this.title,
+    required this.notes,
     required this.isIncome,
     this.paddingHorizontal = 0,
     this.color = Colors.white,
@@ -39,6 +41,7 @@ class TransactionItem extends StatelessWidget {
               type: isIncome,
               date: datetime,
               totalAmount: nominal,
+              notes: notes,
               transactionId: sId,
             ),
           ),

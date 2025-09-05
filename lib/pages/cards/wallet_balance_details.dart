@@ -200,6 +200,7 @@ class _WalletBalanceDetailsState extends State<WalletBalanceDetails> {
                               datetime: everyItem.date,
                               title: everyItem.categoryName,
                               isIncome: everyItem.typeName,
+                              notes: everyItem.note,
                               color: Colors.grey[100]!,
                             );
                           },

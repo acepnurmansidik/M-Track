@@ -532,6 +532,7 @@ class _WalletPageState extends State<WalletPage> {
                         nominal: everyItem.totalAmount,
                         datetime: everyItem.date,
                         title: everyItem.categoryName,
+                        notes: everyItem.note,
                         isIncome: everyItem.typeName,
                         paddingHorizontal: defaultMargin,
                         color: Colors.grey[100]!,
@@ -547,6 +548,7 @@ class _WalletPageState extends State<WalletPage> {
                       datetime: "Aug 24, 2025, 8:10 AM",
                       title: "Freelance",
                       isIncome: "income",
+                      notes: "",
                     ),
                     TransactionItem(
                       sId: "2",
@@ -554,6 +556,7 @@ class _WalletPageState extends State<WalletPage> {
                       datetime: "Aug 24, 2025, 9:10 AM",
                       title: "Freelance",
                       isIncome: "expense",
+                      notes: "",
                     ),
                   ],
                 );

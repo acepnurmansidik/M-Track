@@ -11,6 +11,7 @@ class DetailTransactionPage extends StatefulWidget {
   String type = '';
   String date = '';
   String currency = '';
+  String notes = '';
   int totalAmount = 0;
   DetailTransactionPage({
     super.key,
@@ -20,6 +21,7 @@ class DetailTransactionPage extends StatefulWidget {
     this.date = '',
     this.totalAmount = 0,
     this.currency = 'idr',
+    this.notes = '',
   });
 
   @override
@@ -78,15 +80,14 @@ class _DetailTransactionPageState extends State<DetailTransactionPage> {
   }
 
   Widget _informationSection() {
-    Widget _detailItem(String title, dynamic subtitle, bool isLastItem) {
+    Widget _detailItem(String title, dynamic subtitle) {
       return Container(
         padding: const EdgeInsets.symmetric(vertical: 15),
         decoration: BoxDecoration(
           border: Border(
             bottom: BorderSide(
               width: 1,
-              color:
-                  isLastItem ? Colors.transparent : kGreyColor.withOpacity(.3),
+              color: kGreyColor.withOpacity(.3),
             ),
           ),
         ),
@@ -159,13 +160,50 @@ class _DetailTransactionPageState extends State<DetailTransactionPage> {
             ),
           ),
           _detailItem(
-              "Transaction ID",
-              truncateWithEllipsis(text: widget.transactionId, cutoff: 17),
-              false),
-          _detailItem("Type", toTitleCase(widget.type), false),
-          _detailItem("Date", widget.date, false),
-          _detailItem("Currency", widget.currency.toUpperCase(), false),
-          _detailItem("Total", formatCurrency(widget.totalAmount), true),
+            "Transaction ID",
+            truncateWithEllipsis(text: widget.transactionId, cutoff: 17),
+          ),
+          _detailItem("Type", toTitleCase(widget.type)),
+          _detailItem("Date", widget.date),
+          _detailItem("Currency", widget.currency.toUpperCase()),
+          _detailItem("Total", formatCurrency(widget.totalAmount)),
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 15),
+            margin: const EdgeInsets.only(bottom: 10),
+            decoration: const BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                  width: 1,
+                  color: Colors.transparent,
+                ),
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Notes:",
+                      style: blackTextStyle.copyWith(
+                        fontSize: 14,
+                        color: kGreyColor,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  widget.notes,
+                  style: blackTextStyle.copyWith(
+                    fontSize: 14,
+                    fontWeight: medium,
+                  ),
+                ),
+              ],
+            ),
+          ),
           Container(
             padding: const EdgeInsets.all(20),
             child: PrettyQr(

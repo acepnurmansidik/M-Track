@@ -127,6 +127,7 @@ class _DetailCategoryPageState extends State<DetailCategoryPage> {
                       datetime: everyItem.date,
                       nominal: everyItem.totalAmount,
                       isIncome: everyItem.typeName,
+                      notes: everyItem.note,
                     );
                   }
                   return const SizedBox();

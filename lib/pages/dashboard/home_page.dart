@@ -356,6 +356,7 @@ class _HomePageState extends State<HomePage> {
                                   datetime: everyItem.value.date,
                                   nominal: everyItem.value.totalAmount,
                                   isIncome: everyItem.value.typeName,
+                                  notes: everyItem.value.note,
                                   paddingHorizontal: 10,
                                 );
                               }
