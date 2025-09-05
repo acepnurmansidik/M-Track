@@ -15,6 +15,7 @@ class TransactionItem extends StatelessWidget {
   final int nominal;
   final String datetime;
   final double paddingHorizontal;
+  final Color color;
 
   const TransactionItem({
     super.key,
@@ -24,6 +25,7 @@ class TransactionItem extends StatelessWidget {
     required this.title,
     required this.isIncome,
     this.paddingHorizontal = 0,
+    this.color = Colors.white,
   });
 
   @override
@@ -78,7 +80,7 @@ class TransactionItem extends StatelessWidget {
                 padding: const EdgeInsets.all(6),
                 margin: const EdgeInsets.only(right: 10),
                 decoration: BoxDecoration(
-                  color: kWhiteColor,
+                  color: color,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Container(

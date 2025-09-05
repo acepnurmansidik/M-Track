@@ -4,6 +4,7 @@ import "package:flutter/material.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 import "package:tracking/cubit/action_delete/action_delete_cubit.dart";
 import "package:tracking/cubit/page_cubit.dart";
+import "package:tracking/cubit/user/user_cubit.dart";
 import "package:tracking/pages/auth/cubit/auth_cubit.dart";
 import "package:tracking/pages/cards/wallet_page.dart";
 import "package:tracking/pages/dashboard/cubit/transaction_cubit.dart";
@@ -31,6 +32,7 @@ class _MainPageState extends State<MainPage> {
   void initState() {
     super.initState();
 
+    context.read<UserCubit>().fetchInitiate();
     context.read<AuthCubit>().checkToken(context);
     context.read<WalletCubit>().fetchUserWallet();
     context.read<TransactionCubit>().fetchInitiate();

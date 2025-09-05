@@ -47,12 +47,7 @@ class _WalletPageState extends State<WalletPage> {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      padding: EdgeInsets.only(
-        left: defaultMargin,
-        right: defaultMargin,
-        top: 50,
-        bottom: 30,
-      ),
+      padding: const EdgeInsets.only(top: 50, bottom: 30),
       children: [
         _titleSection(),
         _cardSection(),
@@ -66,7 +61,11 @@ class _WalletPageState extends State<WalletPage> {
 
   Widget _titleSection() {
     return Container(
-      margin: const EdgeInsets.only(bottom: 15),
+      margin: EdgeInsets.only(
+        bottom: 15,
+        left: defaultMargin,
+        right: defaultMargin,
+      ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -149,7 +148,11 @@ class _WalletPageState extends State<WalletPage> {
 
   Widget _cardSection() {
     return Container(
-      margin: const EdgeInsets.only(bottom: 20),
+      margin: EdgeInsets.only(
+        bottom: 20,
+        left: defaultMargin,
+        right: defaultMargin,
+      ),
       height: 200,
       child: Stack(
         children: [
@@ -217,7 +220,8 @@ class _WalletPageState extends State<WalletPage> {
       );
     }
 
-    return SizedBox(
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: defaultMargin),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -282,48 +286,51 @@ class _WalletPageState extends State<WalletPage> {
       );
     }
 
-    return BlocBuilder<TransactionCubit, TransactionState>(
-      builder: (context, state) {
-        if (state is TransactionLoading) {
-        } else if (state is TransactionSuccess) {
-          int totalIncome = 0;
-          int totalExpense = 0;
-          for (var item in state.transactionPeriode.data) {
-            totalIncome += item.income;
-            totalExpense += item.expense;
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: defaultMargin),
+      child: BlocBuilder<TransactionCubit, TransactionState>(
+        builder: (context, state) {
+          if (state is TransactionLoading) {
+          } else if (state is TransactionSuccess) {
+            int totalIncome = 0;
+            int totalExpense = 0;
+            for (var item in state.transactionPeriode.data) {
+              totalIncome += item.income;
+              totalExpense += item.expense;
+            }
+            return Container(
+              margin: const EdgeInsets.only(bottom: 20),
+              height: 60,
+              child: Row(
+                children: [
+                  buildCashflowItem(true, "Income", totalIncome),
+                  Container(
+                    height: 50,
+                    width: .3,
+                    color: kGreyColor,
+                  ),
+                  buildCashflowItem(false, "Expense", totalExpense),
+                ],
+              ),
+            );
           }
           return Container(
             margin: const EdgeInsets.only(bottom: 20),
             height: 60,
             child: Row(
               children: [
-                buildCashflowItem(true, "Income", totalIncome),
+                buildCashflowItem(true, "Income", 0),
                 Container(
                   height: 50,
                   width: .3,
                   color: kGreyColor,
                 ),
-                buildCashflowItem(false, "Expense", totalExpense),
+                buildCashflowItem(false, "Expense", 0),
               ],
             ),
           );
-        }
-        return Container(
-          margin: const EdgeInsets.only(bottom: 20),
-          height: 60,
-          child: Row(
-            children: [
-              buildCashflowItem(true, "Income", 0),
-              Container(
-                height: 50,
-                width: .3,
-                color: kGreyColor,
-              ),
-              buildCashflowItem(false, "Expense", 0),
-            ],
-          ),
-        );
-      },
+        },
+      ),
     );
   }
 
@@ -337,38 +344,103 @@ class _WalletPageState extends State<WalletPage> {
       TypeDataChart('Jun 2025', 77, 65),
       TypeDataChart('Jul 2025', 24, 67),
     ];
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Container(
-        height: 230,
-        margin: const EdgeInsets.only(bottom: 20, top: 10),
-        width: (dChart.length * 60) + 50,
-        child: BlocBuilder<TransactionCubit, TransactionState>(
-          builder: (context, state) {
-            if (state is TransactionLoading) {
-            } else if (state is TransactionSuccess) {
-              List<TypeDataChart> dChart =
-                  state.transactionPeriode.data.map((everyItem) {
-                return TypeDataChart(
-                  everyItem.periode,
-                  everyItem.expense,
-                  everyItem.income,
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: defaultMargin),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Container(
+          height: 230,
+          margin: const EdgeInsets.only(bottom: 20, top: 10),
+          width: (dChart.length * 60) + 50,
+          child: BlocBuilder<TransactionCubit, TransactionState>(
+            builder: (context, state) {
+              if (state is TransactionLoading) {
+              } else if (state is TransactionSuccess) {
+                List<TypeDataChart> dChart =
+                    state.transactionPeriode.data.map((everyItem) {
+                  return TypeDataChart(
+                    everyItem.periode,
+                    everyItem.expense,
+                    everyItem.income,
+                  );
+                }).toList();
+                return SfCartesianChart(
+                  tooltipBehavior: TooltipBehavior(enable: true),
+                  onTooltipRender: (TooltipArgs args) {
+                    // args.text biasanya: "Income : 12345"
+                    if (args.text != null) {
+                      final parts = args.text!.split(':');
+                      if (parts.length == 2) {
+                        final label = parts[0].trim();
+                        final valueStr = parts[1].trim();
+                        final value = double.tryParse(valueStr) ?? 0;
+                        args.text = '$label : ${formatCurrency(value)}';
+                      }
+                    }
+                  },
+                  margin: const EdgeInsets.all(0),
+                  enableMultiSelection: true,
+                  plotAreaBorderWidth: 0,
+                  primaryXAxis: const CategoryAxis(
+                    majorGridLines: MajorGridLines(width: 1),
+                    axisLine: AxisLine(width: 1),
+                    majorTickLines: MajorTickLines(size: 1),
+                  ),
+                  primaryYAxis: NumericAxis(
+                    axisLabelFormatter: (AxisLabelRenderDetails args) {
+                      final label = formatCurrencyIDRNumberShort(args.value);
+                      return ChartAxisLabel(label, null);
+                    },
+                    majorGridLines: const MajorGridLines(width: 1),
+                    axisLine: const AxisLine(width: 1),
+                    majorTickLines: const MajorTickLines(size: 1),
+                  ),
+                  series: [
+                    LineSeries<TypeDataChart, String>(
+                      name: "Income",
+                      color: kGreenColor,
+                      markerSettings: const MarkerSettings(isVisible: true),
+                      onRendererCreated: (controller) {},
+                      onPointLongPress: (pointInteractionDetails) {},
+                      dataSource: dChart,
+                      xValueMapper: (TypeDataChart sales, _) => sales.periode,
+                      yValueMapper: (TypeDataChart sales, _) =>
+                          sales.totalIncome,
+                      dataLabelSettings: DataLabelSettings(
+                        isVisible: true,
+                        // Custom formatter untuk label data
+                        builder:
+                            (data, point, series, pointIndex, seriesIndex) {
+                          final value = data.totalIncome;
+                          return Text(formatCurrency(value));
+                        },
+                      ),
+                    ),
+                    LineSeries<TypeDataChart, String>(
+                      name: "Expense",
+                      color: kRedColor,
+                      markerSettings: const MarkerSettings(isVisible: true),
+                      onRendererCreated: (controller) {},
+                      onPointLongPress: (pointInteractionDetails) {},
+                      dataSource: dChart,
+                      xValueMapper: (TypeDataChart sales, _) => sales.periode,
+                      yValueMapper: (TypeDataChart sales, _) =>
+                          sales.totalExpense,
+                      dataLabelSettings: DataLabelSettings(
+                        isVisible: true,
+                        // Custom formatter untuk label data
+                        builder:
+                            (data, point, series, pointIndex, seriesIndex) {
+                          final value = data.totalIncome;
+                          return Text(formatCurrency(value));
+                        },
+                      ),
+                    ),
+                  ],
                 );
-              }).toList();
+              }
               return SfCartesianChart(
                 tooltipBehavior: TooltipBehavior(enable: true),
-                onTooltipRender: (TooltipArgs args) {
-                  // args.text biasanya: "Income : 12345"
-                  if (args.text != null) {
-                    final parts = args.text!.split(':');
-                    if (parts.length == 2) {
-                      final label = parts[0].trim();
-                      final valueStr = parts[1].trim();
-                      final value = double.tryParse(valueStr) ?? 0;
-                      args.text = '$label : ${formatCurrency(value)}';
-                    }
-                  }
-                },
                 margin: const EdgeInsets.all(0),
                 enableMultiSelection: true,
                 plotAreaBorderWidth: 0,
@@ -377,14 +449,11 @@ class _WalletPageState extends State<WalletPage> {
                   axisLine: AxisLine(width: 1),
                   majorTickLines: MajorTickLines(size: 1),
                 ),
-                primaryYAxis: NumericAxis(
-                  axisLabelFormatter: (AxisLabelRenderDetails args) {
-                    final label = formatCurrencyIDRNumberShort(args.value);
-                    return ChartAxisLabel(label, null);
-                  },
-                  majorGridLines: const MajorGridLines(width: 1),
-                  axisLine: const AxisLine(width: 1),
-                  majorTickLines: const MajorTickLines(size: 1),
+                primaryYAxis: const NumericAxis(
+                  // isVisible: false,
+                  majorGridLines: MajorGridLines(width: 1),
+                  axisLine: AxisLine(width: 1),
+                  majorTickLines: MajorTickLines(size: 1),
                 ),
                 series: [
                   LineSeries<TypeDataChart, String>(
@@ -426,63 +495,8 @@ class _WalletPageState extends State<WalletPage> {
                   ),
                 ],
               );
-            }
-            return SfCartesianChart(
-              tooltipBehavior: TooltipBehavior(enable: true),
-              margin: const EdgeInsets.all(0),
-              enableMultiSelection: true,
-              plotAreaBorderWidth: 0,
-              primaryXAxis: const CategoryAxis(
-                majorGridLines: MajorGridLines(width: 1),
-                axisLine: AxisLine(width: 1),
-                majorTickLines: MajorTickLines(size: 1),
-              ),
-              primaryYAxis: const NumericAxis(
-                // isVisible: false,
-                majorGridLines: MajorGridLines(width: 1),
-                axisLine: AxisLine(width: 1),
-                majorTickLines: MajorTickLines(size: 1),
-              ),
-              series: [
-                LineSeries<TypeDataChart, String>(
-                  name: "Income",
-                  color: kGreenColor,
-                  markerSettings: const MarkerSettings(isVisible: true),
-                  onRendererCreated: (controller) {},
-                  onPointLongPress: (pointInteractionDetails) {},
-                  dataSource: dChart,
-                  xValueMapper: (TypeDataChart sales, _) => sales.periode,
-                  yValueMapper: (TypeDataChart sales, _) => sales.totalIncome,
-                  dataLabelSettings: DataLabelSettings(
-                    isVisible: true,
-                    // Custom formatter untuk label data
-                    builder: (data, point, series, pointIndex, seriesIndex) {
-                      final value = data.totalIncome;
-                      return Text(formatCurrency(value));
-                    },
-                  ),
-                ),
-                LineSeries<TypeDataChart, String>(
-                  name: "Expense",
-                  color: kRedColor,
-                  markerSettings: const MarkerSettings(isVisible: true),
-                  onRendererCreated: (controller) {},
-                  onPointLongPress: (pointInteractionDetails) {},
-                  dataSource: dChart,
-                  xValueMapper: (TypeDataChart sales, _) => sales.periode,
-                  yValueMapper: (TypeDataChart sales, _) => sales.totalExpense,
-                  dataLabelSettings: DataLabelSettings(
-                    isVisible: true,
-                    // Custom formatter untuk label data
-                    builder: (data, point, series, pointIndex, seriesIndex) {
-                      final value = data.totalIncome;
-                      return Text(formatCurrency(value));
-                    },
-                  ),
-                ),
-              ],
-            );
-          },
+            },
+          ),
         ),
       ),
     );
@@ -493,7 +507,11 @@ class _WalletPageState extends State<WalletPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          margin: const EdgeInsets.only(bottom: 10),
+          margin: EdgeInsets.only(
+            bottom: 10,
+            left: defaultMargin,
+            right: defaultMargin,
+          ),
           child: Text(
             "Last transaction",
             style: blackTextStyle.copyWith(fontSize: 15, fontWeight: semibold),
@@ -515,6 +533,8 @@ class _WalletPageState extends State<WalletPage> {
                         datetime: everyItem.date,
                         title: everyItem.categoryName,
                         isIncome: everyItem.typeName,
+                        paddingHorizontal: defaultMargin,
+                        color: Colors.grey[100]!,
                       );
                     }).toList(),
                   );

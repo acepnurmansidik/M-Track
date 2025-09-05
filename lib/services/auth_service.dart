@@ -35,12 +35,14 @@ class AuthService {
   }
 
   Future<AuthModelProps> authLogin(body) async {
+    final storage = FlutterSecureStorage(aOptions: getAndroidOptions());
     try {
       final response = await http.post(
           Uri.parse('${dotenv.env["PUBLIC_API_BASE_V1"]}/auth/signin'),
           body: body);
 
       final auth = AuthModelProps.fromJson(json.decode(response.body));
+      storage.write(key: 'token', value: auth.data.token);
 
       return auth;
     } catch (e) {
@@ -49,11 +51,8 @@ class AuthService {
   }
 
   Future<void> authLogOut(BuildContext context) async {
+    final storage = FlutterSecureStorage(aOptions: getAndroidOptions());
     try {
-      AndroidOptions getAndroidOptions() => const AndroidOptions(
-            encryptedSharedPreferences: true,
-          );
-      final storage = FlutterSecureStorage(aOptions: getAndroidOptions());
       await storage.delete(key: 'token');
       Navigator.pushNamedAndRemoveUntil(
         context,

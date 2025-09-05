@@ -172,6 +172,8 @@ class _WalletBalanceDetailsState extends State<WalletBalanceDetails> {
                   ),
                 );
               } else if (state is TransactionSuccess) {
+                final reversedData =
+                    state.transactionPeriode.data.reversed.toList();
                 return Container(
                   padding: EdgeInsets.only(top: defaultMargin),
                   decoration: BoxDecoration(color: kWhiteColor),
@@ -180,8 +182,11 @@ class _WalletBalanceDetailsState extends State<WalletBalanceDetails> {
                     children: [
                       // Daftar transaksi menggunakan ListView dengan scrollController
                       Container(
-                        margin:
-                            const EdgeInsets.only(top: 75, left: 15, right: 15),
+                        margin: const EdgeInsets.only(
+                          top: 75,
+                          left: 15,
+                          right: 15,
+                        ),
                         child: ListView.builder(
                           controller: scrollController,
                           itemCount: state.transactionPeriode
@@ -195,6 +200,7 @@ class _WalletBalanceDetailsState extends State<WalletBalanceDetails> {
                               datetime: everyItem.date,
                               title: everyItem.categoryName,
                               isIncome: everyItem.typeName,
+                              color: Colors.grey[100]!,
                             );
                           },
                         ),
@@ -208,8 +214,9 @@ class _WalletBalanceDetailsState extends State<WalletBalanceDetails> {
                             margin: const EdgeInsets.only(bottom: 15),
                             decoration: BoxDecoration(
                               color: kDoveGreyColor,
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(18)),
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(18),
+                              ),
                             ),
                           ),
                           Container(
@@ -219,17 +226,22 @@ class _WalletBalanceDetailsState extends State<WalletBalanceDetails> {
                               reverse: true,
                               scrollDirection: Axis.horizontal,
                               child: Row(
-                                children: state.transactionPeriode.data
-                                    .asMap()
-                                    .entries
-                                    .map((entry) {
+                                children:
+                                    reversedData.asMap().entries.map((entry) {
                                   final idx = entry.key;
                                   final periode = entry.value.periode;
-                                  final isSelected = selectedIndex == idx;
+                                  // Karena data dibalik, indeks asli = originalLength - 1 - idx
+                                  final originalIndex =
+                                      state.transactionPeriode.data.length -
+                                          1 -
+                                          idx;
+                                  final isSelected =
+                                      selectedIndex == originalIndex;
+
                                   return GestureDetector(
                                     onTap: () {
                                       setState(() {
-                                        selectedIndex = idx;
+                                        selectedIndex = originalIndex;
                                       });
                                     },
                                     child: AnimatedContainer(

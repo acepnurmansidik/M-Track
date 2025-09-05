@@ -16,7 +16,7 @@ class BalanceInfoLoading extends StatelessWidget {
         highlightColor: Colors.grey[100]!,
         child: Container(
           height: 35,
-          width: 130,
+          width: 110,
           margin: const EdgeInsets.only(right: 8),
           alignment: Alignment.center,
           padding: EdgeInsets.symmetric(
