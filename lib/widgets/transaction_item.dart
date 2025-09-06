@@ -17,6 +17,7 @@ class TransactionItem extends StatelessWidget {
   final String notes;
   final double paddingHorizontal;
   final Color color;
+  final bool isActiveDismissible;
 
   const TransactionItem({
     super.key,
@@ -27,6 +28,7 @@ class TransactionItem extends StatelessWidget {
     required this.notes,
     required this.isIncome,
     this.paddingHorizontal = 0,
+    this.isActiveDismissible = true,
     this.color = Colors.white,
   });
 
@@ -49,6 +51,9 @@ class TransactionItem extends StatelessWidget {
       },
       child: Dismissible(
         key: Key(sId),
+        direction: isActiveDismissible
+            ? DismissDirection.horizontal
+            : DismissDirection.none,
         background: slideEditBackground(),
         secondaryBackground: slideDeleteBackground(),
         confirmDismiss: (direction) async {

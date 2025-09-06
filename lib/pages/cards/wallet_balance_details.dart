@@ -202,6 +202,7 @@ class _WalletBalanceDetailsState extends State<WalletBalanceDetails> {
                               isIncome: everyItem.typeName,
                               notes: everyItem.note,
                               color: Colors.grey[100]!,
+                              isActiveDismissible: false,
                             );
                           },
                         ),
