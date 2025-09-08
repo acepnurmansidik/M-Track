@@ -196,6 +196,7 @@ class _DetailCategoryPageState extends State<DetailCategoryPage> {
         height: 60,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
               height: 40,

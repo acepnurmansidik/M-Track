@@ -488,7 +488,7 @@ class _WalletPageState extends State<WalletPage> {
                       isVisible: true,
                       // Custom formatter untuk label data
                       builder: (data, point, series, pointIndex, seriesIndex) {
-                        final value = data.totalIncome;
+                        final value = data.totalExpense;
                         return Text(formatCurrency(value));
                       },
                     ),
