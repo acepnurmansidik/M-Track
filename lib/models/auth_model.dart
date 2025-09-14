@@ -1,11 +1,13 @@
 class AuthModelDaum {
   final String sId;
   final String name;
+  final String? pin;
   final String token;
 
   AuthModelDaum({
     required this.sId,
     required this.name,
+    required this.pin,
     required this.token,
   });
 
@@ -13,6 +15,7 @@ class AuthModelDaum {
     return AuthModelDaum(
       sId: json['_id'],
       name: json['name'],
+      pin: json['pin'],
       token: json['token'],
     );
   }

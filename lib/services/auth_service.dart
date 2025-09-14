@@ -35,13 +35,14 @@ class AuthService {
   }
 
   Future<AuthModelProps> authLogin(body) async {
-    final storage = FlutterSecureStorage(aOptions: getAndroidOptions());
     try {
       final response = await http.post(
           Uri.parse('${dotenv.env["PUBLIC_API_BASE_V1"]}/auth/signin'),
           body: body);
 
       final auth = AuthModelProps.fromJson(json.decode(response.body));
+      final storage = FlutterSecureStorage(aOptions: getAndroidOptions());
+
       storage.write(key: 'token', value: auth.data.token);
 
       return auth;

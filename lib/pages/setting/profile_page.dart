@@ -5,7 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:tracking/cubit/user/user_cubit.dart';
 import 'package:tracking/pages/auth/cubit/auth_cubit.dart';
+import 'package:tracking/pages/security_input_pin_page.dart';
 import 'package:tracking/theme.dart';
+import 'package:tracking/utils/custom_widget.dart';
 import 'package:tracking/utils/others.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -379,6 +381,12 @@ class _ProfilePageState extends State<ProfilePage> {
               _itemNavigationMenu(
                 title: "pin",
                 icon: Icons.lock_outline_rounded,
+                onChange: () {
+                  Navigator.push(
+                    context,
+                    createRoute(const SecurityInputPinPage()),
+                  );
+                },
               ),
               _itemNavigationMenu(
                 title: "biometrics",

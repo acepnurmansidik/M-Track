@@ -218,11 +218,21 @@ class _DetailCategoryPageState extends State<DetailCategoryPage> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  formatRupiah(amount),
-                  style: greenTextStyle.copyWith(
-                    color: isIncome ? Colors.green[300] : Colors.red[300],
+                TweenAnimationBuilder<int>(
+                  tween: IntTween(
+                    begin: amount == 0 ? 0 : amount ~/ 2,
+                    end: amount,
                   ),
+                  duration: const Duration(milliseconds: 1100),
+                  builder: (context, value, child) {
+                    return Text(
+                      formatRupiah(value),
+                      style: greenTextStyle.copyWith(
+                        color: isIncome ? Colors.green[300] : Colors.red[300],
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    );
+                  },
                 ),
                 Text(title, style: greyTextStyle),
               ],

@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:tracking/models/auth_model.dart';
 import 'package:tracking/services/auth_service.dart';
 
@@ -24,13 +23,6 @@ class AuthCubit extends Cubit<AuthState> {
     try {
       emit(AuthLoading());
       final auth = await AuthService().authLogin(body);
-
-      // save token to storage
-      AndroidOptions getAndroidOptions() => const AndroidOptions(
-            encryptedSharedPreferences: true,
-          );
-      final storage = FlutterSecureStorage(aOptions: getAndroidOptions());
-      await storage.write(key: 'token', value: auth.data.token);
 
       emit(AuthLoginSuccess(auth));
     } catch (e) {

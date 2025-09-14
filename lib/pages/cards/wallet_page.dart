@@ -270,12 +270,21 @@ class _WalletPageState extends State<WalletPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    formatRupiah(amount),
-                    style: greenTextStyle.copyWith(
-                      color: isIncome ? Colors.green[300] : Colors.red[300],
+                  TweenAnimationBuilder<int>(
+                    tween: IntTween(
+                      begin: amount == 0 ? 0 : amount ~/ 2,
+                      end: amount,
                     ),
-                    overflow: TextOverflow.ellipsis,
+                    duration: const Duration(milliseconds: 1100),
+                    builder: (context, value, child) {
+                      return Text(
+                        formatRupiah(value),
+                        style: greenTextStyle.copyWith(
+                          color: isIncome ? Colors.green[300] : Colors.red[300],
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      );
+                    },
                   ),
                   Text(title, style: greyTextStyle),
                 ],
@@ -396,7 +405,7 @@ class _WalletPageState extends State<WalletPage> {
                     majorTickLines: const MajorTickLines(size: 1),
                   ),
                   series: [
-                    LineSeries<TypeDataChart, String>(
+                    SplineSeries<TypeDataChart, String>(
                       name: "Income",
                       color: kGreenColor,
                       markerSettings: const MarkerSettings(isVisible: true),
@@ -416,7 +425,27 @@ class _WalletPageState extends State<WalletPage> {
                         },
                       ),
                     ),
-                    LineSeries<TypeDataChart, String>(
+                    // LineSeries<TypeDataChart, String>(
+                    //   name: "Income",
+                    //   color: kGreenColor,
+                    //   markerSettings: const MarkerSettings(isVisible: true),
+                    //   onRendererCreated: (controller) {},
+                    //   onPointLongPress: (pointInteractionDetails) {},
+                    //   dataSource: dChart,
+                    //   xValueMapper: (TypeDataChart sales, _) => sales.periode,
+                    //   yValueMapper: (TypeDataChart sales, _) =>
+                    //       sales.totalIncome,
+                    //   dataLabelSettings: DataLabelSettings(
+                    //     isVisible: true,
+                    //     // Custom formatter untuk label data
+                    //     builder:
+                    //         (data, point, series, pointIndex, seriesIndex) {
+                    //       final value = data.totalIncome;
+                    //       return Text(formatCurrency(value));
+                    //     },
+                    //   ),
+                    // ),
+                    SplineSeries<TypeDataChart, String>(
                       name: "Expense",
                       color: kRedColor,
                       markerSettings: const MarkerSettings(isVisible: true),
@@ -428,14 +457,33 @@ class _WalletPageState extends State<WalletPage> {
                           sales.totalExpense,
                       dataLabelSettings: DataLabelSettings(
                         isVisible: true,
-                        // Custom formatter untuk label data
                         builder:
                             (data, point, series, pointIndex, seriesIndex) {
-                          final value = data.totalIncome;
+                          final value = data.totalExpense;
                           return Text(formatCurrency(value));
                         },
                       ),
                     ),
+                    // LineSeries<TypeDataChart, String>(
+                    //   name: "Expense",
+                    //   color: kRedColor,
+                    //   markerSettings: const MarkerSettings(isVisible: true),
+                    //   onRendererCreated: (controller) {},
+                    //   onPointLongPress: (pointInteractionDetails) {},
+                    //   dataSource: dChart,
+                    //   xValueMapper: (TypeDataChart sales, _) => sales.periode,
+                    //   yValueMapper: (TypeDataChart sales, _) =>
+                    //       sales.totalExpense,
+                    //   dataLabelSettings: DataLabelSettings(
+                    //     isVisible: true,
+                    //     // Custom formatter untuk label data
+                    //     builder:
+                    //         (data, point, series, pointIndex, seriesIndex) {
+                    //       final value = data.totalExpense;
+                    //       return Text(formatCurrency(value));
+                    //     },
+                    //   ),
+                    // ),
                   ],
                 );
               }

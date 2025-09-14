@@ -15,6 +15,9 @@ class WalletBalanceDetails extends StatefulWidget {
 
 class _WalletBalanceDetailsState extends State<WalletBalanceDetails> {
   int selectedIndex = 0;
+  int totalExpense = 0;
+  int totalIncome = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -194,6 +197,7 @@ class _WalletBalanceDetailsState extends State<WalletBalanceDetails> {
                           itemBuilder: (context, index) {
                             final everyItem = state.transactionPeriode
                                 .data[selectedIndex].listData[index];
+
                             return TransactionItem(
                               sId: everyItem.sId,
                               nominal: everyItem.totalAmount,
@@ -249,9 +253,10 @@ class _WalletBalanceDetailsState extends State<WalletBalanceDetails> {
                                     child: AnimatedContainer(
                                       duration:
                                           const Duration(milliseconds: 300),
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: defaultMargin,
-                                          vertical: 15),
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 15,
+                                        vertical: 15,
+                                      ),
                                       decoration: BoxDecoration(
                                         border: Border(
                                           bottom: BorderSide(
