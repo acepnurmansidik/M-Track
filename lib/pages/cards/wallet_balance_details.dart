@@ -50,7 +50,7 @@ class _WalletBalanceDetailsState extends State<WalletBalanceDetails> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: const Icon(Icons.chevron_left, color: Colors.white),
+              child: const Icon(Icons.arrow_back, color: Colors.white),
             ),
           ),
         ],

@@ -17,7 +17,7 @@ import 'package:tracking/theme.dart';
 import 'package:tracking/utils/custom_widget.dart';
 import 'package:tracking/utils/others.dart';
 import 'package:tracking/widgets/category_error_item.dart';
-import 'package:tracking/widgets/notification_item.dart';
+import 'package:tracking/widgets/notification_navigation_item.dart';
 import 'package:tracking/widgets/transaction_item.dart';
 
 class HomePage extends StatefulWidget {
@@ -80,18 +80,18 @@ class _HomePageState extends State<HomePage> {
 
   // NOTES: HEADER
   Widget _headerSection() {
+    const collapsedHeight = 140.0;
+    const expandedHeight = 210.0;
+
     Widget headerItem(String title, IconData icon, VoidCallback onTap,
         {bool isCollapse = false}) {
-      return GestureDetector(
+      return InkWell(
         onTap: onTap,
+        borderRadius: BorderRadius.circular(100),
         child: Container(
           height: 35,
           margin: const EdgeInsets.only(right: 8),
-          alignment: Alignment.center,
-          padding: EdgeInsets.symmetric(
-            horizontal: defaultMargin,
-            vertical: 2,
-          ),
+          padding: EdgeInsets.symmetric(horizontal: defaultMargin, vertical: 2),
           decoration: BoxDecoration(
             color: kPrimaryV2Color,
             borderRadius: BorderRadius.circular(100),
@@ -99,11 +99,7 @@ class _HomePageState extends State<HomePage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                icon,
-                size: 20,
-                color: kBaseColors,
-              ),
+              Icon(icon, size: 20, color: kBaseColors),
               const SizedBox(width: 5),
               Text(
                 title,
@@ -124,6 +120,7 @@ class _HomePageState extends State<HomePage> {
         color: kBaseColors,
         padding: EdgeInsets.only(top: isCollapse ? 35 : 25, left: 20),
         child: BlocBuilder<WalletCubit, WalletState>(
+          buildWhen: (prev, curr) => curr is! WalletLoading,
           builder: (context, state) {
             if (state is WalletLoading) {
               return BalanceInfoLoading(isCollapse: isCollapse);
@@ -132,12 +129,9 @@ class _HomePageState extends State<HomePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(
-                        'Your balance',
-                        style: greyTextStyle.copyWith(fontSize: 15),
-                      ),
+                      Text('Your balance',
+                          style: greyTextStyle.copyWith(fontSize: 15)),
                       const SizedBox(width: 10),
                       Container(
                         padding: const EdgeInsets.symmetric(
@@ -149,9 +143,7 @@ class _HomePageState extends State<HomePage> {
                         child: Text(
                           state.walletSelected.walletName,
                           style: greyTextStyle.copyWith(
-                            fontSize: 10,
-                            color: kGreenColor,
-                          ),
+                              fontSize: 10, color: kGreenColor),
                         ),
                       ),
                     ],
@@ -165,34 +157,23 @@ class _HomePageState extends State<HomePage> {
                       fontWeight: semibold,
                     ),
                   ),
-                  Container(
-                    margin: const EdgeInsets.only(top: 9),
-                    child: Row(
-                      children: [
-                        headerItem('Request', Icons.add_card, () {
-                          Navigator.push(
-                            context,
-                            createRoute(const FormCashflowPage()),
-                          );
-                        }),
-                        headerItem('Transfer', Icons.send, () {}),
-                        if (!isCollapse)
-                          Container(
-                            height: 35,
-                            alignment: Alignment.center,
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 2),
-                            decoration: BoxDecoration(
-                              color: kThirdColor,
-                              shape: BoxShape.circle,
-                            ),
-                            child: Icon(
-                              Icons.more_horiz,
-                              color: kBlackColor,
-                            ),
-                          ),
-                      ],
-                    ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      headerItem('Request', Icons.add_card, () {
+                        Navigator.push(
+                          context,
+                          createRoute(const FormCashflowPage()),
+                        );
+                      }),
+                      headerItem('Transfer', Icons.send, () {}),
+                      if (!isCollapse)
+                        CircleAvatar(
+                          radius: 18,
+                          backgroundColor: kThirdColor,
+                          child: Icon(Icons.more_horiz, color: kBlackColor),
+                        ),
+                    ],
                   ),
                 ],
               );
@@ -204,82 +185,48 @@ class _HomePageState extends State<HomePage> {
     }
 
     Widget titleSection() {
-      return Container(
+      return Padding(
         padding: const EdgeInsets.only(top: 35, left: 20, right: 20),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             BlocBuilder<UserCubit, UserState>(
               builder: (context, state) {
-                if (state is UserLoading) {
-                  return const SizedBox.shrink();
-                } else if (state is UserSuccess) {
-                  return Stack(
-                    children: [
-                      Container(
-                        height: 40,
-                        width: 40,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.blue[100],
-                        ),
-                        child: Text(
-                          formatEmptyProfile(state.userProfile.data.name),
-                          style: greyTextStyle.copyWith(
-                            fontSize: 16,
-                            fontWeight: semibold,
-                            color: kPrimaryV2Color.withOpacity(.9),
-                          ),
-                        ),
+                if (state is UserSuccess) {
+                  return CircleAvatar(
+                    radius: 20,
+                    backgroundColor: Colors.blue[100],
+                    child: Text(
+                      formatEmptyProfile(state.userProfile.data.name),
+                      style: greyTextStyle.copyWith(
+                        fontSize: 16,
+                        fontWeight: semibold,
+                        color: kPrimaryV2Color.withOpacity(.9),
                       ),
-                      // Uncomment and customize if you want to use an image instead
-                      // Container(
-                      //   height: 40,
-                      //   width: 40,
-                      //   alignment: Alignment.center,
-                      //   decoration: BoxDecoration(
-                      //     shape: BoxShape.circle,
-                      //     color: Colors.blue[100],
-                      //     image: const DecorationImage(
-                      //       image: AssetImage('assets/transportation.png'),
-                      //     ),
-                      //   ),
-                      // ),
-                    ],
+                    ),
                   );
                 }
-                return Container(
-                  height: 40,
-                  width: 40,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: kPrimaryV2Color,
-                  ),
-                );
+                return const CircleAvatar(radius: 20);
               },
             ),
-            NotificationItem(isShowNotif: false),
+            NotificationNavigationItem(isShowNotif: false),
           ],
         ),
       );
     }
 
     return SliverAppBar(
-      collapsedHeight: 140,
-      expandedHeight: 210,
+      collapsedHeight: collapsedHeight,
+      expandedHeight: expandedHeight,
       backgroundColor: kBaseColors,
       surfaceTintColor: kBaseColors,
       pinned: true,
       flexibleSpace: FlexibleSpaceBar(
-        background: Container(
-          color: kBaseColors,
-          child: Column(
-            children: [
-              titleSection(),
-              balanceInfoSection(),
-            ],
-          ),
+        background: Column(
+          children: [
+            titleSection(),
+            balanceInfoSection(),
+          ],
         ),
         collapseMode: CollapseMode.parallax,
         centerTitle: true,
@@ -297,161 +244,28 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // NOTES: FILTER CATEGORY
+  // ---------------- FILTER CATEGORY ----------------
   Widget _categoriesFilterSection() {
-    Widget transactionHistorySection() {
-      return Container(
-        // padding: const EdgeInsets.symmetric(vertical: 5),
-        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-        decoration: BoxDecoration(
-          color: Colors.grey[100],
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: const EdgeInsets.only(left: 14, right: 8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Transactions',
-                    style: greyTextStyle,
-                  ),
-                  TextButton(
-                    onPressed: () {},
-                    child: Text(
-                      'See All',
-                      style: TextStyle(color: kPrimaryV2Color),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            // Contoh konten container
-            SizedBox(
-              height: 170,
-              child: BlocBuilder<TransactionCubit, TransactionState>(
-                builder: (context, state) {
-                  if (state is TransactionLoading) {
-                    return const Column(
-                      children: [
-                        TransactionSquareLoading(),
-                        TransactionSquareLoading(),
-                      ],
-                    );
-                  } else if (state is TransactionSuccess) {
-                    return Column(
-                      children: state.listItemTransaction.data.isNotEmpty
-                          ? state.listItemTransaction.data
-                              .asMap()
-                              .entries
-                              .map((everyItem) {
-                              if (everyItem.key <= 1) {
-                                return TransactionItem(
-                                  sId: everyItem.value.sId,
-                                  title:
-                                      toTitleCase(everyItem.value.categoryName),
-                                  datetime: everyItem.value.date,
-                                  nominal: everyItem.value.totalAmount,
-                                  isIncome: everyItem.value.typeName,
-                                  notes: everyItem.value.note,
-                                  paddingHorizontal: 10,
-                                );
-                              }
-                              return const SizedBox();
-                            }).toList()
-                          : [
-                              SizedBox(
-                                height: 150,
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      height: 115,
-                                      decoration: const BoxDecoration(
-                                        image: DecorationImage(
-                                          image: AssetImage(
-                                              'assets/empty-box.png'),
-                                        ),
-                                      ),
-                                    ),
-                                    Text(
-                                      "Aww... there's not transaction",
-                                      style: blackTextStyle.copyWith(
-                                          fontWeight: medium),
-                                    )
-                                  ],
-                                ),
-                              )
-                            ],
-                    );
-                  }
-
-                  return Column(
-                    children: [
-                      TransactionItemFailed(isIncome: true),
-                      TransactionItemFailed(isIncome: false),
-                    ],
-                  );
-                },
-              ),
-            )
-          ],
-        ),
-      );
-    }
-
-    Widget filterSection() {
-      Widget categoryItem(String title, double leftSpacing) {
-        return GestureDetector(
-          onTap: () {
-            handleChange(title);
-          },
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            margin: EdgeInsets.only(right: 7, left: leftSpacing),
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-            decoration: BoxDecoration(
-              color: selectedMenu == title ? kPrimaryV2Color : Colors.grey[100],
-              borderRadius: BorderRadius.circular(14),
-            ),
-            child: Text(
-              title,
-              style: blackTextStyle.copyWith(
-                fontWeight: selectedMenu == title ? semibold : medium,
-                color: selectedMenu == title ? kWhiteColor : kBlackColor,
-                fontSize: 13,
-              ),
+    Widget categoryItem(String title, double leftSpacing) {
+      final isSelected = selectedMenu == title;
+      return GestureDetector(
+        onTap: () => setState(() => selectedMenu = title),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          margin: EdgeInsets.only(right: 7, left: leftSpacing),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+          decoration: BoxDecoration(
+            color: isSelected ? kPrimaryV2Color : Colors.grey[100],
+            borderRadius: BorderRadius.circular(14),
+          ),
+          child: Text(
+            title,
+            style: blackTextStyle.copyWith(
+              fontWeight: isSelected ? semibold : medium,
+              color: isSelected ? kWhiteColor : kBlackColor,
+              fontSize: 13,
             ),
           ),
-        );
-      }
-
-      return Container(
-        margin: const EdgeInsets.only(bottom: 20),
-        child: Column(
-          children: [
-            Container(
-              width: MediaQuery.of(context).size.width,
-              margin: const EdgeInsets.only(top: 10),
-              child: SingleChildScrollView(
-                controller: controllerFilterCategory,
-                scrollDirection:
-                    Axis.horizontal, // Mengatur scroll ke arah horizontal
-                child: Row(
-                  children: [
-                    categoryItem('All', 20),
-                    // categoryItem('Investment', 0),
-                    // categoryItem('Savings', 0),
-                    categoryItem('Expense', 0),
-                    categoryItem('Income', 0),
-                    // categoryItem('Loans', 0),
-                  ],
-                ),
-              ),
-            ),
-          ],
         ),
       );
     }
@@ -459,161 +273,219 @@ class _HomePageState extends State<HomePage> {
     return SliverList(
       delegate: SliverChildListDelegate(
         [
-          transactionHistorySection(),
+          _transactionHistorySection(),
+          Padding(
+            padding:
+                EdgeInsets.symmetric(horizontal: defaultMargin, vertical: 10),
+            child:
+                Text('Category', style: greyTextStyle.copyWith(fontSize: 16)),
+          ),
           Container(
-            margin: EdgeInsets.symmetric(
-              horizontal: defaultMargin,
-              vertical: 10,
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Category',
-                  style: greyTextStyle.copyWith(fontSize: 16),
-                ),
-              ],
+            margin: const EdgeInsets.only(bottom: 20),
+            child: SingleChildScrollView(
+              controller: controllerFilterCategory,
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  categoryItem('All', 20),
+                  categoryItem('Expense', 0),
+                  categoryItem('Income', 0),
+                ],
+              ),
             ),
           ),
-          filterSection(),
         ],
       ),
     );
   }
 
-  // NOTES: CATEGORY
-  Widget _categoriesItemSection() {
-    Widget _categoryGridItem(CategoryDaum data) {
-      return GestureDetector(
-        onTap: () {
-          Navigator.of(context).push(
-            createRoute(
-              DetailCategoryPage(
-                title: data.category,
-                typeName: data.typeName,
-              ),
+  Widget _transactionHistorySection() {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Transactions', style: greyTextStyle),
+                TextButton(
+                  onPressed: () {},
+                  child:
+                      Text('See All', style: TextStyle(color: kPrimaryV2Color)),
+                ),
+              ],
             ),
-          );
-        },
-        child: Container(
-          height: 150,
-          width: 165,
-          padding: const EdgeInsets.all(15),
-          decoration: BoxDecoration(
-            color: kBaseColors,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.08),
-                spreadRadius: .5,
-                blurRadius: 15,
-                offset: const Offset(0, 0),
-              ),
-            ],
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                height: 60,
-                width: 60,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(
-                        "assets/${data.category.replaceAll(" ", "").toLowerCase()}_pulsar.png"),
-                  ),
-                ),
-              ),
-              const Spacer(),
-              Text(
-                toTitleCase(
-                    data.category), // Ganti dengan nama kategori dari model
-                style: blackTextStyle.copyWith(
-                  fontSize: 16,
-                  fontWeight: semibold,
-                ),
-              ),
-              Text(
-                formatRupiah(
-                    data.totalAmount), // Ganti dengan jumlah dari model
-                style: greyTextStyle.copyWith(
-                  fontSize: 16,
-                ),
-                overflow: TextOverflow.ellipsis,
-              ),
-            ],
+          SizedBox(
+            height: 170,
+            child: BlocBuilder<TransactionCubit, TransactionState>(
+              builder: (context, state) {
+                if (state is TransactionLoading) {
+                  return const Column(
+                    children: [
+                      TransactionSquareLoading(),
+                      TransactionSquareLoading()
+                    ],
+                  );
+                } else if (state is TransactionSuccess) {
+                  final items = state.listItemTransaction.data;
+                  if (items.isEmpty) {
+                    return Column(
+                      children: [
+                        Container(
+                          height: 115,
+                          decoration: const BoxDecoration(
+                            image: DecorationImage(
+                              image: AssetImage('assets/empty-box.png'),
+                            ),
+                          ),
+                        ),
+                        Text("Aww... there's no transaction",
+                            style: blackTextStyle.copyWith(fontWeight: medium)),
+                      ],
+                    );
+                  }
+                  return Column(
+                    children: items.take(2).map((item) {
+                      return TransactionItem(
+                        sId: item.sId,
+                        title: toTitleCase(item.categoryName),
+                        datetime: item.date,
+                        nominal: item.totalAmount,
+                        isIncome: item.typeName,
+                        notes: item.note,
+                        paddingHorizontal: 10,
+                      );
+                    }).toList(),
+                  );
+                }
+                return Column(
+                  children: [
+                    TransactionItemFailed(isIncome: true),
+                    TransactionItemFailed(isIncome: false),
+                  ],
+                );
+              },
+            ),
           ),
-        ),
-      );
-    }
+        ],
+      ),
+    );
+  }
 
+  // ---------------- CATEGORY GRID ----------------
+  Widget _categoriesItemSection() {
     return SliverPadding(
       padding: EdgeInsets.only(
-        left: defaultMargin,
-        right: defaultMargin,
-        bottom: 60,
-      ),
+          left: defaultMargin, right: defaultMargin, bottom: 60),
       sliver: BlocBuilder<TransactionCubit, TransactionState>(
         builder: (context, state) {
           if (state is TransactionLoading) {
-            return SliverGrid(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: 15,
-                crossAxisSpacing: 15,
-                childAspectRatio: 1,
-              ),
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  return const CategoryBoxLoading();
-                },
-                childCount: 4,
-              ),
-            );
+            return _buildLoadingGrid();
           } else if (state is TransactionSuccess) {
-            // Ambil data kategori
             final categories = selectedMenu == "All"
                 ? (state.categoryTransaction as CategoriesModelProps).data
                 : (state.categoryTransaction as CategoriesModelProps)
                     .data
-                    .where((itemSearch) =>
-                        itemSearch.typeName == selectedMenu.toLowerCase())
+                    .where(
+                        (item) => item.typeName == selectedMenu.toLowerCase())
                     .toList();
-
-            return SliverGrid(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: 15,
-                crossAxisSpacing: 15,
-                childAspectRatio: 1,
-              ),
-              delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
-                  // Pastikan untuk mengakses elemen yang benar dari filteredCategories
-                  return _categoryGridItem(
-                      categories[index]); // Pass the category object
-                },
-                childCount: categories.length,
-              ),
-            );
+            return _buildCategoryGrid(categories);
           }
-
-          return SliverGrid(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisSpacing: 15,
-              crossAxisSpacing: 15,
-              childAspectRatio: 1,
-            ),
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                return const CategoryErrorItem();
-              },
-              childCount: 4,
-            ),
-          );
+          return _buildErrorGrid();
         },
       ),
     );
   }
+
+  SliverGrid _buildLoadingGrid() => SliverGrid(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          mainAxisSpacing: 15,
+          crossAxisSpacing: 15,
+          childAspectRatio: 1,
+        ),
+        delegate: SliverChildBuilderDelegate(
+          (context, index) => const CategoryBoxLoading(),
+          childCount: 4,
+        ),
+      );
+
+  SliverGrid _buildErrorGrid() => SliverGrid(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          mainAxisSpacing: 15,
+          crossAxisSpacing: 15,
+          childAspectRatio: 1,
+        ),
+        delegate: SliverChildBuilderDelegate(
+          (context, index) => const CategoryErrorItem(),
+          childCount: 4,
+        ),
+      );
+
+  SliverGrid _buildCategoryGrid(List<CategoryDaum> categories) => SliverGrid(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          mainAxisSpacing: 15,
+          crossAxisSpacing: 15,
+          childAspectRatio: 1,
+        ),
+        delegate: SliverChildBuilderDelegate(
+          (context, index) {
+            final data = categories[index];
+            return GestureDetector(
+              onTap: () => Navigator.of(context).push(
+                createRoute(DetailCategoryPage(
+                  title: data.category,
+                  typeName: data.typeName,
+                )),
+              ),
+              child: Container(
+                height: 150,
+                padding: const EdgeInsets.all(15),
+                decoration: BoxDecoration(
+                  color: kBaseColors,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.08),
+                      spreadRadius: .5,
+                      blurRadius: 15,
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Image.asset(
+                      "assets/${data.category.replaceAll(" ", "").toLowerCase()}_pulsar.png",
+                      height: 60,
+                      width: 60,
+                    ),
+                    const Spacer(),
+                    Text(
+                      toTitleCase(data.category),
+                      style: blackTextStyle.copyWith(
+                          fontSize: 16, fontWeight: semibold),
+                    ),
+                    Text(
+                      formatRupiah(data.totalAmount),
+                      style: greyTextStyle.copyWith(fontSize: 16),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+          childCount: categories.length,
+        ),
+      );
 }

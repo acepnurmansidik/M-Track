@@ -10,7 +10,7 @@ import 'package:tracking/pages/dashboard/cubit/wallet_cubit.dart';
 import 'package:tracking/theme.dart';
 import 'package:tracking/utils/custom_widget.dart';
 import 'package:tracking/utils/others.dart';
-import 'package:tracking/widgets/notification_item.dart';
+import 'package:tracking/widgets/notification_navigation_item.dart';
 import 'package:tracking/widgets/transaction_item.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -140,7 +140,7 @@ class _WalletPageState extends State<WalletPage> {
               ],
             ),
           ),
-          NotificationItem(isShowNotif: false),
+          NotificationNavigationItem(isShowNotif: false),
         ],
       ),
     );
@@ -197,13 +197,14 @@ class _WalletPageState extends State<WalletPage> {
   }
 
   Widget _listButtonSection() {
-    Widget itemButton(String title, Function onNavigation) {
+    Widget itemButton(Function onNavigation,
+        {String title = "", double padding = 13}) {
       return GestureDetector(
         onTap: () => onNavigation(),
         child: Container(
           height: 50,
           width: 50,
-          padding: const EdgeInsets.all(13),
+          padding: EdgeInsets.all(padding),
           margin: const EdgeInsets.only(bottom: 20),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
@@ -226,13 +227,13 @@ class _WalletPageState extends State<WalletPage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          itemButton("card", () {
+          itemButton(() {
             Navigator.push(context, createRoute(const WalletBalanceDetails()));
-          }),
-          itemButton("send", () {}),
-          itemButton("menu", () {}),
-          itemButton("menu", () {}),
-          itemButton("menu", () {}),
+          }, title: "card"),
+          itemButton(title: "send", () {}),
+          itemButton(title: "remind", padding: 12, () {}),
+          itemButton(title: "menu", () {}),
+          itemButton(title: "menu", () {}),
         ],
       ),
     );

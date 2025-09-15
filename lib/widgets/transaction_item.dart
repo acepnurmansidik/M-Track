@@ -7,6 +7,8 @@ import 'package:tracking/pages/detail_transaction_page.dart';
 import 'package:tracking/theme.dart';
 import 'package:tracking/utils/custom_widget.dart';
 import 'package:tracking/utils/others.dart';
+import 'package:tracking/widgets/slide_edit_backgroud.dart';
+import 'package:tracking/widgets/slide_remove_backgroud.dart';
 
 class TransactionItem extends StatelessWidget {
   final String sId;
@@ -54,8 +56,8 @@ class TransactionItem extends StatelessWidget {
         direction: isActiveDismissible
             ? DismissDirection.horizontal
             : DismissDirection.none,
-        background: slideEditBackground(),
-        secondaryBackground: slideDeleteBackground(),
+        background: const SlideEditBackgroud(),
+        secondaryBackground: const SlideRemoveBackgroud(),
         confirmDismiss: (direction) async {
           if (direction == DismissDirection.endToStart) {
             // Dragged to the left
@@ -139,40 +141,6 @@ class TransactionItem extends StatelessWidget {
                 ],
               ),
             ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget slideEditBackground() {
-    return Container(
-      color: Colors.green,
-      height: 80,
-      child: const Align(
-        alignment: Alignment.centerLeft,
-        child: Padding(
-          padding: EdgeInsets.only(left: 20.0),
-          child: Icon(
-            Icons.edit,
-            color: Colors.white,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget slideDeleteBackground() {
-    return Container(
-      color: Colors.red,
-      height: 80,
-      child: const Align(
-        alignment: Alignment.centerRight,
-        child: Padding(
-          padding: EdgeInsets.only(right: 20.0),
-          child: Icon(
-            Icons.delete,
-            color: Colors.white,
           ),
         ),
       ),
