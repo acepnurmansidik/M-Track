@@ -124,6 +124,7 @@ class _DetailCategoryPageState extends State<DetailCategoryPage> {
                     return TransactionItem(
                       sId: everyItem.sId,
                       title: everyItem.categoryName,
+                      transactionCode: everyItem.transactionCode,
                       datetime: everyItem.date,
                       nominal: everyItem.totalAmount,
                       isIncome: everyItem.typeName,

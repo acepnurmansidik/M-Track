@@ -13,6 +13,7 @@ import 'package:tracking/widgets/slide_remove_backgroud.dart';
 class TransactionItem extends StatelessWidget {
   final String sId;
   final String title;
+  final String transactionCode;
   final String isIncome;
   final int nominal;
   final String datetime;
@@ -25,6 +26,7 @@ class TransactionItem extends StatelessWidget {
     super.key,
     required this.sId,
     required this.nominal,
+    required this.transactionCode,
     required this.datetime,
     required this.title,
     required this.notes,
@@ -46,7 +48,7 @@ class TransactionItem extends StatelessWidget {
               date: datetime,
               totalAmount: nominal,
               notes: notes,
-              transactionId: sId,
+              transactionId: transactionCode,
             ),
           ),
         );

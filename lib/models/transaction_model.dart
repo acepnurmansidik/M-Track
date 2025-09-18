@@ -3,6 +3,7 @@ class TransactionDaum {
   bool isPaid;
   int totalAmount;
   String note;
+  String transactionCode;
   String categoryName;
   String typeName;
   String createdAt;
@@ -11,6 +12,7 @@ class TransactionDaum {
 
   TransactionDaum({
     required this.sId,
+    required this.transactionCode,
     required this.isPaid,
     required this.totalAmount,
     required this.note,
@@ -24,6 +26,7 @@ class TransactionDaum {
   factory TransactionDaum.fromJson(Map<String, dynamic> json) {
     return TransactionDaum(
       sId: json['_id'],
+      transactionCode: json['transaction_code'],
       totalAmount: json['total_amount'],
       isPaid: json['is_paid'],
       note: json['note'],

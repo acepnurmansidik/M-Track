@@ -13,7 +13,6 @@ class SecurityChangePinPage extends StatefulWidget {
 
 class _SecurityChangePinPageState extends State<SecurityChangePinPage> {
   TextEditingController pinController = TextEditingController(text: "");
-  bool isMaximumInput = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -98,7 +97,7 @@ class _SecurityChangePinPageState extends State<SecurityChangePinPage> {
             ],
           ),
           const SizedBox(height: 15),
-          if (isMaximumInput)
+          if (pinController.text.length >= 7)
             Text(
               'PIN must be a maximum of 6 digits!',
               style: blackTextStyle.copyWith(
@@ -146,21 +145,27 @@ class _SecurityChangePinPageState extends State<SecurityChangePinPage> {
           return InkWell(
             onTap: () {
               setState(() {
-                if (pinController.text.length >= 7) {
-                  isMaximumInput = true;
-                } else {
-                  isMaximumInput = false;
-                }
-
+                // BIOMETRIC BUTTON
                 if (index == 9) {
                   return;
                 }
 
-                if (index == 11 && pinController.text.isNotEmpty) {
-                  pinController.text = pinController.text
-                      .substring(0, pinController.text.length - 1);
+                // BACKSPACE BUTTOM
+                if (index == 11) {
+                  if (pinController.text.isNotEmpty) {
+                    // Hapus karakter terakhir
+                    pinController.text = pinController.text
+                        .substring(0, pinController.text.length - 1);
+                  }
+
+                  // Jika panjang lebih dari 6, ambil hanya 5 karakter pertama
+                  if (pinController.text.length >= 6) {
+                    pinController.text = pinController.text.substring(0, 5);
+                  }
+
                   return;
                 }
+
                 if (index == 11 && pinController.text.isEmpty) {
                   return;
                 }
@@ -194,7 +199,7 @@ class _SecurityChangePinPageState extends State<SecurityChangePinPage> {
                           child: Text(
                             '${index == 10 ? "0" : index + 1}',
                             style: blackTextStyle.copyWith(
-                              fontSize: 20,
+                              fontSize: 24,
                               fontWeight: bold,
                               color: kBlackColor,
                             ),

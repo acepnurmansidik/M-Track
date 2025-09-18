@@ -357,6 +357,7 @@ class _HomePageState extends State<HomePage> {
                         sId: item.sId,
                         title: toTitleCase(item.categoryName),
                         datetime: item.date,
+                        transactionCode: item.transactionCode,
                         nominal: item.totalAmount,
                         isIncome: item.typeName,
                         notes: item.note,
@@ -430,62 +431,64 @@ class _HomePageState extends State<HomePage> {
         ),
       );
 
-  SliverGrid _buildCategoryGrid(List<CategoryDaum> categories) => SliverGrid(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          mainAxisSpacing: 15,
-          crossAxisSpacing: 15,
-          childAspectRatio: 1,
-        ),
-        delegate: SliverChildBuilderDelegate(
-          (context, index) {
-            final data = categories[index];
-            return GestureDetector(
-              onTap: () => Navigator.of(context).push(
-                createRoute(DetailCategoryPage(
-                  title: data.category,
-                  typeName: data.typeName,
-                )),
+  SliverGrid _buildCategoryGrid(List<CategoryDaum> categories) {
+    return SliverGrid(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        mainAxisSpacing: 15,
+        crossAxisSpacing: 15,
+        childAspectRatio: 1,
+      ),
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          final data = categories[index];
+          return GestureDetector(
+            onTap: () => Navigator.of(context).push(
+              createRoute(DetailCategoryPage(
+                title: data.category,
+                typeName: data.typeName,
+              )),
+            ),
+            child: Container(
+              height: 150,
+              padding: const EdgeInsets.all(15),
+              decoration: BoxDecoration(
+                color: kBaseColors,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.08),
+                    spreadRadius: .5,
+                    blurRadius: 15,
+                  ),
+                ],
               ),
-              child: Container(
-                height: 150,
-                padding: const EdgeInsets.all(15),
-                decoration: BoxDecoration(
-                  color: kBaseColors,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.08),
-                      spreadRadius: .5,
-                      blurRadius: 15,
-                    ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Image.asset(
-                      "assets/${data.category.replaceAll(" ", "").toLowerCase()}_pulsar.png",
-                      height: 60,
-                      width: 60,
-                    ),
-                    const Spacer(),
-                    Text(
-                      toTitleCase(data.category),
-                      style: blackTextStyle.copyWith(
-                          fontSize: 16, fontWeight: semibold),
-                    ),
-                    Text(
-                      formatRupiah(data.totalAmount),
-                      style: greyTextStyle.copyWith(fontSize: 16),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Image.asset(
+                    "assets/${data.category.replaceAll(" ", "").toLowerCase()}_pulsar.png",
+                    height: 60,
+                    width: 60,
+                  ),
+                  const Spacer(),
+                  Text(
+                    toTitleCase(data.category),
+                    style: blackTextStyle.copyWith(
+                        fontSize: 16, fontWeight: semibold),
+                  ),
+                  Text(
+                    formatCurrency(data.totalAmount),
+                    style: greyTextStyle.copyWith(fontSize: 16),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
               ),
-            );
-          },
-          childCount: categories.length,
-        ),
-      );
+            ),
+          );
+        },
+        childCount: categories.length,
+      ),
+    );
+  }
 }

@@ -201,6 +201,7 @@ class _WalletBalanceDetailsState extends State<WalletBalanceDetails> {
                             return TransactionItem(
                               sId: everyItem.sId,
                               nominal: everyItem.totalAmount,
+                              transactionCode: everyItem.transactionCode,
                               datetime: everyItem.date,
                               title: everyItem.categoryName,
                               isIncome: everyItem.typeName,
@@ -300,9 +301,7 @@ class _WalletBalanceDetailsState extends State<WalletBalanceDetails> {
                       margin: const EdgeInsets.only(top: 50),
                       child: ListView(
                         controller: scrollController,
-                        children: [
-                          // TODO: Tambahkan daftar transaksi default jika ada
-                        ],
+                        children: const [],
                       ),
                     ),
                     Column(

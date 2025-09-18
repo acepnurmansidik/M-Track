@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:tracking/cubit/user/user_cubit.dart';
 import 'package:tracking/pages/auth/cubit/auth_cubit.dart';
-import 'package:tracking/pages/security_input_pin_page.dart';
+import 'package:tracking/pages/setting/security_change_pin_page.dart';
 import 'package:tracking/theme.dart';
 import 'package:tracking/utils/custom_widget.dart';
 import 'package:tracking/utils/others.dart';
@@ -163,7 +163,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 Container(
                   margin: const EdgeInsets.only(bottom: 5),
                   child: Text(
-                    state.userProfile.data.name,
+                    toTitleCase(state.userProfile.data.name) ?? "",
                     style: blackTextStyle.copyWith(
                       fontSize: 20,
                       color: kBlackColor,
@@ -384,7 +384,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 onChange: () {
                   Navigator.push(
                     context,
-                    createRoute(const SecurityInputPinPage()),
+                    createRoute(const SecurityChangePinPage()),
                   );
                 },
               ),

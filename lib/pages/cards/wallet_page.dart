@@ -579,6 +579,7 @@ class _WalletPageState extends State<WalletPage> {
                       return TransactionItem(
                         sId: everyItem.sId,
                         nominal: everyItem.totalAmount,
+                        transactionCode: everyItem.transactionCode,
                         datetime: everyItem.date,
                         title: everyItem.categoryName,
                         notes: everyItem.note,
@@ -593,6 +594,7 @@ class _WalletPageState extends State<WalletPage> {
                   children: [
                     TransactionItem(
                       sId: "1",
+                      transactionCode: "CFW-DS66XNSNDHI",
                       nominal: 500,
                       datetime: "Aug 24, 2025, 8:10 AM",
                       title: "Freelance",
@@ -602,6 +604,7 @@ class _WalletPageState extends State<WalletPage> {
                     TransactionItem(
                       sId: "2",
                       nominal: 500,
+                      transactionCode: "CFW-DS66XNSNDHI",
                       datetime: "Aug 24, 2025, 9:10 AM",
                       title: "Freelance",
                       isIncome: "expense",
