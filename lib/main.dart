@@ -1,21 +1,21 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:tracking/cubit/action_delete/action_delete_cubit.dart';
-import 'package:tracking/cubit/page_cubit.dart';
-import 'package:tracking/cubit/reffparam/reffparam_cubit.dart';
-import 'package:tracking/cubit/user/user_cubit.dart';
 import 'package:tracking/firebase_options.dart';
-import 'package:tracking/pages/auth/cubit/auth_cubit.dart';
-import 'package:tracking/pages/dashboard/cubit/transaction_cubit.dart';
-import 'package:tracking/pages/dashboard/cubit/wallet_cubit.dart';
 import 'package:tracking/pages/main_page.dart';
+import 'package:tracking/cubit/page_cubit.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:tracking/pages/splash_page.dart';
+import 'package:tracking/pages/success_page.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:tracking/cubit/user/user_cubit.dart';
 import 'package:tracking/pages/auth/sign_in_page.dart';
 import 'package:tracking/pages/auth/sign_up_page.dart';
-import 'package:tracking/pages/splash_page.dart';
+import 'package:tracking/pages/auth/cubit/auth_cubit.dart';
+import 'package:tracking/cubit/reffparam/reffparam_cubit.dart';
+import 'package:tracking/pages/dashboard/cubit/wallet_cubit.dart';
+import 'package:tracking/cubit/action_delete/action_delete_cubit.dart';
+import 'package:tracking/pages/dashboard/cubit/transaction_cubit.dart';
 import 'package:tracking/pages/statistic/cubit/chart_categories_cubit.dart';
-import 'package:tracking/pages/success_page.dart';
 
 Future main() async {
   await dotenv.load(fileName: '.env');

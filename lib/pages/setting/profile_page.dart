@@ -151,7 +151,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                           ),
                           child: Icon(
-                            Icons.edit,
+                            Icons.camera_alt,
                             color: kBlackColor,
                             size: 15,
                           ),

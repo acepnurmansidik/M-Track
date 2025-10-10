@@ -62,6 +62,7 @@ class NotificationItem extends StatelessWidget {
                   color: kGreyColor.withOpacity(.5),
                   width: .5,
                 ),
+                borderRadius: BorderRadius.circular(10),
               ),
               child: Container(
                 decoration: BoxDecoration(
