@@ -27,6 +27,7 @@ class WalletDaum {
   final String exp;
   final String walletName;
   final String ownerName;
+  final String styleCard;
   final CurrencyId currencyId;
   final int amount;
 
@@ -38,6 +39,7 @@ class WalletDaum {
     required this.amount,
     required this.walletName,
     required this.ownerName,
+    required this.styleCard,
     required this.currencyId,
   });
 
@@ -47,6 +49,7 @@ class WalletDaum {
       vaNumber: json['va_number'],
       number: json['number'],
       exp: json['exp'],
+      styleCard: json['style_card'],
       walletName: json['wallet_name'],
       amount: json['amount'],
       ownerName: json['owner_name'],
