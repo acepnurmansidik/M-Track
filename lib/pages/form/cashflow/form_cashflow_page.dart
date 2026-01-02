@@ -10,6 +10,7 @@ import 'package:tracking/pages/dashboard/cubit/transaction_cubit.dart';
 import 'package:tracking/pages/dashboard/cubit/wallet_cubit.dart';
 import 'package:tracking/theme.dart';
 import 'package:tracking/utils/others.dart';
+import 'package:tracking/utils/wallet_style.dart';
 import 'package:tracking/widgets/custom_textform_field_underline.dart';
 
 class FormCashflowPage extends StatefulWidget {
@@ -166,11 +167,13 @@ class _FormCashflowPageState extends State<FormCashflowPage> {
                   vaNumber: state.walletSelected.vaNumber,
                   number: state.walletSelected.number,
                   exp: state.walletSelected.exp,
+                  styleCard: WalletThemeType.values
+                      .byName(state.walletSelected.styleCard),
                   currency:
                       state.walletSelected.currencyId.value!.toUpperCase(),
                 );
               }
-              return WalletItem();
+              return const WalletItem();
             },
           ),
           GestureDetector(

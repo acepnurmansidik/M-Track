@@ -10,6 +10,7 @@ import 'package:tracking/pages/dashboard/cubit/wallet_cubit.dart';
 import 'package:tracking/theme.dart';
 import 'package:tracking/utils/custom_widget.dart';
 import 'package:tracking/utils/others.dart';
+import 'package:tracking/utils/wallet_style.dart';
 import 'package:tracking/widgets/notification_navigation_item.dart';
 import 'package:tracking/widgets/transaction_item.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -165,11 +166,13 @@ class _WalletPageState extends State<WalletPage> {
                   vaNumber: state.walletSelected.vaNumber,
                   number: state.walletSelected.number,
                   exp: state.walletSelected.exp,
+                  styleCard: WalletThemeType.values
+                      .byName(state.walletSelected.styleCard),
                   currency:
                       state.walletSelected.currencyId.value!.toUpperCase(),
                 );
               }
-              return WalletItem();
+              return const WalletItem();
             },
           ),
           GestureDetector(
